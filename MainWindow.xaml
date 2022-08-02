@@ -1,0 +1,174 @@
+﻿<Window x:Class="EldenRingTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EldenRingTool"
+        mc:Ignorable="d"
+        Title="ERTool VERSION" Width="320" ResizeMode="NoResize" SizeToContent="Height"
+        >
+    <DockPanel Name="dockPanel">
+        <StackPanel DockPanel.Dock="Top">
+            <StackPanel x:Name="mainPanel">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="colMeshAOn" Unchecked="colMeshAOff" x:Name="chkColMeshA">Collision mesh A</CheckBox>
+                    <CheckBox Checked="colMeshBOn" Unchecked="colMeshBOff" Margin="10,0" x:Name="chkColMeshB">Mesh B</CheckBox>
+                    <Button FontSize="8" Click="changeMeshColours">Change Colours</Button>
+                </StackPanel>
+                <TextBlock>Meshes are buggy and may cause flashing lights.</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="charMeshOn" Unchecked="charMeshOff" x:Name="chkCharMesh">Character mesh</CheckBox>
+                    <CheckBox Checked="charModelHideOn" Unchecked="charModelHideOff" Margin="10,0" x:Name="chkHideModels">Hide models</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="hitboxOn" Unchecked="hitboxOff" x:Name="chkHitboxA">Hitbox view A</CheckBox>
+                    <CheckBox Checked="hitboxBOn" Unchecked="hitboxBOff" Margin="10,0" x:Name="chkHitboxB">View B</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="noDeathOn" Unchecked="noDeathOff" x:Name="chkPlayerNoDeath">No death</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="oneHPOn" Unchecked="oneHPOff" x:Name="chkOneHP">1 HP (rtsr)</CheckBox>
+                    <CheckBox Checked="maxHPOn" Unchecked="maxHPOff" Margin="10,0" x:Name="chkMaxHP">Max HP</CheckBox>
+                    <Button FontSize="10" Click="instantDeath" x:Name="btnDie">Die</Button>
+                    <CheckBox Checked="runeArcOn" Unchecked="runArcOff" x:Name="chkRuneArc" Margin="10,0">Rune Arc</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="noAIOn" Unchecked="noAIOff" x:Name="chkDisableAI">Disable AI</CheckBox>
+                    <CheckBox Checked="repeatActionOn" Unchecked="repeatActionOff" Margin="5,0" x:Name="chkRepeatAction">Repeat last action</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="noStamOn" Unchecked="noStamOff" x:Name="chkInfStam">Inf Stam</CheckBox>
+                    <CheckBox Checked="noFPOn" Unchecked="noFPOff" Margin="5,0" x:Name="chkInfFP">Inf FP</CheckBox>
+                    <CheckBox Checked="noGoodsOn" Unchecked="noGoodsOff" Margin="5,0" x:Name="chkInfConsum">Inf Consum.</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="noGravOn" Unchecked="noGravOff" x:Name="chkPlayerNoGrav">No Gravity</CheckBox>
+                    <CheckBox Checked="noMapColOn" Unchecked="nomapColOff" Margin="5,0" x:Name="chkPlayerNoMapCol">No Map Collision</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Torrent:</TextBlock>
+                    <CheckBox Checked="torNoDeathOn" Unchecked="torNoDeathOff" Margin="5,0" x:Name="chkTorNoDeath">No death</CheckBox>
+                    <CheckBox Checked="torNoGravOn" Unchecked="torNoGravOff" x:Name="chkTorNoGrav">No Gravity</CheckBox>
+                    <CheckBox Checked="torNoMapColOn" Unchecked="torNomapColOff" Margin="5,0" x:Name="chkTorNoMapCol">No Map Col.</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="poiseViewOn" Unchecked="poiseViewOff" x:Name="chkPoiseView">In-game poise view</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="eventDrawOn" Unchecked="eventDrawOff" x:Name="chkEventView">View event regions</CheckBox>
+                    <CheckBox Checked="eventStopOn" Unchecked="eventStopOff" Margin="5,0" x:Name="chkEventStop">Disable events</CheckBox>
+                </StackPanel>
+                <!--<StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="topDebugOn" Unchecked="topDebugOff">Show hidden menu below system (respec etc.)</CheckBox>
+                </StackPanel>-->
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="freeCamOn" Unchecked="freeCamOff" x:Name="chkFreeCam">Free camera</CheckBox>
+                    <CheckBox Checked="freeCamControlOn" Unchecked="freeCamControlOff" Margin="5,0" x:Name="chkFreeCamControl">Player control</CheckBox>
+                    <CheckBox Margin="5,0" Checked="noClipOn" Unchecked="noClipOff" x:Name="chkNoClip">Noclip</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="combatMapOn" Unchecked="combatMapOff" x:Name="chkCombatMap">Allow map in combat</CheckBox>
+                    <Button Click="setGameSpeed" Margin="5,0" FontSize="10">Set Game Speed</Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="steamInputEnumDisableOn" Unchecked="steamInputEnumDisableOff" x:Name="chkSteamInputEnum">Stutter fix</CheckBox>
+                    <CheckBox Checked="disableAchieveOn" Unchecked="disableAchieveOff" x:Name="chkSteamAchieve" Margin="5,0">Disable achievements (freeze fix)</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Teleport:</TextBlock>
+                    <Button Margin="2,0" Click="savePos">Save</Button>
+                    <Button Margin="2,0" Click="restorePos" x:Name="restorePosButton" IsEnabled="False">Restore</Button>
+                    <Button Margin="2,0" Click="savePosDB">Save to DB</Button>
+                    <Button Margin="2,0" Click="restorePosDB">Restore from DB</Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Yeet:</TextBlock>
+                    <Button Margin="5,0" Click="doYeet">Forward</Button>
+                    <Button Margin="5,0" Click="doYeet">+X</Button>
+                    <Button Margin="2,0" Click="doYeet">-X</Button>
+                    <Button Margin="2,0" Click="doYeet">+Y</Button>
+                    <Button Margin="2,0" Click="doYeet">-Y</Button>
+                    <Button Margin="2,0" Click="doYeet">+Z</Button>
+                    <Button Margin="2,0" Click="doYeet">-Z</Button>
+                </StackPanel>
+                <TextBlock FontSize="10" Margin="0,0">Hold ctrl/shift/alt to go further</TextBlock>
+                <StackPanel x:Name="positionPanel" Visibility="Collapsed">
+                    <TextBlock x:Name="localPos">Local: </TextBlock>
+                    <TextBlock x:Name="mapPos">Map: </TextBlock>
+                    <TextBlock x:Name="mapID">Map ID: </TextBlock>
+                    <TextBlock x:Name="globalPos">Global: </TextBlock>
+                </StackPanel>
+                <Button Click="addSouls">Add 1mil runes</Button>
+                <Button Click="installTargetHook" Margin="0,5" x:Name="targetHookButton">Enable target options</Button>
+            </StackPanel>
+            <StackPanel x:Name="targetPanel" IsEnabled="False" Opacity="0.5">
+                <DockPanel>
+                    <TextBlock x:Name="hpText" Margin="5,2" DockPanel.Dock="Left" Width="125">HP: 00000 / 00000</TextBlock>
+                    <ProgressBar x:Name="hpBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock x:Name="poiseText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise: 000 / 000</TextBlock>
+                    <ProgressBar x:Name="poiseBar" Height="20" Minimum="0" Maximum="1" Margin="2,2"/>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock x:Name="poiseTimerText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise reset time: 00.0</TextBlock>
+                    <ProgressBar x:Name="poiseTimerBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+                </DockPanel>
+                <StackPanel x:Name="resistsPanel" Visibility="Collapsed">
+                    <DockPanel>
+                        <TextBlock x:Name="poisonText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Poison: 0000 / 0000</TextBlock>
+                        <ProgressBar x:Name="poisonBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="rotText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Rot: 0000 / 0000</TextBlock>
+                        <ProgressBar x:Name="rotBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="bleedText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Bleed: 0000 / 0000</TextBlock>
+                        <ProgressBar x:Name="bleedBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="blightText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Blight: 0000 / 0000</TextBlock>
+                        <ProgressBar x:Name="blightBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="frostText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Frost: 0000 / 0000</TextBlock>
+                        <ProgressBar x:Name="frostBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="sleepText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Sleep: 0000 / 0000</TextBlock>
+                        <ProgressBar x:Name="sleepBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="madText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Madness: 0000 / 0000</TextBlock>
+                        <ProgressBar x:Name="madBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" x:Name="freezeHPPanel">
+                    <CheckBox Checked="targetHpFreezeOn" Unchecked="targetHpFreezeOff" Margin="0,2" x:Name="chkFreezeHP">Freeze HP</CheckBox>
+                    <Button Click="killTarget" Margin="5,0">Kill</Button>
+                    <Button Click="setHP" Margin="2,0">25%</Button>
+                    <Button Click="setHP" Margin="2,0">50%</Button>
+                    <Button Click="setHP" Margin="2,0">75%</Button>
+                    <Button Click="setHP" Margin="2,0">100%</Button>
+                    <Button Click="setHPCustom" Margin="2,0">Custom</Button>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" x:Name="bottomPanel">
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" x:Name="updatePanel">
+                <CheckBox Checked="enableUpdateCheck" Unchecked="disableUpdateCheck" FontSize="10" Margin="5,0" x:Name="chkAutoUpdate">Auto update check</CheckBox>
+                <Button Click="goToWebsite" FontSize="10" x:Name="websiteButton" Margin="5,0">Visit Homepage</Button>
+                <Button Click="hotkeySetup" FontSize="10" HorizontalAlignment="Right" Margin="5,0" x:Name="btnHotkeys">Hotkey Setup</Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0" x:Name="resizePanel">
+                <CheckBox Checked="stayOnTop" Unchecked="dontStayOnTop" FontSize="10" Margin="5,0" x:Name="chkStayOnTop">Stay on top</CheckBox>
+                <Button FontSize="10" Click="hpPoiseOnly" x:Name="compactButton">Toggle Stats/Full</Button>
+                <Button FontSize="10" Click="toggleResists" x:Name="resistsToggle" Margin="5,0">Toggle Resists</Button>
+                <Button FontSize="10" Click="toggleCoords" x:Name="coordsToggle" Margin="0,0">Toggle Coords</Button>
+            </StackPanel>
+            <Button Click="doQuitout" Height="40" x:Name="quitoutButton">Instant Quitout</Button>
+        </StackPanel>
+    </DockPanel>
+</Window>
