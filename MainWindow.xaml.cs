@@ -728,6 +728,7 @@ namespace EldenRingTool
             _process.freezeOn(ERProcess.DebugOpts.DISABLE_TREES);
             _process.freezeOn(ERProcess.DebugOpts.DISABLE_ROCKS);
             _process.freezeOn(ERProcess.DebugOpts.DISABLE_GRASS);
+            _process.freezeOn(ERProcess.DebugOpts.DISABLE_DISTANT_MAP);
         }
 
         private void colMeshBOff(object sender, RoutedEventArgs e)
@@ -737,6 +738,7 @@ namespace EldenRingTool
             _process.offAndUnFreeze(ERProcess.DebugOpts.DISABLE_TREES);
             _process.offAndUnFreeze(ERProcess.DebugOpts.DISABLE_ROCKS);
             _process.offAndUnFreeze(ERProcess.DebugOpts.DISABLE_GRASS);
+            _process.offAndUnFreeze(ERProcess.DebugOpts.DISABLE_DISTANT_MAP);
         }
 
         private void installTargetHook(object sender, RoutedEventArgs e)

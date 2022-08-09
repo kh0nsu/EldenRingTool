@@ -285,6 +285,7 @@ namespace EldenRingTool
             DISABLE_MAP,
             DISABLE_TREES,
             DISABLE_ROCKS,
+            DISABLE_DISTANT_MAP,
             DISABLE_CHARACTER,
             DISABLE_GRASS,
             NO_DEATH,
@@ -292,7 +293,7 @@ namespace EldenRingTool
             ONE_HP,
             MAX_HP, RUNE_ARC,
             TARGET_HP,
-            DISABLE_AI, NO_STAM, NO_FP, NO_GOODS,
+            DISABLE_AI, NO_STAM, NO_FP, NO_GOODS, //TODO: one shot?
             NO_GRAVITY_ALTERNATE, NO_MAP_COLLISION, NO_GRAVITY,
             TORRENT_NO_DEATH, TORRENT_NO_GRAV_ALT, TORRENT_NO_MAP_COLL, TORRENT_NO_GRAV,
             TOP_DEBUG_MENU,
@@ -318,23 +319,23 @@ namespace EldenRingTool
         const long SANE_MINIMUM = 0x700000000000;
         const long SANE_MAXIMUM = 0x800000000000; //TODO: refine. much lower addresses may be valid in some cases.
 
-        const int worldChrManOff = 0x3C1FE98; //pointer to CS::WorldChrManImp
+        const int worldChrManOff = 0x3C310B8; //pointer to CS::WorldChrManImp
 
-        const int hitboxBase = 0x3C20268; //currently no RTTI name for this.
+        const int hitboxBase = 0x3C31488; //currently no RTTI name for this.
 
-        const int groupMaskOff = 0x3A0D830;//not a pointer. static addresses
+        const int groupMaskOff = 0x3A1E830;//not a pointer. static addresses
 
-        const int meshesOff = 0x3C23F64;//static addresses again
+        const int meshesOff = 0x3C3518C;//static addresses again
 
-        const int quitoutBase = 0x3C237B8; //CS::GameMan.
+        const int quitoutBase = 0x3C349D8; //CS::GameMan.
 
-        const int logoScreenBase = 0xA9417D;
+        const int logoScreenBase = 0xA9807D;
 
         readonly byte[] logoScreenOrig = new byte[] { 0x74, 0x53 };
         readonly byte[] logoScreenPatch = new byte[] { 0x90, 0x90 };
 
         const int codeCavePtrLoc = 0x25450;
-        const int targetHookLoc = 0x6F6B52;
+        const int targetHookLoc = 0x6F89A2;
 
         const int codeCaveCodeLoc = codeCavePtrLoc + 0x10;// 0x25460 for 1.03.2
 
@@ -370,48 +371,48 @@ namespace EldenRingTool
             return ret;
         }
 
-        const int miscDebugBase = 0x3c20089;
-        const int noAiUpdate = 0x3C20099;
+        const int miscDebugBase = 0x3C312AF;
+        const int noAiUpdate = 0x3C312BF;
 
-        const int chrDbg = 0x3C200D0;//should be close to misc debug
+        const int chrDbg = 0x3C312A8;//should be close to misc debug
 
-        const int newMenuSystem = 0x3C25780;//CS::CSMenuManImp //irrelvant now with top debug gone
+        const int newMenuSystem = 0x3C369A0;//CS::CSMenuManImp //irrelvant now with top debug gone
 
-        const int fontDrawOffset = 0x25E0DC0; //defaults to 0x48. need 0xC3 for in-game poise viewer.
+        const int fontDrawOffset = 0x25EAF20; //defaults to 0x48. need 0xC3 for in-game poise viewer.
         byte fontDrawNewValue = 0xC3;
 
-        const int DbgEventManOff = 0x3C21EA0; //no name. static addresses.
+        const int DbgEventManOff = 0x3C330C0; //no name. static addresses.
 
-        const int EventPatchLoc1 = 0xDC21A0; //32 C0 C3 (next 3 vary with patch, eg. CC BF 60 in 1.03.2, cc 7b 83 in 1.04.0)
-        const int EventPatchLoc2 = 0xDC2180; //32 C0 C3 (next 3 vary with patch, eg. CC E3 A2 in 1.03.2, 90 49 8b in 1.04.0)
+        const int EventPatchLoc1 = 0xDC8670; //32 C0 C3 (next 3 vary with patch, eg. CC BF 60 in 1.03.2, cc 7b 83 in 1.04.0)
+        const int EventPatchLoc2 = 0xDC8650; //32 C0 C3 (next 3 vary with patch, eg. CC E3 A2 in 1.03.2, 90 49 8b in 1.04.0)
         readonly byte[] eventPatch = new byte[] { 0xB0, 0x01 };
 
-        const int FieldAreaOff = 0x3C23070;//CS::FieldArea
+        const int FieldAreaOff = 0x3C34298;//CS::FieldArea
 
-        const int freeCamPatchLoc = 0x1C2F15;
+        const int freeCamPatchLoc = 0x415305;
 
         //readonly byte[] freeCamOrigCode = new byte[] { 0x32, 0xC0 };
         readonly byte[] freeCamPatchCode = new byte[] { 0xB0, 0x01 };
 
-        const int freeCamPlayerControlPatchLoc = 0x6635B6;
+        const int freeCamPlayerControlPatchLoc = 0x664EE6;
         readonly byte[] freeCamPlayerControlPatchOrig = new byte[] { 0x8B, 0x83, 0xC8, 0, 0, 0 }; //C8 may need to change in different patches
         readonly byte[] freeCamPlayerControlPatchReplacement = new byte[] { 0x31, 0xC0, 0x90, 0x90, 0x90, 0x90 };
 
-        const int mapOpenInCombatOff = 0x7C94D3;
-        const int mapStayOpenInCombatOff = 0x977A97;
+        const int mapOpenInCombatOff = 0x7CB4D3;
+        const int mapStayOpenInCombatOff = 0x979AE7;
 
         readonly byte[] mapCombatCheckPatchCode = new byte[] { 0x31, 0xC0, 0x90, 0x90, 0x90 }; //xor eax, eax; nop nop nop
         byte[] mapOpenInCombatOrig = null;
         byte[] mapStayOpenInCombatOrig = null;
 
         //DbgGetForceActIdx. patch changes it to use the addr from DbgSetLastActIdx 
-        const int enemyRepeatActionOff = 0x3683DA + 4 + 3;
+        const int enemyRepeatActionOff = 0x4F22456;
         const byte enemyRepeatActionPatchVal = 0xB2;
         const byte enemyRepeatActionOrigVal = 0xB1;
 
-        const int zeroCaveOffset = 0x28D7C00; //zeroes at the end of the program
-        //1.05 first call: 5DC690
-        //1.05 second second: 65C940
+        const int zeroCaveOffset = 0x28E3E00; //zeroes at the end of the program
+        //1.06 first call: 5DDE30
+        //1.06 second second: 65E260
         readonly byte[] warpCodeTemplate = new byte[]
         {
             0x00, 0x00, 0x00, 0x00,                   // id (seems pointless)
@@ -420,11 +421,11 @@ namespace EldenRingTool
             0xBA, 0xBB, 0x00, 0x00, 0x00,             // mov edx,000000BB
             0x41, 0xB8, 0xCC, 0x00, 0x00, 0x00,       // mov r8d,000000CC
             0x41, 0xB9, 0xDD, 0x00, 0x00, 0x00,       // mov r9d,000000DD
-            0x48, 0x8D, 0x05, 0xDB, 0xFF, 0xFF, 0xFF, // lea rax,[eldenring.exe+28D7C00]
+            0x48, 0x8D, 0x05, 0xDB, 0xFF, 0xFF, 0xFF, // lea rax,[eldenring.exe+28E3E00]
             0x48, 0x89, 0x44, 0x24, 0x20,             // mov [rsp+20],rax
-            0xE8, 0x61, 0x4A, 0xD0, 0xFD,             // call eldenring.exe+5DC690 //5DC690 - 28D7C00 - 2F, crop 32, little endian
+            0xE8, 0x01, 0xA0, 0xCF, 0xFD,             // call eldenring.exe+5DDE30 //5DDE30 - 28E3E00 - 2F, crop 32, little endian
             0xB9, 0x00, 0x00, 0x00, 0x00,             // mov ecx,00000000
-            0xE8, 0x07, 0x4D, 0xD8, 0xFD,             // call eldenring.exe+65C940 //65C940 - 28D7C00 - 39, crop 32, little endian
+            0xE8, 0x27, 0xA4, 0xD7, 0xFD,             // call eldenring.exe+65E260 //65E260 - 28E3E00 - 39, crop 32, little endian
             0x48, 0x83, 0xC4, 0x48,                   // add rsp,48
             0xC3,                                     // ret 
         };
@@ -458,13 +459,13 @@ namespace EldenRingTool
             0xC3,                                     // ret 
         };*/
 
-        const int usrInputMgrImplOff = 0x44F5828;//DLUID::DLUserInputManagerImpl<DLKR::DLMultiThreadingPolicy> //RTTI should find it
+        const int usrInputMgrImplOff = 0x45075C8;//DLUID::DLUserInputManagerImpl<DLKR::DLMultiThreadingPolicy> //RTTI should find it
         const int usrInputMgrImpSteamInputFlagOff = 0x88b; //in 1.05, the func checking the flag is at +1E7D75F
         //above originally found by putting breakpoints in user32 device enum funcs, which get called by dinput8, which gets called by the steam overlay dll, which gets called by elden ring, then triggering the stutter.
 
-        const int trophyImpOffset = 0x44425B8; //CS::CSTrophyImp
+        const int trophyImpOffset = 0x4453838; //CS::CSTrophyImp
 
-        /*const int toPGDataOff = 0x3C17EE8;
+        /*const int toPGDataOff = 0x3C29108;
         //we have another way to get this, but can use this as a fallback.
         IntPtr getPlayerGameDataPtr()
         {
@@ -473,7 +474,7 @@ namespace EldenRingTool
             return (IntPtr)ptr2;
         }*/
 
-        const int csFlipperOff = 0x4442C18; //lots of interesting stuff here. frame times, fps, etc.
+        const int csFlipperOff = 0x4453E98; //lots of interesting stuff here. frame times, fps, etc.
         const int gameSpeedOffset = 0x2D4;
 
         public float getSetGameSpeed(float? val = null)
@@ -686,7 +687,8 @@ namespace EldenRingTool
         ulong getTorrentPtr()
         {
             var ptr1 = ReadUInt64(erBase + worldChrManOff);
-            var ptr2 = ReadUInt64((IntPtr)(ptr1 + 0x18390)); //CS::ChrSet. is there an alternate pointer for this?
+            //var ptr2 = ReadUInt64((IntPtr)(ptr1 + 0x18390)); //CS::ChrSet. is there an alternate pointer for this?
+            var ptr2 = ReadUInt64((IntPtr)(ptr1 + 0x18378)); //changed in 1.06
             var ptr3 = ReadUInt64((IntPtr)(ptr2 + 0x18));
             var ptr4 = ReadUInt64((IntPtr)(ptr3)); //CS::EnemyIns
             return ptr4;
@@ -709,12 +711,13 @@ namespace EldenRingTool
                     else { ptr += 0xA1; }
                     return ((IntPtr)ptr, 1);
                 }
-                case DebugOpts.DISABLE_MOST_RENDER: return (erBase + groupMaskOff + 0x9, 0);
-                case DebugOpts.DISABLE_MAP: return (erBase + groupMaskOff + 0xA, 0);
-                case DebugOpts.DISABLE_TREES: return (erBase + groupMaskOff + 0x0, 0);
-                case DebugOpts.DISABLE_ROCKS: return (erBase + groupMaskOff + 0x2, 0); //doesn't disable all rocks
-                case DebugOpts.DISABLE_CHARACTER: return (erBase + groupMaskOff + 0x4, 0);
-                case DebugOpts.DISABLE_GRASS: return (erBase + groupMaskOff + 0x8, 0);
+                case DebugOpts.DISABLE_MOST_RENDER: return (erBase + groupMaskOff + 0x0, 0);
+                case DebugOpts.DISABLE_MAP: return (erBase + groupMaskOff + 0x1, 0);
+                case DebugOpts.DISABLE_TREES: return (erBase + groupMaskOff + 0x9, 0);
+                case DebugOpts.DISABLE_ROCKS: return (erBase + groupMaskOff + 0xA, 0);
+                case DebugOpts.DISABLE_DISTANT_MAP: return (erBase + groupMaskOff + 0xB, 0);
+                case DebugOpts.DISABLE_CHARACTER: return (erBase + groupMaskOff + 0xD, 0);
+                case DebugOpts.DISABLE_GRASS: return (erBase + groupMaskOff + 0x11, 0);
 
                 case DebugOpts.NO_DEATH:
                 {
