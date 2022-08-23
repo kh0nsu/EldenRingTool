@@ -411,10 +411,27 @@ namespace EldenRingTool
         const byte enemyRepeatActionOrigVal = 0xB1;
 
         const int zeroCaveOffset = 0x28E3E00; //zeroes at the end of the program
-        //1.06 first call: 5DDE30
-        //1.06 second second: 65E260
-        readonly byte[] warpCodeTemplate = new byte[]
+        const int warpFirstCallOffset = 0x5DDE30;
+        const int warpSecondCallOffset = 0x65E260;
+        static readonly byte[] warpCodeTemplate = new byte[]
         {
+            0x00, 0x00, 0x00, 0x00,                   // id (seems pointless)
+            0x48, 0x83, 0xEC, 0x48,                   // sub rsp,48 (func start)
+            0xB9, 0xAA, 0x00, 0x00, 0x00,             // mov ecx,000000AA
+            0xBA, 0xBB, 0x00, 0x00, 0x00,             // mov edx,000000BB
+            0x41, 0xB8, 0xCC, 0x00, 0x00, 0x00,       // mov r8d,000000CC
+            0x41, 0xB9, 0xDD, 0x00, 0x00, 0x00,       // mov r9d,000000DD
+            0x48, 0x8D, 0x05, 0xDB, 0xFF, 0xFF, 0xFF, // lea rax,[eldenring.exe+zeroCaveOffset] (relative addr)
+            0x48, 0x89, 0x44, 0x24, 0x20,             // mov [rsp+20],rax
+            0xE8, 0, 0, 0, 0,                         //call to pack coords (to be filled in)
+            0xB9, 0x00, 0x00, 0x00, 0x00,             // mov ecx,00000000
+            0xE8, 0, 0, 0, 0,                         //call to actually warp? (to be filled in)
+            0x48, 0x83, 0xC4, 0x48,                   // add rsp,48
+            0xC3,                                     // ret 
+        };
+
+        static readonly byte[] warpCodeTemplate106 = new byte[]
+        {//for reference
             0x00, 0x00, 0x00, 0x00,                   // id (seems pointless)
             0x48, 0x83, 0xEC, 0x48,                   // sub rsp,48 (func start)
             0xB9, 0xAA, 0x00, 0x00, 0x00,             // mov ecx,000000AA
@@ -430,7 +447,7 @@ namespace EldenRingTool
             0xC3,                                     // ret 
         };
 
-        //1.04.1 kept here for reference. template needs to be updated manually for new patches
+        //asm of called funcs for reference (1.04.1)
         //1041 code cave: 28C7800
         /*first call in warp (1.04.1) +5DBBB0:
         00007FF6C859BBB0 | 48:83EC 48               | sub rsp,48                                            |
@@ -442,22 +459,6 @@ namespace EldenRingTool
         00007FF6C861BB67 | 8988 300C0000            | mov dword ptr ds:[rax+C30],ecx                        |
         00007FF6C861BB6D | C3                       | ret                                                   |
         */
-        /*readonly byte[] warpCodeTemplate = new byte[]
-        {
-            0x00, 0x00, 0x00, 0x00,                   // id (seems pointless)
-            0x48, 0x83, 0xEC, 0x48,                   // sub rsp,48 (func start)
-            0xB9, 0xAA, 0x00, 0x00, 0x00,             // mov ecx,000000AA
-            0xBA, 0xBB, 0x00, 0x00, 0x00,             // mov edx,000000BB
-            0x41, 0xB8, 0xCC, 0x00, 0x00, 0x00,       // mov r8d,000000CC
-            0x41, 0xB9, 0xDD, 0x00, 0x00, 0x00,       // mov r9d,000000DD
-            0x48, 0x8D, 0x05, 0xDB, 0xFF, 0xFF, 0xFF, // lea rax,[eldenring.exe+28C7800] //basically just -25.
-            0x48, 0x89, 0x44, 0x24, 0x20,             // mov [rsp+20],rax
-            0xE8, 0x81, 0x43, 0xD1, 0xFD,             // call eldenring.exe+5DBBB0 //5DBBB0 - 28C7800 - 2F, crop 32, little endian
-            0xB9, 0x00, 0x00, 0x00, 0x00,             // mov ecx,00000000
-            0xE8, 0x27, 0x43, 0xD9, 0xFD,             // call eldenring.exe+65BB60 //65BB60 - 28C7800 - 39, crop 32, little endian
-            0x48, 0x83, 0xC4, 0x48,                   // add rsp,48
-            0xC3,                                     // ret 
-        };*/
 
         const int usrInputMgrImplOff = 0x45075C8;//DLUID::DLUserInputManagerImpl<DLKR::DLMultiThreadingPolicy> //RTTI should find it
         const int usrInputMgrImpSteamInputFlagOff = 0x88b; //in 1.05, the func checking the flag is at +1E7D75F
@@ -489,17 +490,27 @@ namespace EldenRingTool
             return ret;
         }
 
+        static byte[] getWarpCodeTemplate()
+        {
+            var buf = warpCodeTemplate.ToArray();
+            int callOneAddr = warpFirstCallOffset - zeroCaveOffset - 0x2F;
+            Array.Copy(BitConverter.GetBytes(callOneAddr), 0, buf, 4 + 4 + 5 + 5 + 6 + 6 + 7 + 5 + 1, 4);
+            int callTwoAddr = warpSecondCallOffset - zeroCaveOffset - 0x39;
+            Array.Copy(BitConverter.GetBytes(callTwoAddr), 0, buf, 4 + 4 + 5 + 5 + 6 + 6 + 7 + 5 + 5 + 5 + 1, 4);
+            //Debug.Assert(buf.SequenceEqual(warpCodeTemplate106));
+            return buf;
+        }
+
         public void doWarp(byte aa, byte bb, byte cc, byte dd)
         {
-            var buf = new byte[warpCodeTemplate.Length];
-            Array.Copy(warpCodeTemplate, buf, warpCodeTemplate.Length);
+            var buf = getWarpCodeTemplate();
             buf[9] = aa;
             buf[14] = bb;
             buf[20] = cc;
             buf[26] = dd;
             WriteBytes(erBase + zeroCaveOffset, buf);
             RunThread(erBase + zeroCaveOffset + 4);
-            WriteBytes(erBase + zeroCaveOffset, new byte[warpCodeTemplate.Length]);
+            //WriteBytes(erBase + zeroCaveOffset, new byte[buf.Length]); //blank it out - is this really needed?
         }
 
         public void doWarp(uint mapID)
@@ -983,7 +994,7 @@ namespace EldenRingTool
                         enableOpt(opt);
                     }
                 }
-                Thread.Sleep(100); //arbitrary
+                Thread.Sleep(100); //arbitrary. will except here when closing program, but nothing needs to be done.
             }
         }
 
