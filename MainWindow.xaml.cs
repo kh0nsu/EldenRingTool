@@ -503,7 +503,7 @@ namespace EldenRingTool
                 var resistBars = new List<ProgressBar>() { poisonBar, rotBar, bleedBar, blightBar, frostBar, sleepBar, madBar };
                 var resistText = new List<TextBlock>() { poisonText, rotText, bleedText, blightText, frostText, sleepText, madText };
 
-                for (int i = 0; i <= 7; i++)
+                for (int i = 0; i < resistNames.Count; i++)
                 {
                     var statInd = ERProcess.TargetInfo.POISON + i * 2;
                     var statIndMax = statInd + 1;
