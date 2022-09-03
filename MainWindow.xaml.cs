@@ -1370,5 +1370,15 @@ namespace EldenRingTool
         {
             positionPanel.Visibility = positionPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
+
+        private void freeUpgOn(object sender, RoutedEventArgs e)
+        {
+            _process.setFreeUpgrade(true);
+        }
+
+        private void freeUpgOff(object sender, RoutedEventArgs e)
+        {
+            _process.setFreeUpgrade(false);
+        }
     }
 }

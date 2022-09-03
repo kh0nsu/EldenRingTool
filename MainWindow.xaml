@@ -54,6 +54,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="poiseViewOn" Unchecked="poiseViewOff" x:Name="chkPoiseView">In-game poise view</CheckBox>
+                    <Button Click="setGameSpeed" Margin="5,0" FontSize="10">Set Game Speed</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="eventDrawOn" Unchecked="eventDrawOff" x:Name="chkEventView">View event regions</CheckBox>
@@ -69,7 +70,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="combatMapOn" Unchecked="combatMapOff" x:Name="chkCombatMap">Allow map in combat</CheckBox>
-                    <Button Click="setGameSpeed" Margin="5,0" FontSize="10">Set Game Speed</Button>
+                    <CheckBox Checked="freeUpgOn" Unchecked="freeUpgOff" x:Name="chkFreeUpg" Margin="5,0">Free Upgrades</CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="steamInputEnumDisableOn" Unchecked="steamInputEnumDisableOff" x:Name="chkSteamInputEnum">Stutter fix</CheckBox>

@@ -478,6 +478,9 @@ namespace EldenRingTool
         const int csFlipperOff = 0x4453E98; //lots of interesting stuff here. frame times, fps, etc.
         const int gameSpeedOffset = 0x2D4;
 
+        const int upgradeRuneCostOff = 0x765241;
+        const int upgradeMatCostOff = 0x8417FC;
+
         public float getSetGameSpeed(float? val = null)
         {
             var ptr = erBase + csFlipperOff;
@@ -626,6 +629,12 @@ namespace EldenRingTool
                 Utils.debugWrite("Unexpected data for logo patch, unknown version?");
                 return false;
             }
+        }
+
+        public void setFreeUpgrade(bool on)
+        {
+            WriteUInt8(erBase + upgradeRuneCostOff, (byte)(on ? 0xEB : 0x74)); //patch JE to JMP
+            WriteBytes(erBase + upgradeMatCostOff, on ? new byte[] { 0x31, 0xFF } : new byte[] { 0x8B, 0xF8 }); //patch mov edi,eax to xor edi,edi
         }
 
         public bool installTargetHook()
