@@ -68,6 +68,7 @@ namespace EldenRingTool
             NO_GRAVITY, NO_MAP_COL,
             TORRENT_NO_DEATH, TORRENT_NO_GRAV, TORRENT_NO_MAP_COL,
             POISE_VIEW,
+            SOUND_VIEW,
             EVENT_VIEW, EVENT_STOP,
             FREE_CAMERA, FREE_CAMERA_CONTROL, NO_CLIP, ALLOW_MAP_COMBAT,
             DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIEVEMENTS,
@@ -449,6 +450,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.TORRENT_NO_GRAV: chkTorNoGrav.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.TORRENT_NO_MAP_COL: chkTorNoMapCol.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.POISE_VIEW: chkPoiseView.IsChecked ^= true; break;
+                case HOTKEY_ACTIONS.SOUND_VIEW: chkSoundView.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.EVENT_VIEW: chkEventView.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.EVENT_STOP: chkEventStop.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.FREE_CAMERA: chkFreeCam.IsChecked ^= true; break;
@@ -1379,6 +1381,16 @@ namespace EldenRingTool
         private void freeUpgOff(object sender, RoutedEventArgs e)
         {
             _process.setFreeUpgrade(false);
+        }
+
+        private void soundViewOn(object sender, RoutedEventArgs e)
+        {
+            _process.setSoundView(true);
+        }
+
+        private void soundViewOff(object sender, RoutedEventArgs e)
+        {
+            _process.setSoundView(false);
         }
     }
 }

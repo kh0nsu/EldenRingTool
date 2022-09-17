@@ -298,6 +298,7 @@ namespace EldenRingTool
             TORRENT_NO_DEATH, TORRENT_NO_GRAV_ALT, TORRENT_NO_MAP_COLL, TORRENT_NO_GRAV,
             TOP_DEBUG_MENU,
             POISE_VIEW,
+            SOUND_VIEW,
             EVENT_DRAW, EVENT_STOP,
             FREE_CAM,
             DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIVEMENTS,
@@ -481,6 +482,26 @@ namespace EldenRingTool
         const int upgradeRuneCostOff = 0x765241;
         const int upgradeMatCostOff = 0x8417FC;
 
+        const int soundDrawPatchLoc = 0x33bfd6;
+        readonly byte[] soundDrawOrigBytes = { 0x74, 0x53 }; //JZ +53
+        readonly byte[] soundDrawPatchBytes = { 0x90, 0x90 }; //nop nop
+
+        public void setSoundView(bool on)
+        {//this can be enabled in a few ways. either look over all targeting system instances and set a flag, or just patch the location that checks the flag. let's go with the patch.
+            //this will also attempt to draw text, which is broken in the game, so the font draw patch must be set
+            if (on) { setFontDraw(); }
+
+            var existingBytes = ReadBytes(erBase + soundDrawPatchLoc, 2);
+            if (existingBytes.SequenceEqual(soundDrawOrigBytes) && on)
+            {
+                WriteBytes(erBase + soundDrawPatchLoc, soundDrawPatchBytes);
+            }
+            else if (existingBytes.SequenceEqual(soundDrawPatchBytes) && !on)
+            {
+                WriteBytes(erBase + soundDrawPatchLoc, soundDrawOrigBytes);
+            }
+        }
+
         public float getSetGameSpeed(float? val = null)
         {
             var ptr = erBase + csFlipperOff;
@@ -592,7 +613,7 @@ namespace EldenRingTool
         }
 
         void setFontDraw()
-        {//needed for poise bars. again no need to turn off.
+        {//needed for poise bars and some other things. no need to turn off.
             int oldVal = ReadUInt8(erBase + fontDrawOffset);
             if (oldVal == fontDrawNewValue) { return; }
             WriteUInt8(erBase + fontDrawOffset, fontDrawNewValue);

@@ -54,6 +54,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="poiseViewOn" Unchecked="poiseViewOff" x:Name="chkPoiseView">In-game poise view</CheckBox>
+                    <CheckBox Checked="soundViewOn" Unchecked="soundViewOff" x:Name="chkSoundView" Margin="5,0">Sound view</CheckBox>
                     <Button Click="setGameSpeed" Margin="5,0" FontSize="10">Set Game Speed</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
