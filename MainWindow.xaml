@@ -54,8 +54,11 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="poiseViewOn" Unchecked="poiseViewOff" x:Name="chkPoiseView">In-game poise view</CheckBox>
-                    <CheckBox Checked="soundViewOn" Unchecked="soundViewOff" x:Name="chkSoundView" Margin="5,0">Sound view</CheckBox>
                     <Button Click="setGameSpeed" Margin="5,0" FontSize="10">Set Game Speed</Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Checked="targetingViewOn" Unchecked="targetingViewOff" x:Name="chkTargetingView">Targeting view (laggy)</CheckBox>
+                    <CheckBox Checked="soundViewOn" Unchecked="soundViewOff" x:Name="chkSoundView" Margin="5,0">Sound view</CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="eventDrawOn" Unchecked="eventDrawOff" x:Name="chkEventView">View event regions</CheckBox>

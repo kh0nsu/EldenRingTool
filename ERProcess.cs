@@ -298,7 +298,7 @@ namespace EldenRingTool
             TORRENT_NO_DEATH, TORRENT_NO_GRAV_ALT, TORRENT_NO_MAP_COLL, TORRENT_NO_GRAV,
             TOP_DEBUG_MENU,
             POISE_VIEW,
-            SOUND_VIEW,
+            TARGETING_VIEW,
             EVENT_DRAW, EVENT_STOP,
             FREE_CAM,
             DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIVEMENTS,
@@ -485,6 +485,8 @@ namespace EldenRingTool
         const int soundDrawPatchLoc = 0x33bfd6;
         readonly byte[] soundDrawOrigBytes = { 0x74, 0x53 }; //JZ +53
         readonly byte[] soundDrawPatchBytes = { 0x90, 0x90 }; //nop nop
+
+        const int allTargetingDebugDraw = 0x3C2D43A;
 
         public void setSoundView(bool on)
         {//this can be enabled in a few ways. either look over all targeting system instances and set a flag, or just patch the location that checks the flag. let's go with the patch.
@@ -883,6 +885,11 @@ namespace EldenRingTool
                     var ptr = ReadUInt64(erBase + trophyImpOffset);
                     var ptr2 = ReadUInt64((IntPtr)ptr + 8);
                     return ((IntPtr)ptr2 + 0x4c, 0);
+                }
+                case DebugOpts.TARGETING_VIEW:
+                {
+                    var ptr = erBase + allTargetingDebugDraw;
+                    return (ptr, 1);
                 }
             }
             return badVal;
