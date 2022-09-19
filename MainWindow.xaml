@@ -104,7 +104,10 @@
                     <TextBlock x:Name="mapID">Map ID: </TextBlock>
                     <TextBlock x:Name="globalPos">Global: </TextBlock>
                 </StackPanel>
-                <Button Click="addSouls">Add 1mil runes</Button>
+                <StackPanel Orientation="Horizontal">
+                    <Button Click="addSouls">Add 1mil runes</Button>
+                    <Button Click="editStats" Margin="5,0">Edit Stats</Button>
+                </StackPanel>
                 <Button Click="installTargetHook" Margin="0,5" x:Name="targetHookButton">Enable target options</Button>
             </StackPanel>
             <StackPanel x:Name="targetPanel" IsEnabled="False" Opacity="0.5">

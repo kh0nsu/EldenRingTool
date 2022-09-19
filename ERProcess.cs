@@ -467,7 +467,7 @@ namespace EldenRingTool
 
         const int trophyImpOffset = 0x4453838; //CS::CSTrophyImp
 
-        /*const int toPGDataOff = 0x3C29108;
+        /*const int toPGDataOff = 0x3C29108; //"GameDataMan"
         //we have another way to get this, but can use this as a fallback.
         IntPtr getPlayerGameDataPtr()
         {
@@ -1116,6 +1116,23 @@ namespace EldenRingTool
             var ptr6 = (IntPtr)(ptr5 + 0x138);
             int ret = ReadInt32(ptr6);
             if (val.HasValue) { WriteInt32(ptr6, val.Value); }
+            return ret;
+        }
+
+        int statsOffset = 0x3c; //possible but unlikely to change between patches
+        readonly string[] STAT_NAMES = new string[] { "Vigor", "Mind", "Endurance", "Strength", "Dexterity", "Intelligence", "Faith", "Arcane" };
+        public List<(string, int)> getSetPlayerStats(List<(string,int)> newStats = null)
+        {
+            var ptr = (IntPtr)getCharPtrGameData();
+            var ret = new List<(string, int)>();
+
+            for (int i = 0; i < STAT_NAMES.Length; i++)
+            {
+                int statOffset = statsOffset + i * 4;
+                int currentVal = ReadInt32(ptr + statOffset);
+                if (newStats != null) { WriteInt32(ptr + statOffset, newStats[i].Item2); }
+                ret.Add((STAT_NAMES[i], currentVal));
+            }
             return ret;
         }
 

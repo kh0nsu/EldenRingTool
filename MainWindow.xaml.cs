@@ -1403,5 +1403,15 @@ namespace EldenRingTool
         {
             _process.offAndUnFreeze(ERProcess.DebugOpts.TARGETING_VIEW);
         }
+
+        private void editStats(object sender, RoutedEventArgs e)
+        {
+            var stats = _process.getSetPlayerStats();
+            var editor = new StatsEditor(stats, (x) =>
+            {
+                _process.getSetPlayerStats(x);
+            });
+            editor.Show();
+        }
     }
 }
