@@ -1413,5 +1413,14 @@ namespace EldenRingTool
             });
             editor.Show();
         }
+
+        private void spawnItem(object sender, RoutedEventArgs e)
+        {
+            var newVal = Microsoft.VisualBasic.Interaction.InputBox("Enter item ID (weapons only for now)", "Item Spawn", "1000000");
+            if (uint.TryParse(newVal, out uint id))
+            {
+                _process.spawnItem(id);
+            }
+        }
     }
 }

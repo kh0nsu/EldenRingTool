@@ -107,6 +107,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Button Click="addSouls">Add 1mil runes</Button>
                     <Button Click="editStats" Margin="5,0">Edit Stats</Button>
+                    <Button Click="spawnItem">Spawn Item</Button>
                 </StackPanel>
                 <Button Click="installTargetHook" Margin="0,5" x:Name="targetHookButton">Enable target options</Button>
             </StackPanel>

@@ -461,6 +461,24 @@ namespace EldenRingTool
         00007FF6C861BB6D | C3                       | ret                                                   |
         */
 
+        const int itemSpawnStart = zeroCaveOffset + 0x100; //warp is only 0x3E big but just go for a round number
+        const int mapItemManOff = 0x3C32B20;
+        const int itemSpawnCall = 0x5539E0;
+        const int itemSpawnData = itemSpawnStart + 0x30;
+
+        static readonly byte[] itemSpawnTemplate = new byte[]
+        {
+            0x48, 0x83, 0xEC, 0x48, //sub rsp,48
+            0x4D, 0x31, 0xC9, //xor r9,r9
+            0x4C, 0x8D, 0x05, 0x22, 0x00, 0x00, 0x00, //lea r8,[eldenring.exe+28E3F30] - relative address, won't change
+            0x49, 0x8D, 0x50, 0x20, //lea rdx,[r8+20]
+            0x49, 0xBA, 0, 0, 0, 0, 0, 0, 0, 0, //mov r10,MapItemMan (addr offset 0x14)
+            0x49, 0x8B, 0x0A, //mov rcx,[r10]
+            0xE8, 0, 0, 0, 0, //call itemSpawnCall. itemSpawnCall - (itemSpawnStart + 0x24) (addr offset 0x20)
+            0x48, 0x83, 0xC4, 0x48, //add rsp,48
+            0xC3, //ret
+        };
+
         const int usrInputMgrImplOff = 0x45075C8;//DLUID::DLUserInputManagerImpl<DLKR::DLMultiThreadingPolicy> //RTTI should find it
         const int usrInputMgrImpSteamInputFlagOff = 0x88b; //in 1.05, the func checking the flag is at +1E7D75F
         //above originally found by putting breakpoints in user32 device enum funcs, which get called by dinput8, which gets called by the steam overlay dll, which gets called by elden ring, then triggering the stutter.
@@ -546,6 +564,28 @@ namespace EldenRingTool
             uint P1 = (mapID & 0x0000FF00U) >> 8; //Z grid
             uint P0 = (mapID & 0x000000FFU); //map type?? this is possibly two nibbles
             doWarp((byte)P3, (byte)P2, (byte)P1, (byte)P0);
+        }
+
+        byte[] getItemSpawnTemplate()
+        {
+            var buf = itemSpawnTemplate.ToArray();
+            var mapItemManAddr = (erBase + mapItemManOff).ToInt64();
+            Array.Copy(BitConverter.GetBytes(mapItemManAddr), 0, buf, 0x14, 8);
+            int callAddr = itemSpawnCall - (itemSpawnStart + 0x24);
+            Array.Copy(BitConverter.GetBytes(callAddr), 0, buf, 0x20, 4);
+            return buf;
+        }
+
+        public void spawnItem(uint itemID)
+        {
+            var buf = getItemSpawnTemplate();
+            WriteBytes(erBase + itemSpawnStart, buf);
+            WriteUInt32(erBase + itemSpawnData + 0x20, 1); //struct count
+            WriteUInt32(erBase + itemSpawnData + 0x24, itemID);
+            WriteUInt32(erBase + itemSpawnData + 0x28, 1); //qty
+            WriteUInt32(erBase + itemSpawnData + 0x2C, 0xFFFF0000); //unused?
+            WriteUInt32(erBase + itemSpawnData + 0x30, 0xFFFFFFFF); //gem?
+            RunThread(erBase + itemSpawnStart);
         }
 
         public void setEnemyRepeatActionPatch(bool on)
