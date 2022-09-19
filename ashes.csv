@@ -1,4 +1,5 @@
 Name,ID
+Default,FFFFFFFF
 Assassin's Gambit,8000EB28
 Barbaric Roar,8000FDE8
 Barrage,80009CA4
@@ -16,7 +17,6 @@ Carian Retaliation,80007724
 Charge Forth,80002904
 Chilling Mist,800058AC
 Cragblade,8000ED1C
-Default,FFFFFFFF
 Determination,8000EA60
 Double Slash,80002BC0
 Earthshaker,800052D0

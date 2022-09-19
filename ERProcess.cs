@@ -576,15 +576,15 @@ namespace EldenRingTool
             return buf;
         }
 
-        public void spawnItem(uint itemID)
+        public void spawnItem(uint itemID, uint qty = 1, uint ashOfWar = 0xFFFFFFFF)
         {
             var buf = getItemSpawnTemplate();
             WriteBytes(erBase + itemSpawnStart, buf);
             WriteUInt32(erBase + itemSpawnData + 0x20, 1); //struct count
             WriteUInt32(erBase + itemSpawnData + 0x24, itemID);
-            WriteUInt32(erBase + itemSpawnData + 0x28, 1); //qty
+            WriteUInt32(erBase + itemSpawnData + 0x28, qty);
             WriteUInt32(erBase + itemSpawnData + 0x2C, 0); //unused?
-            WriteUInt32(erBase + itemSpawnData + 0x30, 0xFFFFFFFF); //gem?
+            WriteUInt32(erBase + itemSpawnData + 0x30, ashOfWar);
             RunThread(erBase + itemSpawnStart);
         }
 
@@ -1493,7 +1493,7 @@ namespace EldenRingTool
         static List<(string, uint)> ashes = new System.Collections.Generic.List<(string, uint)>();
         static bool _loaded = false;
 
-        static List<(string, uint)> importNameHexIDCSV(string name)
+        static List<(string, uint)> importNameIDCSV(string name, System.Globalization.NumberStyles numType = System.Globalization.NumberStyles.HexNumber)
         {
             var ret = new List<(string, uint)>();
             try
@@ -1510,7 +1510,7 @@ namespace EldenRingTool
                     {
                         var lineSplit = line.Split(',');
                         var nm = lineSplit[0];
-                        var id = uint.Parse(lineSplit[1], System.Globalization.NumberStyles.HexNumber);
+                        var id = uint.Parse(lineSplit[1], numType);
                         ret.Add((nm, id));
                     }
                 }
@@ -1525,9 +1525,9 @@ namespace EldenRingTool
         {
             if (_loaded) { return; }
 
-            ashes = importNameHexIDCSV("ashes.csv");
-            infusions = importNameHexIDCSV("infusions.csv");
-            items = importNameHexIDCSV("items.csv");
+            ashes = importNameIDCSV("ashes.csv");
+            infusions = importNameIDCSV("infusions.csv", System.Globalization.NumberStyles.Number);
+            items = importNameIDCSV("items.csv");
 
             _loaded = true;
         }

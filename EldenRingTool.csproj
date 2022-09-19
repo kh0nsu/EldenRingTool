@@ -61,10 +61,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ItemSpawn.xaml.cs">
+      <DependentUpon>ItemSpawn.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StatsEditor.xaml.cs">
       <DependentUpon>StatsEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
+    <Page Include="ItemSpawn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
