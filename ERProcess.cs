@@ -583,7 +583,7 @@ namespace EldenRingTool
             WriteUInt32(erBase + itemSpawnData + 0x20, 1); //struct count
             WriteUInt32(erBase + itemSpawnData + 0x24, itemID);
             WriteUInt32(erBase + itemSpawnData + 0x28, 1); //qty
-            WriteUInt32(erBase + itemSpawnData + 0x2C, 0xFFFF0000); //unused?
+            WriteUInt32(erBase + itemSpawnData + 0x2C, 0); //unused?
             WriteUInt32(erBase + itemSpawnData + 0x30, 0xFFFFFFFF); //gem?
             RunThread(erBase + itemSpawnStart);
         }
@@ -1482,6 +1482,77 @@ namespace EldenRingTool
                 foreach (var kvp in intVals) { ret += kvp.Key + " [" + kvp.Value + "] "; }
                 foreach (var kvp in floatVals) { ret += kvp.Key + " [" + kvp.Value + "] "; }
                 return ret;
+            }
+        }
+    }
+
+    public class ItemDB
+    {
+        static List<(string, uint)> items = new System.Collections.Generic.List<(string, uint)>();
+        static List<(string, uint)> infusions = new System.Collections.Generic.List<(string, uint)>();
+        static List<(string, uint)> ashes = new System.Collections.Generic.List<(string, uint)>();
+        static bool _loaded = false;
+
+        static List<(string, uint)> importNameHexIDCSV(string name)
+        {
+            var ret = new List<(string, uint)>();
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith(name));
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    var header = reader.ReadLine();
+                    var headerSplit = header.Split(',');
+                    string line = "";
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        var lineSplit = line.Split(',');
+                        var nm = lineSplit[0];
+                        var id = uint.Parse(lineSplit[1], System.Globalization.NumberStyles.HexNumber);
+                        ret.Add((nm, id));
+                    }
+                }
+                return ret;
+            }
+            catch
+            {
+                return ret;
+            }
+        }
+        static void loadDB()
+        {
+            if (_loaded) { return; }
+
+            ashes = importNameHexIDCSV("ashes.csv");
+            infusions = importNameHexIDCSV("infusions.csv");
+            items = importNameHexIDCSV("items.csv");
+
+            _loaded = true;
+        }
+        public static List<(string, uint)> Items
+        {
+            get
+            {
+                loadDB();
+                return items;
+            }
+        }
+        public static List<(string, uint)> Infusions
+        {
+            get
+            {
+                loadDB();
+                return infusions;
+            }
+        }
+        public static List<(string, uint)> Ashes
+        {
+            get
+            {
+                loadDB();
+                return ashes;
             }
         }
     }

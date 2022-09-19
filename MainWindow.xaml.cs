@@ -1416,11 +1416,9 @@ namespace EldenRingTool
 
         private void spawnItem(object sender, RoutedEventArgs e)
         {
-            var newVal = Microsoft.VisualBasic.Interaction.InputBox("Enter item ID (weapons only for now)", "Item Spawn", "1000000");
-            if (uint.TryParse(newVal, out uint id))
-            {
-                _process.spawnItem(id);
-            }
+            var name = Microsoft.VisualBasic.Interaction.InputBox("Enter (partial) item name)", "Item Spawn", "Fallingstar");
+            var item = ItemDB.Items.Where(x => x.Item1.ToLower().Contains(name.ToLower())).FirstOrDefault();
+            _process.spawnItem(item.Item2);
         }
     }
 }
