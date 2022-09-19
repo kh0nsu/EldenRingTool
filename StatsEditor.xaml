@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EldenRingTool"
         mc:Ignorable="d"
-        Title="Stats Editor" Width="150" ResizeMode="NoResize" SizeToContent="Height">
+        Title="Stats Editor" Width="150" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterOwner">
     <StackPanel Orientation="Vertical" x:Name="mainPanel">
         <StackPanel Orientation="Vertical" x:Name="statsPanel">
             <Grid x:Name="statsGrid">

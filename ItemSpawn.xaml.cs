@@ -16,7 +16,27 @@ namespace EldenRingTool
         {
             try
             {
-                var item = ItemDB.Items.Where(x => x.Item1.ToLower().Contains(txtItem.Text.ToLower())).FirstOrDefault();
+                var itemExact = ItemDB.Items.Where(x => x.Item1.ToLower().Equals(txtItem.Text.ToLower()));
+                var itemStart = ItemDB.Items.Where(x => x.Item1.ToLower().StartsWith(txtItem.Text.ToLower()));
+                var itemContain = ItemDB.Items.Where(x => x.Item1.ToLower().Contains(txtItem.Text.ToLower()));
+                (string, uint) item = ("", 0);
+                if (itemExact.Count() > 0)
+                {
+                    item = itemExact.First();
+                }
+                else if (itemStart.Count() > 0)
+                {
+                    item = itemStart.First();
+                }
+                else if (itemContain.Count() > 0)
+                {
+                    item = itemContain.First();
+                }
+                else
+                {
+                    MessageBox.Show("Item not found");
+                    return;
+                }
                 txtItem.Text = item.Item1;
                 var level = uint.Parse(txtLevel.Text);
                 var infus = ItemDB.Infusions.Where(x => x.Item1.ToLower().Contains(txtInfusion.Text.ToLower())).FirstOrDefault();

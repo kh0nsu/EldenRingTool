@@ -1411,12 +1411,14 @@ namespace EldenRingTool
             {
                 _process.getSetPlayerStats(x);
             });
+            editor.Owner = this;
             editor.Show();
         }
 
         private void spawnItem(object sender, RoutedEventArgs e)
         {
             var itemSpawn = new ItemSpawn(_process);
+            itemSpawn.Owner = this;
             itemSpawn.Show();
         }
     }
