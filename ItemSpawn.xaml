@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EldenRingTool"
         mc:Ignorable="d"
-        Title="Item Spawn" Width="450" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterOwner">
+        Title="Item Spawn" Width="500" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterOwner">
     <StackPanel Orientation="Vertical">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -13,6 +13,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1.2*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -22,10 +23,12 @@
             <Label Grid.Row="0" Grid.Column="1">Level</Label>
             <Label Grid.Row="0" Grid.Column="2">Infusion</Label>
             <Label Grid.Row="0" Grid.Column="3">Ash Of War</Label>
+            <Label Grid.Row="0" Grid.Column="4">Quantity</Label>
             <TextBox Grid.Row="1" Grid.Column="0" x:Name="txtItem">fallingstar</TextBox>
             <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtLevel">0</TextBox>
             <TextBox Grid.Row="1" Grid.Column="2" x:Name="txtInfusion">Normal</TextBox>
             <TextBox Grid.Row="1" Grid.Column="3" x:Name="txtAsh">Default</TextBox>
+            <TextBox Grid.Row="1" Grid.Column="4" x:Name="txtQuantity">1</TextBox>
         </Grid>
         <Button Click="spawnItem">Spawn</Button>
     </StackPanel>

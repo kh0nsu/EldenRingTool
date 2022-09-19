@@ -44,7 +44,8 @@ namespace EldenRingTool
                 uint itemID = item.Item2 + level + infus.Item2;
                 var ash = ItemDB.Ashes.Where(x => x.Item1.ToLower().Contains(txtAsh.Text.ToLower())).FirstOrDefault();
                 txtAsh.Text = ash.Item1;
-                _process.spawnItem(itemID, 1, ash.Item2);
+                uint qty = uint.Parse(txtQuantity.Text);
+                _process.spawnItem(itemID, qty, ash.Item2);
             }
             catch
             {
