@@ -288,7 +288,7 @@ namespace EldenRingTool
             DISABLE_DISTANT_MAP,
             DISABLE_CHARACTER,
             DISABLE_GRASS,
-            NO_DEATH,
+            NO_DEATH, ALL_CHR_NO_DEATH,
             INSTANT_QUITOUT,
             ONE_HP,
             MAX_HP, RUNE_ARC,
@@ -505,6 +505,36 @@ namespace EldenRingTool
         readonly byte[] soundDrawPatchBytes = { 0x90, 0x90 }; //nop nop
 
         const int allTargetingDebugDraw = 0x3C2D43A;
+
+        int allChrNoDeath = 0x3C312BA;
+
+        const int torrentDisabledCheckOne = 0xC730EA;
+        const int torrentDisabledCheckTwo = 0x6E7CDF;
+        readonly byte[] torrentCheckOrigBytes = { 0x0F, 0x95, 0xC0 };
+        readonly byte[] torrentCheckPatchBytes = { 0x30, 0xC0, 0x90 };
+
+        public void setTorrentAnywherePatch(bool on)
+        {
+            var existingBytes = ReadBytes(erBase + torrentDisabledCheckOne, 3);
+            if (existingBytes.SequenceEqual(torrentCheckOrigBytes) && on)
+            {
+                WriteBytes(erBase + torrentDisabledCheckOne, torrentCheckPatchBytes);
+            }
+            else if (existingBytes.SequenceEqual(torrentCheckPatchBytes) && !on)
+            {
+                WriteBytes(erBase + torrentDisabledCheckOne, torrentCheckOrigBytes);
+            }
+
+            existingBytes = ReadBytes(erBase + torrentDisabledCheckTwo, 3);
+            if (existingBytes.SequenceEqual(torrentCheckOrigBytes) && on)
+            {
+                WriteBytes(erBase + torrentDisabledCheckTwo, torrentCheckPatchBytes);
+            }
+            else if (existingBytes.SequenceEqual(torrentCheckPatchBytes) && !on)
+            {
+                WriteBytes(erBase + torrentDisabledCheckTwo, torrentCheckOrigBytes);
+            }
+        }
 
         public void setSoundView(bool on)
         {//this can be enabled in a few ways. either look over all targeting system instances and set a flag, or just patch the location that checks the flag. let's go with the patch.
@@ -808,6 +838,10 @@ namespace EldenRingTool
                     var ptr5 = ReadUInt64((IntPtr)(ptr4 + 0)); //CS::CSChrDataModule
                     var ptr6 = (IntPtr)(ptr5 + 0x19B); //was 197 in an older patch
                     return (ptr6, 0x10); //bitfield, bit 0
+                }
+                case DebugOpts.ALL_CHR_NO_DEATH:
+                {
+                    return (erBase + allChrNoDeath, 1);
                 }
                 case DebugOpts.ONE_HP:
                 case DebugOpts.MAX_HP:
@@ -1297,7 +1331,7 @@ namespace EldenRingTool
             return 0; //teleported
         }
         public IntPtr getFreeCamPtr()
-        {
+        {//pointer to CSDebugCam
             var ptr1 = ReadUInt64(erBase + FieldAreaOff);
             var ptr2 = ReadUInt64((IntPtr)(ptr1 + 0x20));
             var ptr3 = ReadUInt64((IntPtr)(ptr2 + 0xD0));

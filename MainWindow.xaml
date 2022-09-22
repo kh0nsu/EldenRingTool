@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EldenRingTool"
         mc:Ignorable="d"
-        Title="ERTool VERSION" Width="320" ResizeMode="NoResize" SizeToContent="Height"
+        Title="ERTool VERSION" Width="330" ResizeMode="NoResize" SizeToContent="Height"
         >
     <DockPanel Name="dockPanel">
         <StackPanel DockPanel.Dock="Top">
@@ -25,7 +25,8 @@
                     <CheckBox Checked="hitboxBOn" Unchecked="hitboxBOff" Margin="10,0" x:Name="chkHitboxB">View B</CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox Checked="noDeathOn" Unchecked="noDeathOff" x:Name="chkPlayerNoDeath">No death</CheckBox>
+                    <CheckBox Checked="noDeathOn" Unchecked="noDeathOff" x:Name="chkPlayerNoDeath">No death (player)</CheckBox>
+                    <CheckBox Checked="noDeathAllOn" Unchecked="noDeathAllOff" x:Name="chkAllNoDeath" Margin="5,0">No death (all enemies/npcs)</CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="oneHPOn" Unchecked="oneHPOff" x:Name="chkOneHP">1 HP (rtsr)</CheckBox>
@@ -70,11 +71,12 @@
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="freeCamOn" Unchecked="freeCamOff" x:Name="chkFreeCam">Free camera</CheckBox>
                     <CheckBox Checked="freeCamControlOn" Unchecked="freeCamControlOff" Margin="5,0" x:Name="chkFreeCamControl">Player control</CheckBox>
-                    <CheckBox Margin="5,0" Checked="noClipOn" Unchecked="noClipOff" x:Name="chkNoClip">Noclip</CheckBox>
+                    <CheckBox Checked="noClipOn" Unchecked="noClipOff" x:Name="chkNoClip">Noclip</CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox Checked="combatMapOn" Unchecked="combatMapOff" x:Name="chkCombatMap">Allow map in combat</CheckBox>
+                    <CheckBox Checked="combatMapOn" Unchecked="combatMapOff" x:Name="chkCombatMap">Combat map</CheckBox>
                     <CheckBox Checked="freeUpgOn" Unchecked="freeUpgOff" x:Name="chkFreeUpg" Margin="5,0">Free Upgrades</CheckBox>
+                    <CheckBox Checked="torrentAnywhereOn" Unchecked="torrentAnywhereOff" x:Name="chkTorrentAnywhere">Torrent Anywhere</CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="steamInputEnumDisableOn" Unchecked="steamInputEnumDisableOff" x:Name="chkSteamInputEnum">Stutter fix</CheckBox>

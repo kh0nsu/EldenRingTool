@@ -61,7 +61,7 @@ namespace EldenRingTool
             COL_MESH_A, COL_MESH_B, COL_MESH_CYCLE,
             CHAR_MESH, HIDE_MODELS,
             HITBOX_A, HITBOX_B,
-            NO_DEATH,
+            NO_DEATH, ALL_NO_DEATH,
             ONE_HP, MAX_HP, DIE, RUNE_ARC,
             DISABLE_AI, REPEAT_ENEMY_ACTIONS,
             INF_STAM, INF_FP, INF_CONSUM,
@@ -70,7 +70,7 @@ namespace EldenRingTool
             POISE_VIEW,
             SOUND_VIEW, TARGETING_VIEW,
             EVENT_VIEW, EVENT_STOP,
-            FREE_CAMERA, FREE_CAMERA_CONTROL, NO_CLIP, ALLOW_MAP_COMBAT,
+            FREE_CAMERA, FREE_CAMERA_CONTROL, NO_CLIP, ALLOW_MAP_COMBAT, TORRENT_ANYWHERE,
             DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIEVEMENTS,
             ADD_SOULS,
             GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC
@@ -435,6 +435,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.HITBOX_A: chkHitboxA.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.HITBOX_B: chkHitboxB.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.NO_DEATH: chkPlayerNoDeath.IsChecked ^= true; break;
+                case HOTKEY_ACTIONS.ALL_NO_DEATH: chkAllNoDeath.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.ONE_HP: chkOneHP.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.MAX_HP: chkMaxHP.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.DIE: instantDeath(null, null); break;
@@ -458,6 +459,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.FREE_CAMERA_CONTROL: chkFreeCamControl.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.NO_CLIP: chkNoClip.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.ALLOW_MAP_COMBAT: chkCombatMap.IsChecked ^= true; break;
+                case HOTKEY_ACTIONS.TORRENT_ANYWHERE: chkTorrentAnywhere.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.DISABLE_STEAM_INPUT_ENUM: chkSteamInputEnum.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.DISABLE_STEAM_ACHIEVEMENTS: chkSteamAchieve.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.ADD_SOULS: addSouls(null, null); break;
@@ -1420,6 +1422,26 @@ namespace EldenRingTool
             var itemSpawn = new ItemSpawn(_process);
             itemSpawn.Owner = this;
             itemSpawn.Show();
+        }
+
+        private void torrentAnywhereOn(object sender, RoutedEventArgs e)
+        {
+            _process.setTorrentAnywherePatch(true);
+        }
+
+        private void torrentAnywhereOff(object sender, RoutedEventArgs e)
+        {
+            _process.setTorrentAnywherePatch(false);
+        }
+
+        private void noDeathAllOn(object sender, RoutedEventArgs e)
+        {
+            _process.freezeOn(ERProcess.DebugOpts.ALL_CHR_NO_DEATH);
+        }
+
+        private void noDeathAllOff(object sender, RoutedEventArgs e)
+        {
+            _process.offAndUnFreeze(ERProcess.DebugOpts.ALL_CHR_NO_DEATH);
         }
     }
 }
