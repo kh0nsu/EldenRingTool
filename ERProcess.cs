@@ -506,7 +506,7 @@ namespace EldenRingTool
 
         const int allTargetingDebugDraw = 0x3C2D43A;
 
-        int allChrNoDeath = 0x3C312BA;
+        const int allChrNoDeath = 0x3C312BA;
 
         const int torrentDisabledCheckOne = 0xC730EA;
         const int torrentDisabledCheckTwo = 0x6E7CDF;
@@ -770,8 +770,11 @@ namespace EldenRingTool
         }
 
         //both of these are equivalent. not sure why different tables use different ones. perhaps one is more likely to survive future patches.
-        uint worldChrManPlayerOff1 = 0xB658; //points to a pointer to CS::PlayerIns. constant not found...? likely less reliable.
-        uint worldChrManPlayerOff2 = 0x18468; //points directly to CS::PlayerIns, commonly found after refs to CS::WorldChrManImp
+        //const uint worldChrManPlayerOff1 = 0xB658; //points to a pointer to CS::PlayerIns. constant not found...? likely less reliable.
+        const uint worldChrManPlayerOff2 = 0x18468; //points directly to CS::PlayerIns, commonly found after refs to CS::WorldChrManImp
+
+        //uint worldChrManTorrentOff = 0x18378; //changed in 1.06. need AOB for this. cannot find the constant in the game however so it likely has a different way to get to torrent.
+        const uint worldChrManTorrentOffAlt = 0xb6f0; //not sure if this is patch-stable or not.
 
         ulong getPlayerInsPtr()
         {
@@ -800,9 +803,9 @@ namespace EldenRingTool
         ulong getTorrentPtr()
         {
             var ptr1 = ReadUInt64(erBase + worldChrManOff);
-            //var ptr2 = ReadUInt64((IntPtr)(ptr1 + 0x18390)); //CS::ChrSet. is there an alternate pointer for this?
-            var ptr2 = ReadUInt64((IntPtr)(ptr1 + 0x18378)); //changed in 1.06
-            var ptr3 = ReadUInt64((IntPtr)(ptr2 + 0x18));
+            //var ptr2 = ReadUInt64((IntPtr)(ptr1 + worldChrManTorrentOff)); //gets a ptr to a ChrSet
+            //var ptr3 = ReadUInt64((IntPtr)(ptr2 + 0x18)); //no name
+            var ptr3 = ReadUInt64((IntPtr)(ptr1 + worldChrManTorrentOffAlt + 0x18));
             var ptr4 = ReadUInt64((IntPtr)(ptr3)); //CS::EnemyIns
             return ptr4;
         }
