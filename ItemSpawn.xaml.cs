@@ -38,17 +38,21 @@ namespace EldenRingTool
                     return;
                 }
                 txtItem.Text = item.Item1;
-                var level = uint.Parse(txtLevel.Text);
+                uint level;
+                if (!uint.TryParse(txtLevel.Text, out level)) { level = 0; }
                 var infus = ItemDB.Infusions.Where(x => x.Item1.ToLower().Contains(txtInfusion.Text.ToLower())).FirstOrDefault();
                 txtInfusion.Text = infus.Item1;
                 uint itemID = item.Item2 + level + infus.Item2;
                 var ash = ItemDB.Ashes.Where(x => x.Item1.ToLower().Contains(txtAsh.Text.ToLower())).FirstOrDefault();
                 txtAsh.Text = ash.Item1;
-                uint qty = uint.Parse(txtQuantity.Text);
+                uint qty;
+                if (!uint.TryParse(txtQuantity.Text, out qty)) { qty = 1; }
                 _process.spawnItem(itemID, qty, ash.Item2);
             }
             catch
             {
+                MessageBox.Show("Error");
+                return;
             }
         }
     }
