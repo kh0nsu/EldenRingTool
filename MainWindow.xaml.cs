@@ -611,6 +611,7 @@ namespace EldenRingTool
             _process.freezeOn(ERProcess.DebugOpts.DISABLE_TREES);
             _process.freezeOn(ERProcess.DebugOpts.DISABLE_ROCKS);
             _process.freezeOn(ERProcess.DebugOpts.DISABLE_GRASS);
+            _process.freezeOn(ERProcess.DebugOpts.DISABLE_DISTANT_MAP);
         }
 
         private void colMeshAOff(object sender, RoutedEventArgs e)
@@ -620,6 +621,7 @@ namespace EldenRingTool
             _process.offAndUnFreeze(ERProcess.DebugOpts.DISABLE_TREES);
             _process.offAndUnFreeze(ERProcess.DebugOpts.DISABLE_ROCKS);
             _process.offAndUnFreeze(ERProcess.DebugOpts.DISABLE_GRASS);
+            _process.offAndUnFreeze(ERProcess.DebugOpts.DISABLE_DISTANT_MAP);
         }
 
         //code is gonna get repetitive. i'm sorry. i never planned this many features.
@@ -1225,7 +1227,7 @@ namespace EldenRingTool
         }
 
         private void restorePosDB(object sender, RoutedEventArgs e)
-        {
+        {//TODO: use selection window?
             try
             {
                 var lines = File.ReadAllLines(posDbFile());
