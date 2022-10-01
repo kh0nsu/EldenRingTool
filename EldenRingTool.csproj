@@ -64,6 +64,9 @@
     <Compile Include="ItemSpawn.xaml.cs">
       <DependentUpon>ItemSpawn.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Selection.xaml.cs">
+      <DependentUpon>Selection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StatsEditor.xaml.cs">
       <DependentUpon>StatsEditor.xaml</DependentUpon>
     </Compile>
@@ -85,6 +88,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Selection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="StatsEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

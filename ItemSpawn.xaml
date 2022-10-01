@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EldenRingTool"
         mc:Ignorable="d"
-        Title="Item Spawn" Width="500" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterOwner">
+        Title="Item Spawn" Width="600" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterOwner">
     <StackPanel Orientation="Vertical">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3.5*"/>
+                <ColumnDefinition Width="0.3*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="3*"/>
@@ -20,15 +21,16 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0">Item Name</Label>
-            <Label Grid.Row="0" Grid.Column="1">Level</Label>
-            <Label Grid.Row="0" Grid.Column="2">Infusion</Label>
-            <Label Grid.Row="0" Grid.Column="3">Ash Of War</Label>
-            <Label Grid.Row="0" Grid.Column="4">Quantity</Label>
+            <Label Grid.Row="0" Grid.Column="2">Level</Label>
+            <Label Grid.Row="0" Grid.Column="3">Infusion</Label>
+            <Label Grid.Row="0" Grid.Column="4">Ash Of War</Label>
+            <Label Grid.Row="0" Grid.Column="5">Quantity</Label>
             <TextBox Grid.Row="1" Grid.Column="0" x:Name="txtItem">fallingstar</TextBox>
-            <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtLevel">0</TextBox>
-            <TextBox Grid.Row="1" Grid.Column="2" x:Name="txtInfusion">Normal</TextBox>
-            <TextBox Grid.Row="1" Grid.Column="3" x:Name="txtAsh">Default</TextBox>
-            <TextBox Grid.Row="1" Grid.Column="4" x:Name="txtQuantity">1</TextBox>
+            <Button Grid.Row="1" Grid.Column="1" Click="showList">?</Button>
+            <TextBox Grid.Row="1" Grid.Column="2" x:Name="txtLevel">0</TextBox>
+            <TextBox Grid.Row="1" Grid.Column="3" x:Name="txtInfusion">Normal</TextBox>
+            <TextBox Grid.Row="1" Grid.Column="4" x:Name="txtAsh">Default</TextBox>
+            <TextBox Grid.Row="1" Grid.Column="5" x:Name="txtQuantity">1</TextBox>
         </Grid>
         <Button Click="spawnItem">Spawn</Button>
     </StackPanel>

@@ -55,5 +55,12 @@ namespace EldenRingTool
                 return;
             }
         }
+
+        private void showList(object sender, RoutedEventArgs e)
+        {
+            var sel = new Selection(ItemDB.Items.Select(x => x.Item1).ToList<object>(), (x) => { txtItem.Text = x as string; }, "Choose an item");
+            sel.Owner = this;
+            sel.Show();
+        }
     }
 }
