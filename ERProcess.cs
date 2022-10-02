@@ -18,6 +18,7 @@ namespace EldenRingTool
         private Process _targetProcess = null;
         private IntPtr _targetProcessHandle = IntPtr.Zero;
         public IntPtr erBase = IntPtr.Zero;
+        int erSize = 0;
 
         protected bool disposed = false;
         
@@ -26,6 +27,9 @@ namespace EldenRingTool
 
         [DllImport("kernel32.dll")]
         private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int iSize, ref int lpNumberOfBytesRead);
+
+        [DllImport("ntdll.dll")]
+        static extern int NtReadVirtualMemory(IntPtr ProcessHandle, IntPtr BaseAddress, byte[] Buffer, UInt32 NumberOfBytesToRead, ref UInt32 NumberOfBytesRead); //consider replacing ReadProcessMemory with this
 
         [DllImport("kernel32.dll")]
         private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int iSize, int lpNumberOfBytesWritten);
@@ -56,6 +60,7 @@ namespace EldenRingTool
         {
             findAttach();
             findBaseAddress();
+            aobScan();
 
             freezeThread = new Thread(() => { freezeFunc(); });
             freezeThread.Start();
@@ -156,6 +161,7 @@ namespace EldenRingTool
                     if (modNameLower == erProName + ".exe")
                     {
                         erBase = processModule.BaseAddress;
+                        erSize = processModule.ModuleMemorySize;
                     }
                 }
             }
@@ -322,94 +328,182 @@ namespace EldenRingTool
 
         //addresses/offsets - patch-specific
 
-        const int worldChrManOff = 0x3C310B8; //pointer to CS::WorldChrManImp
+        int worldChrManOff = 0x3C310B8; //pointer to CS::WorldChrManImp
 
-        const int hitboxBase = 0x3C31488; //currently no RTTI name for this.
+        int hitboxBase = 0x3C31488; //currently no RTTI name for this.
+        uint hitboxOffset = 0xA0;
 
-        const int groupMaskBase = 0x3A1E830;//most render
+        int groupMaskBase = 0x3A1E830;//most render
         //const int groupMaskMap = 0x3A1E831;
-        const int groupMaskTrees = 0x3A1E839;
+        int groupMaskTrees = 0x3A1E839;
 
-        const int meshesOff = 0x3C3518C;//static addresses again
+        int meshesOff = 0x3C3518C;//static addresses again
 
-        const int quitoutBase = 0x3C349D8; //CS::GameMan.
+        int quitoutBase = 0x3C349D8; //CS::GameMan.
 
-        const int logoScreenBase = 0xA9807D;
+        int logoScreenBase = 0xA9807D;
 
-        const int codeCavePtrLoc = 0x25450;
-        const int targetHookLoc = 0x6F89A2;
+        int codeCavePtrLoc = 0x25450;
+        int targetHookLoc = 0x6F89A2;
 
-        const int codeCaveCodeLoc = codeCavePtrLoc + 0x10;// 0x25460 for 1.03.2
+        int codeCaveCodeLoc { get { return codeCavePtrLoc + 0x10; } }
 
-        const int miscDebugBase = 0x3C312AF;
-        const int noAiUpdate = 0x3C312BF;
+        int miscDebugBase = 0x3C312AF;
+        int noAiUpdate = 0x3C312BF;
 
-        const int chrDbg = 0x3C312A8;//should be close to misc debug
+        int chrDbg = 0x3C312A8;//should be close to misc debug
 
-        const int newMenuSystem = 0x3C369A0;//CS::CSMenuManImp //irrelvant now with top debug gone
+        int newMenuSystem = 0x3C369A0;//CS::CSMenuManImp //irrelvant now with top debug gone
 
-        const int fontDrawOffset = 0x25EAF20; //defaults to 0x48. need 0xC3 for in-game poise viewer.
+        int fontDrawOffset = 0x25EAF20; //defaults to 0x48. need 0xC3 for in-game poise viewer.
 
-        const int DbgEventManOff = 0x3C330C0; //no name. static addresses.
+        int DbgEventManOff = 0x3C330C0; //no name. static addresses.
 
-        const int EventPatchLoc1 = 0xDC8670; //32 C0 C3 (next 3 vary with patch, eg. CC BF 60 in 1.03.2, cc 7b 83 in 1.04.0)
-        const int EventPatchLoc2 = 0xDC8650; //32 C0 C3 (next 3 vary with patch, eg. CC E3 A2 in 1.03.2, 90 49 8b in 1.04.0)
+        int EventPatchLoc1 = 0xDC8670; //32 C0 C3 (next 3 vary with patch, eg. CC BF 60 in 1.03.2, cc 7b 83 in 1.04.0)
+        int EventPatchLoc2 = 0xDC8650; //32 C0 C3 (next 3 vary with patch, eg. CC E3 A2 in 1.03.2, 90 49 8b in 1.04.0)
 
-        const int FieldAreaOff = 0x3C34298;//CS::FieldArea
+        int FieldAreaOff = 0x3C34298;//CS::FieldArea
 
-        //const int freeCamPatchLoc = 0x415305;
-        const int freeCamPatchLocAlt = 0xDB8A00; //1st addr after call (a jmp)
+        //int freeCamPatchLoc = 0x415305;
+        int freeCamPatchLocAlt = 0xDB8A00; //1st addr after call (a jmp)
         
-        const int freeCamPlayerControlPatchLoc = 0x664EE6;
+        int freeCamPlayerControlPatchLoc = 0x664EE6;
         
-        const int mapOpenInCombatOff = 0x7CB4D3;
-        const int mapStayOpenInCombatOff = 0x979AE7;
+        int mapOpenInCombatOff = 0x7CB4D3;
+        int mapStayOpenInCombatOff = 0x979AE7;
 
         //DbgGetForceActIdx. patch changes it to use the addr from DbgSetLastActIdx 
-        const int enemyRepeatActionOff = 0x4F22456;
+        int enemyRepeatActionOff = 0x4F22456;
         
-        const int zeroCaveOffset = 0x28E3E00; //zeroes at the end of the program
-        const int warpFirstCallOffset = 0x5DDE30;
-        const int warpSecondCallOffset = 0x65E260;
+        int zeroCaveOffset = 0x28E3E00; //zeroes at the end of the program
+        int warpFirstCallOffset = 0x5DDE30;
+        int warpSecondCallOffset = 0x65E260;
 
-        const int itemSpawnStart = zeroCaveOffset + 0x100; //warp is only 0x3E big but just go for a round number
-        const int mapItemManOff = 0x3C32B20;
-        const int itemSpawnCall = 0x5539E0;
-        const int itemSpawnData = itemSpawnStart + 0x30;
+        int itemSpawnStart { get { return zeroCaveOffset + 0x100; } } //warp is only 0x3E big but just go for a round number
+        int mapItemManOff = 0x3C32B20;
+        int itemSpawnCall = 0x5539E0;
+        int itemSpawnData { get { return itemSpawnStart + 0x30; } }
 
-        const int usrInputMgrImplOff = 0x45075C8;//DLUID::DLUserInputManagerImpl<DLKR::DLMultiThreadingPolicy> //RTTI should find it
-        const int usrInputMgrImpSteamInputFlagOff = 0x88b; //in 1.05, the func checking the flag is at +1E7D75F
+        int usrInputMgrImplOff = 0x45075C8;//DLUID::DLUserInputManagerImpl<DLKR::DLMultiThreadingPolicy> //RTTI should find it
+        uint usrInputMgrImpSteamInputFlagOff = 0x88b; //in 1.05, the func checking the flag is at +1E7D75F
         //above originally found by putting breakpoints in user32 device enum funcs, which get called by dinput8, which gets called by the steam overlay dll, which gets called by elden ring, then triggering the stutter.
 
-        const int trophyImpOffset = 0x4453838; //CS::CSTrophyImp
+        int trophyImpOffset = 0x4453838; //CS::CSTrophyImp
 
-        //const int toPGDataOff = 0x3C29108; //"GameDataMan"
+        //int toPGDataOff = 0x3C29108; //"GameDataMan"
 
-        const int csFlipperOff = 0x4453E98; //lots of interesting stuff here. frame times, fps, etc.
-        const int gameSpeedOffset = 0x2D4;
+        int csFlipperOff = 0x4453E98; //lots of interesting stuff here. frame times, fps, etc.
+        int gameSpeedOffset = 0x2D4;
 
-        const int upgradeRuneCostOff = 0x765241;
-        const int upgradeMatCostOff = 0x8417FC;
+        int upgradeRuneCostOff = 0x765241;
+        int upgradeMatCostOff = 0x8417FC;
 
-        const int soundDrawPatchLoc = 0x33bfd6;
+        int soundDrawPatchLoc = 0x33bfd6;
 
-        const int allTargetingDebugDraw = 0x3C2D43A;
+        int allTargetingDebugDraw = 0x3C2D43A;
 
-        const int allChrNoDeath = 0x3C312BA;
+        int allChrNoDeath = 0x3C312BA;
 
-        const int torrentDisabledCheckOne = 0xC730EA;
-        const int torrentDisabledCheckTwo = 0x6E7CDF;
+        int torrentDisabledCheckOne = 0xC730EA;
+        int torrentDisabledCheckTwo = 0x6E7CDF;
 
         //both of these are equivalent. not sure why different tables use different ones. perhaps one is more likely to survive future patches.
-        //const uint worldChrManPlayerOff1 = 0xB658; //points to a pointer to CS::PlayerIns. constant not found...? likely less reliable.
-        const uint worldChrManPlayerOff2 = 0x18468; //points directly to CS::PlayerIns, commonly found after refs to CS::WorldChrManImp
+        //uint worldChrManPlayerOff1 = 0xB658; //points to a pointer to CS::PlayerIns. constant not found...? likely less reliable.
+        uint worldChrManPlayerOff2 = 0x18468; //points directly to CS::PlayerIns, commonly found after refs to CS::WorldChrManImp
 
         //uint worldChrManTorrentOff = 0x18378; //changed in 1.06. need AOB for this. cannot find the constant in the game however so it likely has a different way to get to torrent.
-        const uint worldChrManTorrentOffAlt = 0xb6f0; //not sure if this is patch-stable or not.
+        uint worldChrManTorrentOffAlt = 0xb6f0; //not sure if this is patch-stable or not.
 
-        const uint noDeathOffset = 0x19B; //was 197 in an older patch
+        uint noDeathOffset = 0x19B; //was 197 in an older patch
 
-        const uint mapIDinPlayerIns = 0x6C0;
+        uint mapIDinPlayerIns = 0x6C0;
+
+        void aobScan()
+        {//see https://github.com/kh0nsu/FromAobScan
+            var sw = new Stopwatch();
+            sw.Start();
+            var scanner = new AOBScanner(_targetProcessHandle, erBase, erSize);
+            
+            worldChrManOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 4C 8B A8 ?? ?? ?? ?? 4D 85 ED 0F 84 ?? ?? ?? ??", "CS::WorldChrManImp", 5 + 3, 5 + 3 + 4, startIndex: 1800000);
+            worldChrManPlayerOff2 = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 4C 8B A8 ?? ?? ?? ?? 4D 85 ED 0F 84 ?? ?? ?? ??", "CS::WorldChrManImp offset", 5 + 7 + 3, startIndex: 1800000);
+            hitboxBase = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B0D ???????? E8 ???????? F3 0F1057 ?? 48 8BCB 0FB693 ????0000 E8 ???????? 48 8BCB E8 ???????? 48 8B0D ????????", "hitboxBase", 1 + 2, 1 + 2 + 4, startIndex: 10900000);
+            hitboxOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "80B9 ????0000 00 48 8BF9 BE FFFFFFFF 74 ?? 48 8B19 48 85DB 74 ??", "hitboxOffset", 2, startIndex: 5200000);
+
+            groupMaskBase = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "803D ???????? 00 0F1000 0F1145 D0 0F84 ????0000 803D ???????? 00 0F85 ????0000 803D ???????? 00 B3 01 C605 ???????? 00 74 ?? BA 01000000", "groupMaskBase", 2, 2 + 4 + 1, startIndex: 6500000);
+            groupMaskTrees = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "803D ???????? 00 74 1f ba 05000000", "groupMaskTrees", 2, 7, startIndex: 6500000);
+            meshesOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "0F B6 25 ?? ?? ?? ?? 44 0F B6 3D ?? ?? ?? ?? E8 ?? ?? ?? ?? 0F B6 F8", "meshesOff", 3, 7, startIndex: 7100000);
+
+            quitoutBase = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 0F B6 40 10 C3", "CS::GameMan", 3, 7, startIndex: 6500000);
+            logoScreenBase = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "74 53 48 8B05 ???????? 48 85C0 75 ?? 48 8D0D ???????? E8 ???????? 4C 8BC8 4C 8D05 ???????? BA ????0000 48 8D0D ???????? E8 ????????", "logoScreenBase", startIndex: 10900000);
+            targetHookLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B48 ?? 49 898D ????0000 49 8BCE E8 ???????? 84C0 75 ?? 49 8B5E ?? 48 8D4D ?? E8 ????????", "targetHookLoc", startIndex: 7100000);
+            scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B48 ?? 49 898D ????0000 49 8BCE E8 ???????? 84C0 75 ?? 49 8B5E ?? 48 8D4D ?? E8 ????????", "targetHookLoc offset", 1 + 2 + 1 + 1 + 2, startIndex: 7100000); //TODO
+            //miscDebugBase = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "803D ???????? 00 74 09 48 8D4D A0 E8 ???????? 4D 85E4", "miscDebugBase", 2, 7, startIndex: 4200000); //TODO: this address is slightly wrong
+            noAiUpdate = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "0FB63D ???????? 48 85C0 75 2E", "noAIUpdate", 3, 7, startIndex: 3800000);
+
+            chrDbg = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 41 83 FF 02 ?? ?? 48 85 C0", "chrDbg", 3, 7, startIndex: 5000000);
+            newMenuSystem = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B05 ???????? 33DB 48 897424 ?? 48 8BF1 895C24 ?? 48 85C0 75 ??", "CSMenuManImp", 3, 7, startIndex: 7400000);
+            fontDrawOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 895C24 10 55 56 57 41 54 41 55 41 56 41 57 48 8D6C24 ?? 48 81EC ???????? 0F29B424 ????????", "fontDrawOffset", startIndex: 39000000);
+            DbgEventManOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 0D ???????? 48 85 C9 ???? 83 CF 20", "DbgEventManOff", 3, 7, startIndex: 10000000);
+
+            EventPatchLoc1 = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 84C0 74 06 E8 ???????? 90 48 8BC7", "Event patch func 1", 1, 1 + 4, startIndex: 5500000);
+            EventPatchLoc2 = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 84C0 74 06 E8 ???????? 90 48 8BC7", "Event patch func 2", 1 + 4 + 2 + 1 + 1 + 1, 1 + 4 + 2 + 1 + 1 + 1 + 4, startIndex: 5500000);
+            FieldAreaOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 0D ?? ?? ?? ?? 48 ?? ?? ?? 44 0F B6 61 ?? E8 ?? ?? ?? ?? 48 63 87 ?? ?? ?? ?? 48 ?? ?? ?? 48 85 C0", "CS::FieldArea", 3, 7, startIndex: 6400000);
+            freeCamPatchLocAlt = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "EB 05 E8 ?? ?? ?? ?? E8 ?? ?? ?? ?? 84 C0 75 0C", "free cam patch loc, 1st called addr", readoffset32: 1 + 1 + 1 + 4 + 1, 1 + 1 + 1 + 4 + 1 + 4, startIndex: 7000000);
+
+            freeCamPlayerControlPatchLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "8B 83 ?? 00 00 00 FF C8 83 F8 01", "free cam player control patch loc", startIndex: 6500000);
+            if (freeCamPlayerControlPatchLoc < 0)
+            {
+                freeCamPlayerControlPatchLoc = scanner.findAddr(scanner.sectionTwo, scanner.textTwoAddr, "8B 83 ?? 00 00 00 FF C8 83 F8 01", "free cam player control patch loc (2nd section)");
+            }
+            mapOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 84C0 74 ?? C745 38 ???????? C745 3C ???????? C745 40 ???????? 48 8D05 ????????", "map open in combat", startIndex: 8000000);
+            mapStayOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ?? ?? ?? ?? 84 C0 75 ?? 38 83 ?? ?? ?? ?? 75 ?? 83 e7 fe", "map stay open in combat", startIndex: 9800000);
+
+            enemyRepeatActionOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 41 08 0F BE 80 B1 E9 00 00", "enemyRepeatActionOff (1st sect)", justOffset: 7);
+            if (enemyRepeatActionOff < 0)
+            {
+                enemyRepeatActionOff = scanner.findAddr(scanner.sectionTwo, scanner.textTwoAddr, "48 8B 41 08 0F BE 80 B1 E9 00 00", "enemyRepeatActionOff (2nd sect)", justOffset: 7);
+            }
+            warpFirstCallOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 83EC 48 48 C74424 28 FEFFFFFF E8 ?? ?? ?? ?? 48", "warp call one", startIndex: 6000000);
+            warpSecondCallOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "488B05 ???????? 8988 ??0C0000 C3", "warp call two", startIndex: 6500000);
+            usrInputMgrImplOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8905 ???????? 48 8B05 ???????? E8 ???????? 4C 8B08 41 B8 ??000000 48 8D15 ????0000 48 8BC8 41 FF51 ?? 48 8B1D ????????", "usrInputMgrImplOff", 3, 7, startIndex: 1000000);
+            usrInputMgrImpSteamInputFlagOff = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "80B9 ????0000 00 48 8B5C24 40", "steam input flag check", 2, startIndex: 31500000);
+            csFlipperOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? F3 0F 10 88 ?? ?? ?? ?? F3 0F", "csFlipperOff", 3, 7, startIndex: 13800000);
+            gameSpeedOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? F3 0F 10 88 ?? ?? ?? ?? F3 0F", "csFlipperOff gameSpeedOffset", 7 + 4, startIndex: 13800000);
+            noDeathOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4883EC20F681????000001488bd97408", "no-death offset in CSChrDataModule", 4 + 2, startIndex: 4200000);
+            //scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 48 85 C0 74 05 48 8B 40 58 C3 C3", "GameDataMan", 3, 7, startIndex: 2300000);
+
+            trophyImpOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48833D ???????? 00 75 31 4C 8B05 ???????? 4C 8945 10 BA 08000000 8D4A 18", "CS::CSTrophyImp", 3, 8, startIndex: 13800000);
+
+            upgradeRuneCostOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "74 28 48 8B45 ?? 48 85C0 74 07 F3 0F1048 ?? EB 08 F3 0F100D ????????", "Weapon upgrade rune cost", startIndex: 7500000);
+            upgradeMatCostOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "8BF8 44 8BC3 48 8D55 ?? 48 8D4D ?? E8 ????????", "Weapon upgrade material cost", startIndex: 8500000);
+
+            soundDrawPatchLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "74 ?? 48 8B0D ???????? BE 01000000 897424 ?? 48 85C9 75 ?? 48 8D0D ???????? E8 ????????", "soundDrawPatchLoc", startIndex: 3200000);
+
+            allTargetingDebugDraw = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "40 3835 ???????? 0F84 ????0000 48 8D5424 ?? 48 8BCF E8 ????0000 48 8D4C24 ?? E8 ???????? 6644 85BF ????000074 ?? 48 8B05 ???????? 48 85C0 75 ?? 48 8D0D ???????? E8 ???????? 4C 8BC8 4C 8D05 ????????BA ????0000 48 8D0D ????????E8 ???????? 48 8B05 ????????48 8B80 ????????48 8D5424 ?? 48 8B88 ????????48 8B49 ?? E8 ???????? EB ?? 8B8F ????0000 E8 ???????? F3 0F1145 ?? 48 8D4C24 ?? 66 859F ????000074 ?? B2 ?? EB ??", "allTargetingDebugDraw", 3, 3 + 4, startIndex: 3200000); //yes, it's long, take off more than a little and it gets two matches
+
+            mapItemManOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 0D ???????? C7 44 24 50 FFFFFFFF", "MapItemManImpl", 3, 7, startIndex: 5700000);
+            itemSpawnCall = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "8B 02 83 F8 0A", "ItemSpawnCall", justOffset: -0x52, startIndex: 5400000);
+            if (itemSpawnCall < 0)
+            {
+                itemSpawnCall = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "40 55 56 57 41 54 41 55 41 56 41 57 48 8D6C24 ?? 48 81EC ????0000 48 C745 ?? FEFFFFFF 48 899C24 ????0000 48 8B05 ???????? 48 33C4 48 8945 ?? 44 894C24 ?? 4D 8B??4C 894424 ?? 4C 8B??33FF 897C24 ?? 8B02 83F8 ?? 0F87 ????0000", "ItemSpawnCall 1.02.x", startIndex: 5400000);
+            }
+
+            allChrNoDeath = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "803D ???????? 00 75 ?? 48 8BCB E8 ???????? 48 8BC8 E8 ???????? 84C0 74 ?? 48 833D ???????? 00", "allChrNoDeath", 2, 2 + 4 + 1, startIndex: 4200000);
+            //scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "803D ???????? 00 0F85 ???????? 32C0 48 83C4 20 5B C3", "playerNoDeath", 2, 2 + 4 + 1, startIndex: 4200000);
+
+            torrentDisabledCheckOne = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B40 68 8078 36 00 0F95C0 40 B7 01 8806 48 8B5C24 30 40 0FB6C7 48 8B7424 38 48 83C4 20 5F C3", "torrentDisabledCheckOne", justOffset: 4 + 4, startIndex: 12900000);
+            torrentDisabledCheckTwo = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 48 8B48 ?? 8079 36 00 0F95C0 48 83C4 ?? C3", "torrentDisabledCheckTwo", justOffset: 5 + 4 + 4, startIndex: 7000000);
+
+            mapIDinPlayerIns = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "C783 ????0000 FFFFFFFF 0F280D ???????? 66 0F7F4D ?? F2 0F118B ????0000 66 0F73D9 ?? 66 0F7E8B ????0000 44 89AB ????0000 C783 ????0000 FFFFFFFF 44 89AB ????0000 C783 ????0000 FFFFFFFF", "mapIDinPlayerIns", readoffset32: 2, startIndex: 6300000);
+
+            var cave = "";
+            for (int i = 0; i < 0xA0; i++) { cave += "90"; }
+            codeCavePtrLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, cave, "codeCave_0x60_nops", startIndex: 100000);
+
+
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
+        }
 
         //code templates and patches - should be game version independent
 
@@ -452,7 +546,7 @@ namespace EldenRingTool
             0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
         //replacement code contains the offset from the following instruction (basically hook loc + 5) to the code cave.
         //then it just nops to fill out the rest of the old instructions
-        static byte[] getTargetHookReplacementCode()
+        byte[] getTargetHookReplacementCode()
         {
             var ret = new byte[targetHookReplacementCodeTemplate.Length];
             int addrOffset = codeCaveCodeLoc - (targetHookLoc + 5); //target minus next instruction location (ie. the NOP 5 bytes in)
@@ -464,7 +558,7 @@ namespace EldenRingTool
         static readonly byte[] targetHookCaveCodeTemplate = new byte[] { 0x48, 0xA3,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //full 64 bit ptr address goes here
         0x48, 0x8B, 0x48, 0x08, //should be identical to orig code from here to just before E9
-        0x49, 0x89, 0x8D, 0xA0, 0x06, 0x00, 0x00,
+        0x49, 0x89, 0x8D, 0xA0, 0x06, 0x00, 0x00, //TODO: fill in offset from scan
         0xE9,
         0, 0, 0, 0, //address offset
          };
@@ -501,7 +595,7 @@ namespace EldenRingTool
             return (IntPtr)ptr2;
         }*/
 
-        static byte[] getTargetHookCaveCodeTemplate()
+        byte[] getTargetHookCaveCodeTemplate()
         {
             var ret = new byte[targetHookCaveCodeTemplate.Length];
             int addrOffset = targetHookLoc + targetHookReplacementCodeTemplate.Length - (codeCaveCodeLoc + ret.Length); //again, target (after the hook) minus next instruction location (the NOPs after the end of our injection)
@@ -561,7 +655,7 @@ namespace EldenRingTool
             return ret;
         }
 
-        static byte[] getWarpCodeTemplate()
+        byte[] getWarpCodeTemplate()
         {
             var buf = warpCodeTemplate.ToArray();
             int callOneAddr = warpFirstCallOffset - zeroCaveOffset - 0x2F;
@@ -708,6 +802,7 @@ namespace EldenRingTool
 
         public bool patchLogos()
         {//see https://github.com/bladecoding/DarkSouls3RemoveIntroScreens/blob/master/SoulsSkipIntroScreen/dllmain.cpp, or my fork i guess
+            if (logoScreenBase < 0) { return false; }
             var code = ReadBytes(erBase + logoScreenBase, logoScreenOrig.Length);
             if (code.SequenceEqual(logoScreenOrig))
             {//original code
@@ -819,8 +914,8 @@ namespace EldenRingTool
                 {
                     var ptr = ReadUInt64(erBase + hitboxBase);
                     if (ptr < SANE_MINIMUM) { return badVal; }
-                    if (opt == DebugOpts.HITBOX_VIEW_A) { ptr += 0xA0; }
-                    else { ptr += 0xA1; }
+                    if (opt == DebugOpts.HITBOX_VIEW_A) { ptr += hitboxOffset; }
+                    else { ptr += hitboxOffset + 1; }
                     return ((IntPtr)ptr, 1);
                 }
                 case DebugOpts.DISABLE_MOST_RENDER: return (erBase + groupMaskBase, 0); //TODO: re-check offsets for other patches (especially 1.05)

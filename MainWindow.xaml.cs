@@ -174,7 +174,7 @@ namespace EldenRingTool
                             System.Threading.Thread.Sleep(1000);
                             if (ERProcess.checkGameRunning())
                             {
-                                System.Threading.Thread.Sleep(2500); //arbitrary wait to let the game start up more before applying patches. likely not required.
+                                System.Threading.Thread.Sleep(1000); //arbitrary wait to let the game start up more before applying patches. likely not required.
                                 break;
                             }
                         }
