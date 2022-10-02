@@ -320,11 +320,15 @@ namespace EldenRingTool
         const long SANE_MINIMUM = 0x700000000000;
         const long SANE_MAXIMUM = 0x800000000000; //TODO: refine. much lower addresses may be valid in some cases.
 
+        //addresses/offsets - patch-specific
+
         const int worldChrManOff = 0x3C310B8; //pointer to CS::WorldChrManImp
 
         const int hitboxBase = 0x3C31488; //currently no RTTI name for this.
 
-        const int groupMaskOff = 0x3A1E830;//not a pointer. static addresses
+        const int groupMaskBase = 0x3A1E830;//most render
+        //const int groupMaskMap = 0x3A1E831;
+        const int groupMaskTrees = 0x3A1E839;
 
         const int meshesOff = 0x3C3518C;//static addresses again
 
@@ -332,13 +336,115 @@ namespace EldenRingTool
 
         const int logoScreenBase = 0xA9807D;
 
-        readonly byte[] logoScreenOrig = new byte[] { 0x74, 0x53 };
-        readonly byte[] logoScreenPatch = new byte[] { 0x90, 0x90 };
-
         const int codeCavePtrLoc = 0x25450;
         const int targetHookLoc = 0x6F89A2;
 
         const int codeCaveCodeLoc = codeCavePtrLoc + 0x10;// 0x25460 for 1.03.2
+
+        const int miscDebugBase = 0x3C312AF;
+        const int noAiUpdate = 0x3C312BF;
+
+        const int chrDbg = 0x3C312A8;//should be close to misc debug
+
+        const int newMenuSystem = 0x3C369A0;//CS::CSMenuManImp //irrelvant now with top debug gone
+
+        const int fontDrawOffset = 0x25EAF20; //defaults to 0x48. need 0xC3 for in-game poise viewer.
+
+        const int DbgEventManOff = 0x3C330C0; //no name. static addresses.
+
+        const int EventPatchLoc1 = 0xDC8670; //32 C0 C3 (next 3 vary with patch, eg. CC BF 60 in 1.03.2, cc 7b 83 in 1.04.0)
+        const int EventPatchLoc2 = 0xDC8650; //32 C0 C3 (next 3 vary with patch, eg. CC E3 A2 in 1.03.2, 90 49 8b in 1.04.0)
+
+        const int FieldAreaOff = 0x3C34298;//CS::FieldArea
+
+        //const int freeCamPatchLoc = 0x415305;
+        const int freeCamPatchLocAlt = 0xDB8A00; //1st addr after call (a jmp)
+        
+        const int freeCamPlayerControlPatchLoc = 0x664EE6;
+        
+        const int mapOpenInCombatOff = 0x7CB4D3;
+        const int mapStayOpenInCombatOff = 0x979AE7;
+
+        //DbgGetForceActIdx. patch changes it to use the addr from DbgSetLastActIdx 
+        const int enemyRepeatActionOff = 0x4F22456;
+        
+        const int zeroCaveOffset = 0x28E3E00; //zeroes at the end of the program
+        const int warpFirstCallOffset = 0x5DDE30;
+        const int warpSecondCallOffset = 0x65E260;
+
+        const int itemSpawnStart = zeroCaveOffset + 0x100; //warp is only 0x3E big but just go for a round number
+        const int mapItemManOff = 0x3C32B20;
+        const int itemSpawnCall = 0x5539E0;
+        const int itemSpawnData = itemSpawnStart + 0x30;
+
+        const int usrInputMgrImplOff = 0x45075C8;//DLUID::DLUserInputManagerImpl<DLKR::DLMultiThreadingPolicy> //RTTI should find it
+        const int usrInputMgrImpSteamInputFlagOff = 0x88b; //in 1.05, the func checking the flag is at +1E7D75F
+        //above originally found by putting breakpoints in user32 device enum funcs, which get called by dinput8, which gets called by the steam overlay dll, which gets called by elden ring, then triggering the stutter.
+
+        const int trophyImpOffset = 0x4453838; //CS::CSTrophyImp
+
+        //const int toPGDataOff = 0x3C29108; //"GameDataMan"
+
+        const int csFlipperOff = 0x4453E98; //lots of interesting stuff here. frame times, fps, etc.
+        const int gameSpeedOffset = 0x2D4;
+
+        const int upgradeRuneCostOff = 0x765241;
+        const int upgradeMatCostOff = 0x8417FC;
+
+        const int soundDrawPatchLoc = 0x33bfd6;
+
+        const int allTargetingDebugDraw = 0x3C2D43A;
+
+        const int allChrNoDeath = 0x3C312BA;
+
+        const int torrentDisabledCheckOne = 0xC730EA;
+        const int torrentDisabledCheckTwo = 0x6E7CDF;
+
+        //both of these are equivalent. not sure why different tables use different ones. perhaps one is more likely to survive future patches.
+        //const uint worldChrManPlayerOff1 = 0xB658; //points to a pointer to CS::PlayerIns. constant not found...? likely less reliable.
+        const uint worldChrManPlayerOff2 = 0x18468; //points directly to CS::PlayerIns, commonly found after refs to CS::WorldChrManImp
+
+        //uint worldChrManTorrentOff = 0x18378; //changed in 1.06. need AOB for this. cannot find the constant in the game however so it likely has a different way to get to torrent.
+        const uint worldChrManTorrentOffAlt = 0xb6f0; //not sure if this is patch-stable or not.
+
+        const uint noDeathOffset = 0x19B; //was 197 in an older patch
+
+        const uint mapIDinPlayerIns = 0x6C0;
+
+        //code templates and patches - should be game version independent
+
+        static readonly byte[] itemSpawnTemplate = new byte[]
+        {
+            0x48, 0x83, 0xEC, 0x48, //sub rsp,48
+            0x4D, 0x31, 0xC9, //xor r9,r9
+            0x4C, 0x8D, 0x05, 0x22, 0x00, 0x00, 0x00, //lea r8,[eldenring.exe+28E3F30] - relative address, won't change
+            0x49, 0x8D, 0x50, 0x20, //lea rdx,[r8+20]
+            0x49, 0xBA, 0, 0, 0, 0, 0, 0, 0, 0, //mov r10,MapItemMan (addr offset 0x14)
+            0x49, 0x8B, 0x0A, //mov rcx,[r10]
+            0xE8, 0, 0, 0, 0, //call itemSpawnCall. itemSpawnCall - (itemSpawnStart + 0x24) (addr offset 0x20)
+            0x48, 0x83, 0xC4, 0x48, //add rsp,48
+            0xC3, //ret
+        };
+
+        static readonly byte[] warpCodeTemplate = new byte[]
+        {
+            0x00, 0x00, 0x00, 0x00,                   // id (seems pointless)
+            0x48, 0x83, 0xEC, 0x48,                   // sub rsp,48 (func start)
+            0xB9, 0xAA, 0x00, 0x00, 0x00,             // mov ecx,000000AA
+            0xBA, 0xBB, 0x00, 0x00, 0x00,             // mov edx,000000BB
+            0x41, 0xB8, 0xCC, 0x00, 0x00, 0x00,       // mov r8d,000000CC
+            0x41, 0xB9, 0xDD, 0x00, 0x00, 0x00,       // mov r9d,000000DD
+            0x48, 0x8D, 0x05, 0xDB, 0xFF, 0xFF, 0xFF, // lea rax,[eldenring.exe+zeroCaveOffset] (relative addr)
+            0x48, 0x89, 0x44, 0x24, 0x20,             // mov [rsp+20],rax
+            0xE8, 0, 0, 0, 0,                         //call to pack coords (to be filled in)
+            0xB9, 0x00, 0x00, 0x00, 0x00,             // mov ecx,00000000
+            0xE8, 0, 0, 0, 0,                         //call to actually warp? (to be filled in)
+            0x48, 0x83, 0xC4, 0x48,                   // add rsp,48
+            0xC3,                                     // ret 
+        };
+
+        readonly byte[] torrentCheckOrigBytes = { 0x0F, 0x95, 0xC0 };
+        readonly byte[] torrentCheckPatchBytes = { 0x30, 0xC0, 0x90 };
 
         static readonly byte[] targetHookOrigCode = new byte[] { 0x48, 0x8B, 0x48, 0x08, 0x49, 0x89, 0x8D, 0xA0, 0x06, 0x00, 0x00, }; //followed by 0x49, 0x8B, 0xCE, 0xE8, which stays unchanged.
         static readonly byte[] targetHookReplacementCodeTemplate = new byte[] { 0xE9,
@@ -363,6 +469,38 @@ namespace EldenRingTool
         0, 0, 0, 0, //address offset
          };
 
+        readonly byte[] freeCamPlayerControlPatchOrig = new byte[] { 0x8B, 0x83, 0xC8, 0, 0, 0 }; //C8 may need to change in different patches
+        readonly byte[] freeCamPlayerControlPatchReplacement = new byte[] { 0x31, 0xC0, 0x90, 0x90, 0x90, 0x90 };
+
+        readonly byte[] logoScreenOrig = new byte[] { 0x74, 0x53 };
+        readonly byte[] logoScreenPatch = new byte[] { 0x90, 0x90 };
+
+        readonly byte[] eventPatch = new byte[] { 0xB0, 0x01 };
+
+        readonly byte[] soundDrawOrigBytes = { 0x74, 0x53 }; //JZ +53
+        readonly byte[] soundDrawPatchBytes = { 0x90, 0x90 }; //nop nop
+
+        //readonly byte[] freeCamOrigCode = new byte[] { 0x32, 0xC0 };
+        //readonly byte[] freeCamPatchCode = new byte[] { 0xB0, 0x01 };
+        readonly byte[] freeCamPatchCodeAlt = new byte[] { 0xB0, 0x01, 0xC3 }; //return 1
+
+        readonly byte[] mapCombatCheckPatchCode = new byte[] { 0x31, 0xC0, 0x90, 0x90, 0x90 }; //xor eax, eax; nop nop nop
+
+        byte fontDrawNewValue = 0xC3; //ret
+
+        const byte enemyRepeatActionPatchVal = 0xB2;
+        const byte enemyRepeatActionOrigVal = 0xB1;
+
+        //patch functions, helper functions, etc.
+
+        //we have another way to get this, but can use this as a fallback.
+        /*IntPtr getPlayerGameDataPtr()
+        {
+            var ptr = ReadUInt64(erBase + toPGDataOff);
+            var ptr2 = ReadUInt64((IntPtr)ptr + 8); //CS::PlayerGameData
+            return (IntPtr)ptr2;
+        }*/
+
         static byte[] getTargetHookCaveCodeTemplate()
         {
             var ret = new byte[targetHookCaveCodeTemplate.Length];
@@ -371,147 +509,6 @@ namespace EldenRingTool
             Array.Copy(BitConverter.GetBytes(addrOffset), 0, ret, ret.Length - 4, 4);
             return ret;
         }
-
-        const int miscDebugBase = 0x3C312AF;
-        const int noAiUpdate = 0x3C312BF;
-
-        const int chrDbg = 0x3C312A8;//should be close to misc debug
-
-        const int newMenuSystem = 0x3C369A0;//CS::CSMenuManImp //irrelvant now with top debug gone
-
-        const int fontDrawOffset = 0x25EAF20; //defaults to 0x48. need 0xC3 for in-game poise viewer.
-        byte fontDrawNewValue = 0xC3;
-
-        const int DbgEventManOff = 0x3C330C0; //no name. static addresses.
-
-        const int EventPatchLoc1 = 0xDC8670; //32 C0 C3 (next 3 vary with patch, eg. CC BF 60 in 1.03.2, cc 7b 83 in 1.04.0)
-        const int EventPatchLoc2 = 0xDC8650; //32 C0 C3 (next 3 vary with patch, eg. CC E3 A2 in 1.03.2, 90 49 8b in 1.04.0)
-        readonly byte[] eventPatch = new byte[] { 0xB0, 0x01 };
-
-        const int FieldAreaOff = 0x3C34298;//CS::FieldArea
-
-        const int freeCamPatchLoc = 0x415305;
-
-        //readonly byte[] freeCamOrigCode = new byte[] { 0x32, 0xC0 };
-        readonly byte[] freeCamPatchCode = new byte[] { 0xB0, 0x01 };
-
-        const int freeCamPlayerControlPatchLoc = 0x664EE6;
-        readonly byte[] freeCamPlayerControlPatchOrig = new byte[] { 0x8B, 0x83, 0xC8, 0, 0, 0 }; //C8 may need to change in different patches
-        readonly byte[] freeCamPlayerControlPatchReplacement = new byte[] { 0x31, 0xC0, 0x90, 0x90, 0x90, 0x90 };
-
-        const int mapOpenInCombatOff = 0x7CB4D3;
-        const int mapStayOpenInCombatOff = 0x979AE7;
-
-        readonly byte[] mapCombatCheckPatchCode = new byte[] { 0x31, 0xC0, 0x90, 0x90, 0x90 }; //xor eax, eax; nop nop nop
-        byte[] mapOpenInCombatOrig = null;
-        byte[] mapStayOpenInCombatOrig = null;
-
-        //DbgGetForceActIdx. patch changes it to use the addr from DbgSetLastActIdx 
-        const int enemyRepeatActionOff = 0x4F22456;
-        const byte enemyRepeatActionPatchVal = 0xB2;
-        const byte enemyRepeatActionOrigVal = 0xB1;
-
-        const int zeroCaveOffset = 0x28E3E00; //zeroes at the end of the program
-        const int warpFirstCallOffset = 0x5DDE30;
-        const int warpSecondCallOffset = 0x65E260;
-        static readonly byte[] warpCodeTemplate = new byte[]
-        {
-            0x00, 0x00, 0x00, 0x00,                   // id (seems pointless)
-            0x48, 0x83, 0xEC, 0x48,                   // sub rsp,48 (func start)
-            0xB9, 0xAA, 0x00, 0x00, 0x00,             // mov ecx,000000AA
-            0xBA, 0xBB, 0x00, 0x00, 0x00,             // mov edx,000000BB
-            0x41, 0xB8, 0xCC, 0x00, 0x00, 0x00,       // mov r8d,000000CC
-            0x41, 0xB9, 0xDD, 0x00, 0x00, 0x00,       // mov r9d,000000DD
-            0x48, 0x8D, 0x05, 0xDB, 0xFF, 0xFF, 0xFF, // lea rax,[eldenring.exe+zeroCaveOffset] (relative addr)
-            0x48, 0x89, 0x44, 0x24, 0x20,             // mov [rsp+20],rax
-            0xE8, 0, 0, 0, 0,                         //call to pack coords (to be filled in)
-            0xB9, 0x00, 0x00, 0x00, 0x00,             // mov ecx,00000000
-            0xE8, 0, 0, 0, 0,                         //call to actually warp? (to be filled in)
-            0x48, 0x83, 0xC4, 0x48,                   // add rsp,48
-            0xC3,                                     // ret 
-        };
-
-        static readonly byte[] warpCodeTemplate106 = new byte[]
-        {//for reference
-            0x00, 0x00, 0x00, 0x00,                   // id (seems pointless)
-            0x48, 0x83, 0xEC, 0x48,                   // sub rsp,48 (func start)
-            0xB9, 0xAA, 0x00, 0x00, 0x00,             // mov ecx,000000AA
-            0xBA, 0xBB, 0x00, 0x00, 0x00,             // mov edx,000000BB
-            0x41, 0xB8, 0xCC, 0x00, 0x00, 0x00,       // mov r8d,000000CC
-            0x41, 0xB9, 0xDD, 0x00, 0x00, 0x00,       // mov r9d,000000DD
-            0x48, 0x8D, 0x05, 0xDB, 0xFF, 0xFF, 0xFF, // lea rax,[eldenring.exe+28E3E00]
-            0x48, 0x89, 0x44, 0x24, 0x20,             // mov [rsp+20],rax
-            0xE8, 0x01, 0xA0, 0xCF, 0xFD,             // call eldenring.exe+5DDE30 //5DDE30 - 28E3E00 - 2F, crop 32, little endian
-            0xB9, 0x00, 0x00, 0x00, 0x00,             // mov ecx,00000000
-            0xE8, 0x27, 0xA4, 0xD7, 0xFD,             // call eldenring.exe+65E260 //65E260 - 28E3E00 - 39, crop 32, little endian
-            0x48, 0x83, 0xC4, 0x48,                   // add rsp,48
-            0xC3,                                     // ret 
-        };
-
-        //asm of called funcs for reference (1.04.1)
-        //1041 code cave: 28C7800
-        /*first call in warp (1.04.1) +5DBBB0:
-        00007FF6C859BBB0 | 48:83EC 48               | sub rsp,48                                            |
-        00007FF6C859BBB4 | 48:C74424 28 FEFFFFFF    | mov qword ptr ss:[rsp+28],FFFFFFFFFFFFFFFE            |
-        00007FF6C859BBBD | E8 4EB7CBFF              | call <eldenring_1.04.1.PackCoords>                    |
-        00007FF6C859BBC2 | 48:8D4C24 20             | lea rcx,qword ptr ss:[rsp+20]                         |
-        second call +65BB60:
-        00007FF6C861BB60 | 48:8B05 A1FE5A03         | mov rax,qword ptr ds:[7FF6CBBCBA08]                   |
-        00007FF6C861BB67 | 8988 300C0000            | mov dword ptr ds:[rax+C30],ecx                        |
-        00007FF6C861BB6D | C3                       | ret                                                   |
-        */
-
-        const int itemSpawnStart = zeroCaveOffset + 0x100; //warp is only 0x3E big but just go for a round number
-        const int mapItemManOff = 0x3C32B20;
-        const int itemSpawnCall = 0x5539E0;
-        const int itemSpawnData = itemSpawnStart + 0x30;
-
-        static readonly byte[] itemSpawnTemplate = new byte[]
-        {
-            0x48, 0x83, 0xEC, 0x48, //sub rsp,48
-            0x4D, 0x31, 0xC9, //xor r9,r9
-            0x4C, 0x8D, 0x05, 0x22, 0x00, 0x00, 0x00, //lea r8,[eldenring.exe+28E3F30] - relative address, won't change
-            0x49, 0x8D, 0x50, 0x20, //lea rdx,[r8+20]
-            0x49, 0xBA, 0, 0, 0, 0, 0, 0, 0, 0, //mov r10,MapItemMan (addr offset 0x14)
-            0x49, 0x8B, 0x0A, //mov rcx,[r10]
-            0xE8, 0, 0, 0, 0, //call itemSpawnCall. itemSpawnCall - (itemSpawnStart + 0x24) (addr offset 0x20)
-            0x48, 0x83, 0xC4, 0x48, //add rsp,48
-            0xC3, //ret
-        };
-
-        const int usrInputMgrImplOff = 0x45075C8;//DLUID::DLUserInputManagerImpl<DLKR::DLMultiThreadingPolicy> //RTTI should find it
-        const int usrInputMgrImpSteamInputFlagOff = 0x88b; //in 1.05, the func checking the flag is at +1E7D75F
-        //above originally found by putting breakpoints in user32 device enum funcs, which get called by dinput8, which gets called by the steam overlay dll, which gets called by elden ring, then triggering the stutter.
-
-        const int trophyImpOffset = 0x4453838; //CS::CSTrophyImp
-
-        /*const int toPGDataOff = 0x3C29108; //"GameDataMan"
-        //we have another way to get this, but can use this as a fallback.
-        IntPtr getPlayerGameDataPtr()
-        {
-            var ptr = ReadUInt64(erBase + toPGDataOff);
-            var ptr2 = ReadUInt64((IntPtr)ptr + 8); //CS::PlayerGameData
-            return (IntPtr)ptr2;
-        }*/
-
-        const int csFlipperOff = 0x4453E98; //lots of interesting stuff here. frame times, fps, etc.
-        const int gameSpeedOffset = 0x2D4;
-
-        const int upgradeRuneCostOff = 0x765241;
-        const int upgradeMatCostOff = 0x8417FC;
-
-        const int soundDrawPatchLoc = 0x33bfd6;
-        readonly byte[] soundDrawOrigBytes = { 0x74, 0x53 }; //JZ +53
-        readonly byte[] soundDrawPatchBytes = { 0x90, 0x90 }; //nop nop
-
-        const int allTargetingDebugDraw = 0x3C2D43A;
-
-        const int allChrNoDeath = 0x3C312BA;
-
-        const int torrentDisabledCheckOne = 0xC730EA;
-        const int torrentDisabledCheckTwo = 0x6E7CDF;
-        readonly byte[] torrentCheckOrigBytes = { 0x0F, 0x95, 0xC0 };
-        readonly byte[] torrentCheckPatchBytes = { 0x30, 0xC0, 0x90 };
 
         public void setTorrentAnywherePatch(bool on)
         {
@@ -571,7 +568,6 @@ namespace EldenRingTool
             Array.Copy(BitConverter.GetBytes(callOneAddr), 0, buf, 4 + 4 + 5 + 5 + 6 + 6 + 7 + 5 + 1, 4);
             int callTwoAddr = warpSecondCallOffset - zeroCaveOffset - 0x39;
             Array.Copy(BitConverter.GetBytes(callTwoAddr), 0, buf, 4 + 4 + 5 + 5 + 6 + 6 + 7 + 5 + 5 + 5 + 1, 4);
-            //Debug.Assert(buf.SequenceEqual(warpCodeTemplate106));
             return buf;
         }
 
@@ -635,6 +631,9 @@ namespace EldenRingTool
             }
         }
 
+        byte[] mapOpenInCombatOrig = null;
+        byte[] mapStayOpenInCombatOrig = null;
+
         public void doCombatMapPatch()
         {
             if (ReadUInt8(erBase + mapOpenInCombatOff) == 0xE8)
@@ -662,9 +661,13 @@ namespace EldenRingTool
 
         void doFreeCamPatch()
         {//no undo as no need to turn this off
-            if (!ReadBytes(erBase + freeCamPatchLoc, 2).SequenceEqual(freeCamPatchCode))
+            /*if (!ReadBytes(erBase + freeCamPatchLoc, 2).SequenceEqual(freeCamPatchCode))
             {
                 WriteBytes(erBase + freeCamPatchLoc, freeCamPatchCode);
+            }*/
+            if (ReadUInt8(erBase + freeCamPatchLocAlt) == 0xEB) //jmp
+            {
+                WriteBytes(erBase + freeCamPatchLocAlt, freeCamPatchCodeAlt);
             }
         }
 
@@ -769,13 +772,6 @@ namespace EldenRingTool
             return true;
         }
 
-        //both of these are equivalent. not sure why different tables use different ones. perhaps one is more likely to survive future patches.
-        //const uint worldChrManPlayerOff1 = 0xB658; //points to a pointer to CS::PlayerIns. constant not found...? likely less reliable.
-        const uint worldChrManPlayerOff2 = 0x18468; //points directly to CS::PlayerIns, commonly found after refs to CS::WorldChrManImp
-
-        //uint worldChrManTorrentOff = 0x18378; //changed in 1.06. need AOB for this. cannot find the constant in the game however so it likely has a different way to get to torrent.
-        const uint worldChrManTorrentOffAlt = 0xb6f0; //not sure if this is patch-stable or not.
-
         ulong getPlayerInsPtr()
         {
             var ptr1 = ReadUInt64(erBase + worldChrManOff);
@@ -827,19 +823,19 @@ namespace EldenRingTool
                     else { ptr += 0xA1; }
                     return ((IntPtr)ptr, 1);
                 }
-                case DebugOpts.DISABLE_MOST_RENDER: return (erBase + groupMaskOff + 0x0, 0);
-                case DebugOpts.DISABLE_MAP: return (erBase + groupMaskOff + 0x1, 0);
-                case DebugOpts.DISABLE_TREES: return (erBase + groupMaskOff + 0x9, 0);
-                case DebugOpts.DISABLE_ROCKS: return (erBase + groupMaskOff + 0xA, 0);
-                case DebugOpts.DISABLE_DISTANT_MAP: return (erBase + groupMaskOff + 0xB, 0);
-                case DebugOpts.DISABLE_CHARACTER: return (erBase + groupMaskOff + 0xD, 0);
-                case DebugOpts.DISABLE_GRASS: return (erBase + groupMaskOff + 0x11, 0);
+                case DebugOpts.DISABLE_MOST_RENDER: return (erBase + groupMaskBase, 0); //TODO: re-check offsets for other patches (especially 1.05)
+                case DebugOpts.DISABLE_MAP: return (erBase + groupMaskBase + 1, 0);
+                case DebugOpts.DISABLE_TREES: return (erBase + groupMaskTrees, 0);
+                case DebugOpts.DISABLE_ROCKS: return (erBase + groupMaskTrees + 1, 0);
+                case DebugOpts.DISABLE_DISTANT_MAP: return (erBase + groupMaskTrees + 2, 0);
+                case DebugOpts.DISABLE_CHARACTER: return (erBase + groupMaskTrees + 4, 0);
+                case DebugOpts.DISABLE_GRASS: return (erBase + groupMaskTrees + 8, 0);
 
                 case DebugOpts.NO_DEATH:
                 {
                     var ptr4 = getCharPtrModules();
                     var ptr5 = ReadUInt64((IntPtr)(ptr4 + 0)); //CS::CSChrDataModule
-                    var ptr6 = (IntPtr)(ptr5 + 0x19B); //was 197 in an older patch
+                    var ptr6 = (IntPtr)(ptr5 + noDeathOffset);
                     return (ptr6, 0x10); //bitfield, bit 0
                 }
                 case DebugOpts.ALL_CHR_NO_DEATH:
@@ -882,7 +878,7 @@ namespace EldenRingTool
                 {
                     return (erBase + miscDebugBase + 0x6, 1);
                 }
-                case DebugOpts.NO_GRAVITY_ALTERNATE:
+                case DebugOpts.NO_GRAVITY_ALTERNATE: //not currently used
                 {//this is the "another no gravity" pointer. there is another flag available (the not-another one)
                     //this one makes the player float up slightly. it blocks teleport
                     //the other one does not cause a float but allows teleport. hmmm.
@@ -916,9 +912,9 @@ namespace EldenRingTool
                     var ptr1 = getTorrentPtr();
                     var ptr2 = ReadUInt64((IntPtr)(ptr1 + 0x190));
                     var ptr3 = ReadUInt64((IntPtr)(ptr2 + 0)); //CS::CSChrDataModule
-                    return ((IntPtr)(ptr3 + 0x19B), 0x10); //same offset as player no death
+                    return ((IntPtr)(ptr3 + noDeathOffset), 0x10); //same offset as player no death
                 }
-                case DebugOpts.TORRENT_NO_GRAV_ALT:
+                case DebugOpts.TORRENT_NO_GRAV_ALT: //not currently used
                 {//this is the 'another no grav' flag, equivalent to the player version.
                     var ptr1 = getTorrentPtr();
                     return ((IntPtr)(ptr1 + 0x1C4), 0x15);
@@ -961,7 +957,7 @@ namespace EldenRingTool
                 {
                     var ptr = ReadUInt64(erBase + trophyImpOffset);
                     var ptr2 = ReadUInt64((IntPtr)ptr + 8);
-                    return ((IntPtr)ptr2 + 0x4c, 0);
+                    return ((IntPtr)ptr2 + 0x4c, 0); //not sure if offset is patch stable, but it's likely as it's a fairly low offset
                 }
                 case DebugOpts.TARGETING_VIEW:
                 {
@@ -1267,11 +1263,11 @@ namespace EldenRingTool
         public (float, float, float, float, uint) getMapCoords()
         {//aka "chunk coords", sometimes called 'global coords' though the x/y/z is not global
             var ptr2 = getPlayerInsPtr();
-            float mx = ReadFloat((IntPtr)(ptr2 + 0x6B8 - 0x8));
-            float my = ReadFloat((IntPtr)(ptr2 + 0x6BC - 0x8));
-            float mz = ReadFloat((IntPtr)(ptr2 + 0x6C0 - 0x8));
-            float mRad = ReadFloat((IntPtr)(ptr2 + 0x6C4 - 0x8)); //character facing direction. not camera. not needed to port but may be useful.
-            uint mapID = ReadUInt32((IntPtr)(ptr2 + 0x6C8 - 0x8));
+            float mx = ReadFloat((IntPtr)(ptr2 + mapIDinPlayerIns - 16));
+            float my = ReadFloat((IntPtr)(ptr2 + mapIDinPlayerIns - 12));
+            float mz = ReadFloat((IntPtr)(ptr2 + mapIDinPlayerIns - 8));
+            float mRad = ReadFloat((IntPtr)(ptr2 + mapIDinPlayerIns - 4)); //character facing direction. not camera. not needed to port but may be useful.
+            uint mapID = ReadUInt32((IntPtr)(ptr2 + mapIDinPlayerIns));
 
             //rad of +/- Pi, North, +Z
             //rad of -Pi/2, East, +X
