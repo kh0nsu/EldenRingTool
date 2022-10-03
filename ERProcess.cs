@@ -504,6 +504,7 @@ namespace EldenRingTool
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
             codeCavePtrLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, cave, "codeCave_0x60_nops", startIndex: 100000);
 
+            zeroCaveOffset = scanner.textOneAddr + (int)scanner.textOneSize;
 
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
