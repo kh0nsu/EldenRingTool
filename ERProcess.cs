@@ -326,7 +326,7 @@ namespace EldenRingTool
         const long SANE_MINIMUM = 0x700000000000;
         const long SANE_MAXIMUM = 0x800000000000; //TODO: refine. much lower addresses may be valid in some cases.
 
-        //addresses/offsets - patch-specific
+        //addresses/offsets - all are for 1.06 but will be replaced by AOB scanning at run time
 
         int worldChrManOff = 0x3C310B8; //pointer to CS::WorldChrManImp
 
@@ -345,10 +345,11 @@ namespace EldenRingTool
 
         int codeCavePtrLoc = 0x25450;
         int targetHookLoc = 0x6F89A2;
+        int targetHookOffset = 0x6A0;
 
         int codeCaveCodeLoc { get { return codeCavePtrLoc + 0x10; } }
 
-        int miscDebugBase = 0x3C312AF;
+        int noGoodsConsume = 0x3C312B3;
         int noAiUpdate = 0x3C312BF;
 
         int chrDbg = 0x3C312A8;//should be close to misc debug
@@ -418,6 +419,7 @@ namespace EldenRingTool
 
         uint mapIDinPlayerIns = 0x6C0;
 
+        //scanning for above addresses
         void aobScan()
         {//see https://github.com/kh0nsu/FromAobScan
             var sw = new Stopwatch();
@@ -435,9 +437,11 @@ namespace EldenRingTool
 
             quitoutBase = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 0F B6 40 10 C3", "CS::GameMan", 3, 7, startIndex: 6500000);
             logoScreenBase = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "74 53 48 8B05 ???????? 48 85C0 75 ?? 48 8D0D ???????? E8 ???????? 4C 8BC8 4C 8D05 ???????? BA ????0000 48 8D0D ???????? E8 ????????", "logoScreenBase", startIndex: 10900000);
-            targetHookLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B48 ?? 49 898D ????0000 49 8BCE E8 ???????? 84C0 75 ?? 49 8B5E ?? 48 8D4D ?? E8 ????????", "targetHookLoc", startIndex: 7100000);
-            scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B48 ?? 49 898D ????0000 49 8BCE E8 ???????? 84C0 75 ?? 49 8B5E ?? 48 8D4D ?? E8 ????????", "targetHookLoc offset", 1 + 2 + 1 + 1 + 2, startIndex: 7100000); //TODO
-            //miscDebugBase = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "803D ???????? 00 74 09 48 8D4D A0 E8 ???????? 4D 85E4", "miscDebugBase", 2, 7, startIndex: 4200000); //TODO: this address is slightly wrong
+            var thl = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B48 ?? 49 898D ????0000 49 8BCE E8 ???????? 84C0 75 ?? 49 8B5E ?? 48 8D4D ?? E8 ????????", "targetHookLoc", startIndex: 7100000);
+            if (thl > 0) { targetHookLoc = thl; } //should do this with all patches really, as they will fail the scan if already patched
+            var tho = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B48 ?? 49 898D ????0000 49 8BCE E8 ???????? 84C0 75 ?? 49 8B5E ?? 48 8D4D ?? E8 ????????", "targetHookLoc offset", 1 + 2 + 1 + 1 + 2, startIndex: 7100000);
+            if (tho > 0) { targetHookOffset = tho; }
+            noGoodsConsume = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "803D ???????? 00 75 05 45 33C0 EB 03 41 B0 01 48 8D8424 ??000000 48 898424 ??000000 41 8B06 898424 ??000000 48 8D8E ????0000 48 8D9424 ??000000 E8 ???????? 0FB6D0", "noGoodsConsume", 2, 2 + 4 + 1, startIndex: 6300000);
             noAiUpdate = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "0FB63D ???????? 48 85C0 75 2E", "noAIUpdate", 3, 7, startIndex: 3800000);
 
             chrDbg = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 41 83 FF 02 ?? ?? 48 85 C0", "chrDbg", 3, 7, startIndex: 5000000);
@@ -540,7 +544,7 @@ namespace EldenRingTool
         readonly byte[] torrentCheckOrigBytes = { 0x0F, 0x95, 0xC0 };
         readonly byte[] torrentCheckPatchBytes = { 0x30, 0xC0, 0x90 };
 
-        static readonly byte[] targetHookOrigCode = new byte[] { 0x48, 0x8B, 0x48, 0x08, 0x49, 0x89, 0x8D, 0xA0, 0x06, 0x00, 0x00, }; //followed by 0x49, 0x8B, 0xCE, 0xE8, which stays unchanged.
+        static readonly byte[] targetHookOrigCode = new byte[] { 0x48, 0x8B, 0x48, 0x08, 0x49, 0x89, 0x8D, 0, 0, 0, 0, }; //last four bytes are the 'target hook offset' which varies with patches. followed by 0x49, 0x8B, 0xCE, 0xE8, which stays unchanged.
         static readonly byte[] targetHookReplacementCodeTemplate = new byte[] { 0xE9,
             0, 0, 0, 0, //address offset
             0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
@@ -558,7 +562,7 @@ namespace EldenRingTool
         static readonly byte[] targetHookCaveCodeTemplate = new byte[] { 0x48, 0xA3,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //full 64 bit ptr address goes here
         0x48, 0x8B, 0x48, 0x08, //should be identical to orig code from here to just before E9
-        0x49, 0x89, 0x8D, 0xA0, 0x06, 0x00, 0x00, //TODO: fill in offset from scan
+        0x49, 0x89, 0x8D, 0, 0, 0, 0, //fill in offset from scan
         0xE9,
         0, 0, 0, 0, //address offset
          };
@@ -601,6 +605,7 @@ namespace EldenRingTool
             int addrOffset = targetHookLoc + targetHookReplacementCodeTemplate.Length - (codeCaveCodeLoc + ret.Length); //again, target (after the hook) minus next instruction location (the NOPs after the end of our injection)
             Array.Copy(targetHookCaveCodeTemplate, ret, ret.Length);
             Array.Copy(BitConverter.GetBytes(addrOffset), 0, ret, ret.Length - 4, 4);
+            Array.Copy(BitConverter.GetBytes(targetHookOffset), 0, ret, 2 + 8 + 4 + 3, 4);
             return ret;
         }
 
@@ -834,13 +839,13 @@ namespace EldenRingTool
             var targetHookReplacementCode = getTargetHookReplacementCode();
             var targetHookCaveCode = getTargetHookCaveCodeTemplate(); //still needs to have ptr addr added in
 
-            var code = ReadBytes(erBase + targetHookLoc, targetHookOrigCode.Length);
-            if (code.SequenceEqual(targetHookReplacementCode))
+            var code = ReadBytes(erBase + targetHookLoc, targetHookOrigCode.Length).Take(7); //compare first 7 bytes only; ignores target offset
+            if (code.SequenceEqual(targetHookReplacementCode.Take(7)))
             {
                 Console.WriteLine("Already hooked");
                 return true;
             }
-            if (!code.SequenceEqual(targetHookOrigCode))
+            if (!code.SequenceEqual(targetHookOrigCode.Take(7)))
             {
                 Console.WriteLine("Unexpected code at hook location");
                 return false;
@@ -963,15 +968,15 @@ namespace EldenRingTool
                 }
                 case DebugOpts.NO_GOODS:
                 {
-                    return (erBase + miscDebugBase + 0x4, 1);
+                    return (erBase + noGoodsConsume, 1);
                 }
                 case DebugOpts.NO_STAM:
                 {
-                    return (erBase + miscDebugBase + 0x5, 1);
+                    return (erBase + noGoodsConsume + 1, 1);
                 }
                 case DebugOpts.NO_FP:
                 {
-                    return (erBase + miscDebugBase + 0x6, 1);
+                    return (erBase + noGoodsConsume + 2, 1);
                 }
                 case DebugOpts.NO_GRAVITY_ALTERNATE: //not currently used
                 {//this is the "another no gravity" pointer. there is another flag available (the not-another one)

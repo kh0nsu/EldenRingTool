@@ -372,7 +372,7 @@ namespace MiscUtils
                 }
             }
             while (index != -1 && !singleMatch);
-            if (0 == count && outputConsole) { Console.WriteLine("Nothing found for " + desc); }
+            if (0 == count) { Console.WriteLine("Nothing found for " + desc); }
             return result;
         }
     }
