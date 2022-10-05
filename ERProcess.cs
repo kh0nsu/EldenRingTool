@@ -506,6 +506,8 @@ namespace EldenRingTool
 
             zeroCaveOffset = scanner.textOneAddr + (int)scanner.textOneSize;
 
+            scanner.Dispose();
+
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
         }

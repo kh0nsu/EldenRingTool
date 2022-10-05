@@ -224,7 +224,7 @@ namespace MiscUtils
     }
 #endif
 
-    public class AOBScanner
+    public class AOBScanner : IDisposable
     {
         [DllImport("ntdll.dll")]
         static extern int NtReadVirtualMemory(IntPtr ProcessHandle, IntPtr BaseAddress, byte[] Buffer, UInt32 NumberOfBytesToRead, ref UInt32 NumberOfBytesRead);
@@ -374,6 +374,12 @@ namespace MiscUtils
             while (index != -1 && !singleMatch);
             if (0 == count) { Console.WriteLine("Nothing found for " + desc); }
             return result;
+        }
+
+        public void Dispose()
+        {
+            sectionOne = null;
+            sectionTwo = null;
         }
     }
 }
