@@ -413,11 +413,16 @@ namespace EldenRingTool
         uint worldChrManPlayerOff2 = 0x18468; //points directly to CS::PlayerIns, commonly found after refs to CS::WorldChrManImp
 
         //uint worldChrManTorrentOff = 0x18378; //changed in 1.06. need AOB for this. cannot find the constant in the game however so it likely has a different way to get to torrent.
-        uint worldChrManTorrentOffAlt = 0xb6f0; //not sure if this is patch-stable or not.
+        //above method works in 1.07, base ptr is 0x1e1a0: 0x1ded8 + 59*8
+        //uint worldChrManTorrentOffAlt = 0xb6f0; //works up to 1.06. broken in 1.07.
 
         uint noDeathOffset = 0x19B; //was 197 in an older patch
 
         uint mapIDinPlayerIns = 0x6C0;
+
+        uint chrSetOffset = 0x1DED8; //1.07 addr, was stable previously
+        uint pgDataOffset = 0x570; //patch stable so far
+        uint torrentIDOffset = 0x930; //also appears patch stable
 
         //scanning for above addresses
         void aobScan()
@@ -499,6 +504,10 @@ namespace EldenRingTool
             torrentDisabledCheckTwo = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 48 8B48 ?? 8079 36 00 0F95C0 48 83C4 ?? C3", "torrentDisabledCheckTwo", justOffset: 5 + 4 + 4, startIndex: 7000000);
 
             mapIDinPlayerIns = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "C783 ????0000 FFFFFFFF 0F280D ???????? 66 0F7F4D ?? F2 0F118B ????0000 66 0F73D9 ?? 66 0F7E8B ????0000 44 89AB ????0000 C783 ????0000 FFFFFFFF 44 89AB ????0000 C783 ????0000 FFFFFFFF", "mapIDinPlayerIns", readoffset32: 2, startIndex: 6300000);
+
+            chrSetOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B8CFE ??????00 48 85C9 74 ?? 4C 8B01 8BD0 41 FF50 ?? 48 8B7C24 ?? 48 8B5C24 ?? 48 83C4 ??", "worldChrManChrSetOffset", 4, startIndex: 5000000);
+            pgDataOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B81 ????0000 48 C702 FFFFFFFF 48 85C0 74 0A 48 8B80 ????0000 48 8902 48 8BC2", "PGDataOffset", 3, startIndex: 6400000);
+            torrentIDOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B81 ????0000 48 C702 FFFFFFFF 48 85C0 74 0A 48 8B80 ????0000 48 8902 48 8BC2", "TorrentIDOffset", 3 + 4 + 3 + 4 + 3 + 2 + 3, startIndex: 6400000);
 
             var cave = "";
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
@@ -895,7 +904,7 @@ namespace EldenRingTool
         ulong getCharPtrGameData()
         {
             var ptr3 = getPlayerInsPtr();
-            var ptr4 = ReadUInt64((IntPtr)(ptr3 + 0x570)); //CS::PlayerGameData
+            var ptr4 = ReadUInt64((IntPtr)(ptr3 + pgDataOffset)); //CS::PlayerGameData
             return ptr4;
         }
 
@@ -903,8 +912,15 @@ namespace EldenRingTool
         {
             var ptr1 = ReadUInt64(erBase + worldChrManOff);
             //var ptr2 = ReadUInt64((IntPtr)(ptr1 + worldChrManTorrentOff)); //gets a ptr to a ChrSet
-            //var ptr3 = ReadUInt64((IntPtr)(ptr2 + 0x18)); //no name
-            var ptr3 = ReadUInt64((IntPtr)(ptr1 + worldChrManTorrentOffAlt + 0x18));
+
+            uint torrentID = ReadUInt32((IntPtr)(getCharPtrGameData() + torrentIDOffset));
+            if ((torrentID & 0xF0000000) != 0x10000000 || (torrentID & 0x000FFFFF) != 0)
+            {
+                Utils.debugWrite($"Warning: torrent ID of {torrentID:X8} is unusual"); //normal if you're on the main menu as chr/torrent doesn't exist
+            }
+            uint chrSetTorrentOff = (torrentID & 0x0FF00000) >> 20;
+            var ptr2 = ReadUInt64((IntPtr)(ptr1 + chrSetOffset + chrSetTorrentOff * 8)); //gets a ptr to a ChrSet
+            var ptr3 = ReadUInt64((IntPtr)(ptr2 + 0x18)); //no name
             var ptr4 = ReadUInt64((IntPtr)(ptr3)); //CS::EnemyIns
             return ptr4;
         }
