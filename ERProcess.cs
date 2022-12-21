@@ -464,7 +464,7 @@ namespace EldenRingTool
             {
                 freeCamPlayerControlPatchLoc = scanner.findAddr(scanner.sectionTwo, scanner.textTwoAddr, "8B 83 ?? 00 00 00 FF C8 83 F8 01", "free cam player control patch loc (2nd section)");
             }
-            mapOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 84C0 74 ?? C745 38 ???????? C745 3C ???????? C745 40 ???????? 48 8D05 ????????", "map open in combat", startIndex: 8000000);
+            mapOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 84C0 74 ?? C745 ?? ???????? C745 ?? ???????? C745 ?? ???????? 48 8D05 ????????", "map open in combat", startIndex: 8000000);
             mapStayOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ?? ?? ?? ?? 84 C0 75 ?? 38 83 ?? ?? ?? ?? 75 ?? 83 e7 fe", "map stay open in combat", startIndex: 9800000);
 
             enemyRepeatActionOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 41 08 0F BE 80 B1 E9 00 00", "enemyRepeatActionOff (1st sect)", justOffset: 7);
@@ -503,7 +503,7 @@ namespace EldenRingTool
             torrentDisabledCheckOne = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B40 68 8078 36 00 0F95C0 40 B7 01 8806 48 8B5C24 30 40 0FB6C7 48 8B7424 38 48 83C4 20 5F C3", "torrentDisabledCheckOne", justOffset: 4 + 4, startIndex: 12900000);
             torrentDisabledCheckTwo = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 48 8B48 ?? 8079 36 00 0F95C0 48 83C4 ?? C3", "torrentDisabledCheckTwo", justOffset: 5 + 4 + 4, startIndex: 7000000);
 
-            mapIDinPlayerIns = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "C783 ????0000 FFFFFFFF 0F280D ???????? 66 0F7F4D ?? F2 0F118B ????0000 66 0F73D9 ?? 66 0F7E8B ????0000 44 89AB ????0000 C783 ????0000 FFFFFFFF 44 89AB ????0000 C783 ????0000 FFFFFFFF", "mapIDinPlayerIns", readoffset32: 2, startIndex: 6300000);
+            mapIDinPlayerIns = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "C783 ????0000 FFFFFFFF 0F280D ???????? 66 0F7F4D ?? F2 0F118B ????0000 66 0F73D9 ?? 66 0F7E8B", "mapIDinPlayerIns", readoffset32: 2, startIndex: 6300000);
 
             chrSetOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B8CFE ??????00 48 85C9 74 ?? 4C 8B01 8BD0 41 FF50 ?? 48 8B7C24 ?? 48 8B5C24 ?? 48 83C4 ??", "worldChrManChrSetOffset", 4, startIndex: 5000000);
             pgDataOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B81 ????0000 48 C702 FFFFFFFF 48 85C0 74 0A 48 8B80 ????0000 48 8902 48 8BC2", "PGDataOffset", 3, startIndex: 6400000);
