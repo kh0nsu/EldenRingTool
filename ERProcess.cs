@@ -467,10 +467,10 @@ namespace EldenRingTool
             mapOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 84C0 74 ?? C745 ?? ???????? C745 ?? ???????? C745 ?? ???????? 48 8D05 ????????", "map open in combat", startIndex: 8000000);
             mapStayOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ?? ?? ?? ?? 84 C0 75 ?? 38 83 ?? ?? ?? ?? 75 ?? 83 e7 fe", "map stay open in combat", startIndex: 9800000);
 
-            enemyRepeatActionOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 41 08 0F BE 80 B1 E9 00 00", "enemyRepeatActionOff (1st sect)", justOffset: 7);
+            enemyRepeatActionOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 41 08 0F BE 80 ?? E9 00 00", "enemyRepeatActionOff (1st sect)", justOffset: 7);
             if (enemyRepeatActionOff < 0)
             {
-                enemyRepeatActionOff = scanner.findAddr(scanner.sectionTwo, scanner.textTwoAddr, "48 8B 41 08 0F BE 80 B1 E9 00 00", "enemyRepeatActionOff (2nd sect)", justOffset: 7);
+                enemyRepeatActionOff = scanner.findAddr(scanner.sectionTwo, scanner.textTwoAddr, "48 8B 41 08 0F BE 80 ?? E9 00 00", "enemyRepeatActionOff (2nd sect)", justOffset: 7);
             }
             warpFirstCallOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 83EC 48 48 C74424 28 FEFFFFFF E8 ?? ?? ?? ?? 48", "warp call one", startIndex: 6000000);
             warpSecondCallOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "488B05 ???????? 8988 ??0C0000 C3", "warp call two", startIndex: 6500000);
@@ -600,6 +600,9 @@ namespace EldenRingTool
 
         const byte enemyRepeatActionPatchVal = 0xB2;
         const byte enemyRepeatActionOrigVal = 0xB1;
+
+        const byte enemyRepeatActionPatchVal108 = 0xC2;
+        const byte enemyRepeatActionOrigVal108 = 0xC1;
 
         //patch functions, helper functions, etc.
 
@@ -735,6 +738,14 @@ namespace EldenRingTool
             else if (!on && b == enemyRepeatActionPatchVal)
             {
                 WriteUInt8(erBase + enemyRepeatActionOff, enemyRepeatActionOrigVal);
+            }
+            else if (on && b == enemyRepeatActionOrigVal108)
+            {
+                WriteUInt8(erBase + enemyRepeatActionOff, enemyRepeatActionPatchVal108);
+            }
+            else if (!on && b == enemyRepeatActionPatchVal108)
+            {
+                WriteUInt8(erBase + enemyRepeatActionOff, enemyRepeatActionOrigVal108);
             }
             else
             {
