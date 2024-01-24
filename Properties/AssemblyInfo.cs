@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("EldenRingTool")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,6 +51,6 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.4.3.0")]
-[assembly: AssemblyFileVersion("1.4.3.0")]
+[assembly: AssemblyVersion("1.4.4.0")]
+[assembly: AssemblyFileVersion("1.4.4.0")]
 //must include all four parts. parsing a version pads the FRONT with zeroes, in some cases, not the back as you might expect.

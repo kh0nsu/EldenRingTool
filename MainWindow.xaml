@@ -31,8 +31,9 @@
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="oneHPOn" Unchecked="oneHPOff" x:Name="chkOneHP">1 HP (rtsr)</CheckBox>
                     <CheckBox Checked="maxHPOn" Unchecked="maxHPOff" Margin="10,0" x:Name="chkMaxHP">Max HP</CheckBox>
-                    <Button FontSize="10" Click="instantDeath" x:Name="btnDie">Die</Button>
-                    <CheckBox Checked="runeArcOn" Unchecked="runArcOff" x:Name="chkRuneArc" Margin="10,0">Rune Arc</CheckBox>
+                    <Button FontSize="10" Click="btnSetPlayerHP_Click" x:Name="btnSetPlayerHP">Set HP</Button>
+                    <Button FontSize="10" Click="instantDeath" x:Name="btnDie" Margin="5,0">Die</Button>
+                    <CheckBox Checked="runeArcOn" Unchecked="runArcOff" x:Name="chkRuneArc" Margin="5,0">Rune Arc</CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="noAIOn" Unchecked="noAIOff" x:Name="chkDisableAI">Disable AI</CheckBox>

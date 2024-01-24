@@ -1445,5 +1445,16 @@ namespace EldenRingTool
         {
             _process.offAndUnFreeze(ERProcess.DebugOpts.ALL_CHR_NO_DEATH);
         }
+
+        private void btnSetPlayerHP_Click(object sender, RoutedEventArgs e)
+        {
+            var existing = _process.getSetPlayerHP();
+            var newVal = Microsoft.VisualBasic.Interaction.InputBox("Enter HP", "Set Player HP", existing.ToString());
+            if (string.IsNullOrEmpty(newVal)) { return; }
+            if (int.TryParse(newVal, out var newValInt))
+            {
+                _process.getSetPlayerHP(newValInt);
+            }
+        }
     }
 }
