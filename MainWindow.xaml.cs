@@ -73,7 +73,8 @@ namespace EldenRingTool
             FREE_CAMERA, FREE_CAMERA_CONTROL, NO_CLIP, ALLOW_MAP_COMBAT, TORRENT_ANYWHERE,
             DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIEVEMENTS,
             ADD_SOULS,
-            GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC
+            GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
+            FPS_30, FPS_60, FPS_120, FPS_144, FPS_240, FPS_1000,
         }
 
         ERProcess _process = null;
@@ -471,6 +472,12 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.GAME_SPEED_300PC: _process.getSetGameSpeed(3.0f); break;
                 case HOTKEY_ACTIONS.GAME_SPEED_500PC: _process.getSetGameSpeed(5.0f); break;
                 case HOTKEY_ACTIONS.GAME_SPEED_1000PC: _process.getSetGameSpeed(10.0f); break;
+                case HOTKEY_ACTIONS.FPS_30: _process.getSetFrameTimeTarget(1 / 30.0f); break;
+                case HOTKEY_ACTIONS.FPS_60: _process.getSetFrameTimeTarget(1 / 60.0f); break;
+                case HOTKEY_ACTIONS.FPS_120: _process.getSetFrameTimeTarget(1 / 120.0f); break;
+                case HOTKEY_ACTIONS.FPS_144: _process.getSetFrameTimeTarget(1 / 144.0f); break;
+                case HOTKEY_ACTIONS.FPS_240: _process.getSetFrameTimeTarget(1 / 240.0f); break;
+                case HOTKEY_ACTIONS.FPS_1000: _process.getSetFrameTimeTarget(1 / 1000.0f); break;
                 default: Utils.debugWrite("Action not handled: " + act.ToString()); break;
             }
         }
