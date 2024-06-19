@@ -57,6 +57,7 @@
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="poiseViewOn" Unchecked="poiseViewOff" x:Name="chkPoiseView">In-game poise view</CheckBox>
                     <Button Click="setGameSpeed" Margin="5,0" FontSize="10">Set Game Speed</Button>
+                    <Button Click="setTargetFPS" Margin="0,0" FontSize="10">Set Target FPS</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="targetingViewOn" Unchecked="targetingViewOff" x:Name="chkTargetingView">Targeting view (laggy)</CheckBox>

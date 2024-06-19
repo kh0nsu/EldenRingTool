@@ -395,6 +395,7 @@ namespace EldenRingTool
 
         int csFlipperOff = 0x4453E98; //lots of interesting stuff here. frame times, fps, etc.
         int gameSpeedOffset = 0x2D4;
+        int frameTimeTargetOffset = 0xE44832; //value for 2.01
 
         int upgradeRuneCostOff = 0x765241;
         int upgradeMatCostOff = 0x8417FC;
@@ -478,6 +479,8 @@ namespace EldenRingTool
             usrInputMgrImpSteamInputFlagOff = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "80B9 ????0000 00 48 8B5C24 40", "steam input flag check", 2, startIndex: 31500000);
             csFlipperOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? F3 0F 10 88 ?? ?? ?? ?? F3 0F", "csFlipperOff", 3, 7, startIndex: 13800000);
             gameSpeedOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? F3 0F 10 88 ?? ?? ?? ?? F3 0F", "csFlipperOff gameSpeedOffset", 7 + 4, startIndex: 13800000);
+            frameTimeTargetOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "8973 ?? C743 ?? ??88883C EB ?? 8973 ??", "frame time target (1/60.0f)", justOffset: 6, startIndex: 13000000);
+
             noDeathOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4883EC20F681????000001488bd97408", "no-death offset in CSChrDataModule", 4 + 2, startIndex: 4200000);
             //scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 48 85 C0 74 05 48 8B 40 58 C3 C3", "GameDataMan", 3, 7, startIndex: 2300000);
 
@@ -671,6 +674,17 @@ namespace EldenRingTool
             if (val.HasValue)
             {
                 WriteFloat(ptr2, val.Value);
+            }
+            return ret;
+        }
+
+        public float getSetFrameTimeTarget(float? val = null)
+        {//target frame time in seconds, default 1/60.0f
+            var ptr = erBase + frameTimeTargetOffset;
+            var ret = ReadFloat(ptr);
+            if (val.HasValue)
+            {
+                WriteFloat(ptr, val.Value);
             }
             return ret;
         }

@@ -1373,6 +1373,18 @@ namespace EldenRingTool
             }
         }
 
+        private void setTargetFPS(object sender, RoutedEventArgs e)
+        {
+            var existing = 1.0f / _process.getSetFrameTimeTarget();
+            var newVal = Microsoft.VisualBasic.Interaction.InputBox("Enter target FPS (windowed/borderless)", "Target FPS", existing.ToString());
+            if (string.IsNullOrEmpty(newVal)) { return; }
+            if (float.TryParse(newVal, out var newValFlt))
+            {
+                newValFlt = 1.0f / newValFlt;
+                _process.getSetFrameTimeTarget(newValFlt);
+            }
+        }
+
         private void toggleCoords(object sender, RoutedEventArgs e)
         {
             positionPanel.Visibility = positionPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
