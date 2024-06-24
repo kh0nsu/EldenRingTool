@@ -464,9 +464,13 @@ namespace EldenRingTool
             if (freeCamPlayerControlPatchLoc < 0)
             {
                 freeCamPlayerControlPatchLoc = scanner.findAddr(scanner.sectionTwo, scanner.textTwoAddr, "8B 83 ?? 00 00 00 FF C8 83 F8 01", "free cam player control patch loc (2nd section)");
+                if (freeCamPlayerControlPatchLoc < 0)
+                {//ugh
+                    freeCamPlayerControlPatchLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "8B 93 c8 00 00 00 85 d2 0f ?? ?? ?? 00 00", "free cam player control patch loc 1.12", startIndex: 6500000);
+                }
             }
             mapOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ???????? 84C0 74 ?? C745 ?? ???????? C745 ?? ???????? C745 ?? ???????? 48 8D05 ????????", "map open in combat", startIndex: 8000000);
-            mapStayOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ?? ?? ?? ?? 84 C0 75 ?? 38 83 ?? ?? ?? ?? 75 ?? 83 e7 fe", "map stay open in combat", startIndex: 9800000);
+            mapStayOpenInCombatOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "E8 ?? ?? ?? ?? 84 C0 75 ?? 38 83 ?? ?? 00 00 75 ?? 83 ?? fe 89", "map stay open in combat", startIndex: 9800000);
 
             enemyRepeatActionOff = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 41 08 0F BE 80 ?? E9 00 00", "enemyRepeatActionOff (1st sect)", justOffset: 7);
             if (enemyRepeatActionOff < 0)
@@ -584,6 +588,10 @@ namespace EldenRingTool
 
         readonly byte[] freeCamPlayerControlPatchOrig = new byte[] { 0x8B, 0x83, 0xC8, 0, 0, 0 }; //C8 may need to change in different patches
         readonly byte[] freeCamPlayerControlPatchReplacement = new byte[] { 0x31, 0xC0, 0x90, 0x90, 0x90, 0x90 };
+
+        readonly byte[] freeCamPlayerControlPatchOrig112 = new byte[] { 0x8B, 0x93, 0xC8, 0, 0, 0 }; //MOV EDX,dword ptr[RBX + 0xc8]
+        readonly byte[] freeCamPlayerControlPatchReplacement112 = new byte[] { 0x31, 0xD2, 0x90, 0x90, 0x90, 0x90 }; //xor edx,edx, nop nop nop nop
+
 
         readonly byte[] logoScreenOrig = new byte[] { 0x74, 0x53 };
         readonly byte[] logoScreenPatch = new byte[] { 0x90, 0x90 };
@@ -813,6 +821,10 @@ namespace EldenRingTool
             {
                 WriteBytes(erBase + freeCamPlayerControlPatchLoc, freeCamPlayerControlPatchReplacement);
             }
+            if (ReadBytes(erBase + freeCamPlayerControlPatchLoc, 6).SequenceEqual(freeCamPlayerControlPatchOrig112))
+            {
+                WriteBytes(erBase + freeCamPlayerControlPatchLoc, freeCamPlayerControlPatchReplacement112);
+            }
         }
 
         public void undoFreeCamPlayerControlPatch()
@@ -820,6 +832,10 @@ namespace EldenRingTool
             if (ReadBytes(erBase + freeCamPlayerControlPatchLoc, 6).SequenceEqual(freeCamPlayerControlPatchReplacement))
             {
                 WriteBytes(erBase + freeCamPlayerControlPatchLoc, freeCamPlayerControlPatchOrig);
+            }
+            if (ReadBytes(erBase + freeCamPlayerControlPatchLoc, 6).SequenceEqual(freeCamPlayerControlPatchReplacement112))
+            {
+                WriteBytes(erBase + freeCamPlayerControlPatchLoc, freeCamPlayerControlPatchOrig112);
             }
         }
 
