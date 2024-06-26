@@ -1549,6 +1549,7 @@ namespace EldenRingTool
         }
 
         const int MAIN_WORLD_ID = 60;
+        const int DLC_WORLD_ID = 61;
         const float TILE_SIZE = 256;
 
         public static bool mapAreaIsMainWorld(uint mapID)
@@ -1556,6 +1557,16 @@ namespace EldenRingTool
             uint P3 = (mapID & 0xFF000000U) >> 24;
             return P3 == MAIN_WORLD_ID;
         }
+        public static bool mapAreaIsDLC(uint mapID)
+        {
+            uint P3 = (mapID & 0xFF000000U) >> 24;
+            return P3 == DLC_WORLD_ID;
+        }
+
+        //TODO: we need a convention for DLC coords
+        //either add a dimension (fallback to 0 for base map) or add a huge offset like +1 million. an offset will however reduce the effective resolution
+        //TODO: check if TILE_SIZE is still valid
+        //TODO: update functions below
 
         public static (float, float) getMapIDWorldMapCoords(uint mapID)
         {//see http://soulsmodding.wikidot.com/reference:elden-ring-map-list
@@ -1576,7 +1587,7 @@ namespace EldenRingTool
                 return (mapCoords.Item1 + mapOff.Item1, mapCoords.Item2, mapCoords.Item3 + mapOff.Item2);
             }
             else
-            {
+            {//TODO: search for a conversion back to the relevant top-level world
                 var mapID = mapCoords.Item5;
                 uint P3 = (mapID & 0xFF000000U) >> 24;
                 uint P2 = (mapID & 0x00FF0000U) >> 16;
