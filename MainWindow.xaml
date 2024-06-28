@@ -171,31 +171,31 @@
                 <StackPanel x:Name="resistsPanel" Visibility="Collapsed">
                     <DockPanel>
                         <TextBlock x:Name="poisonText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Poison: 0000 / 0000</TextBlock>
-                        <ProgressBar x:Name="poisonBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                        <ProgressBar x:Name="poisonBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FF095416" />
                     </DockPanel>
                     <DockPanel>
                         <TextBlock x:Name="rotText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Rot: 0000 / 0000</TextBlock>
-                        <ProgressBar x:Name="rotBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                        <ProgressBar x:Name="rotBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FFBB138E" />
                     </DockPanel>
                     <DockPanel>
                         <TextBlock x:Name="bleedText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Bleed: 0000 / 0000</TextBlock>
-                        <ProgressBar x:Name="bleedBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                        <ProgressBar x:Name="bleedBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FFB00606" />
                     </DockPanel>
                     <DockPanel>
                         <TextBlock x:Name="blightText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Blight: 0000 / 0000</TextBlock>
-                        <ProgressBar x:Name="blightBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                        <ProgressBar x:Name="blightBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FF404040" />
                     </DockPanel>
                     <DockPanel>
                         <TextBlock x:Name="frostText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Frost: 0000 / 0000</TextBlock>
-                        <ProgressBar x:Name="frostBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                        <ProgressBar x:Name="frostBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FF068DB0" />
                     </DockPanel>
                     <DockPanel>
                         <TextBlock x:Name="sleepText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Sleep: 0000 / 0000</TextBlock>
-                        <ProgressBar x:Name="sleepBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                        <ProgressBar x:Name="sleepBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FF4D0888" />
                     </DockPanel>
                     <DockPanel>
                         <TextBlock x:Name="madText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Madness: 0000 / 0000</TextBlock>
-                        <ProgressBar x:Name="madBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" />
+                        <ProgressBar x:Name="madBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FFEAA000" />
                     </DockPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" x:Name="freezeHPPanel">
