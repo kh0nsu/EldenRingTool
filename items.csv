@@ -22,6 +22,7 @@ About Item Crafting,40002399
 About Materials,400023AE
 About Monument Icon,400023A7
 About Multiplayer,400023EB
+About New Inventory Features,401EA84A
 About Pouches,400023B1
 About Requesting Help from Hunters,400023A8
 About Roundtable Hold,400023AC
@@ -37,6 +38,8 @@ About Summoning Pools,400023A6
 About Summoning Spirits,40002397
 About Teardrop Scarabs,400023A0
 About the Map,40002393
+About the Revered Spirit Ash Blessing,401EA849
+About the Scadutree Blessing,401EA848
 About Vanquishing Enemy Groups,4000239F
 About Wielding Armaments,400023B4
 Academy Glintstone Key,40001FAD
@@ -47,7 +50,9 @@ Academy Scroll,400022A2
 Acid Spraymist,40000E1A
 Adula's Moonblade,4000114F
 Aeonian Butterfly,40005141
+Aged One's Exultation,20001F7C
 Agheel's Flame,40001B59
+Ailment Talisman,20001FB8
 Alabaster Lord's Sword,002ED830
 Alberich's Bracers,1001D588
 Alberich's Pointed Hat (Altered),1001D8A8
@@ -97,6 +102,7 @@ Ancestral Follower Ashes,40033068
 Ancestral Infant's Head,40000BB8
 Ancestral Spirit's Horn,200017DE
 Ancient Death Rancor,40001389
+Ancient Dragon Florissax,4021CC58
 Ancient Dragon Knight Kristoff +1,4003E801
 Ancient Dragon Knight Kristoff +10,4003E80A
 Ancient Dragon Knight Kristoff +2,4003E802
@@ -108,13 +114,26 @@ Ancient Dragon Knight Kristoff +7,4003E807
 Ancient Dragon Knight Kristoff +8,4003E808
 Ancient Dragon Knight Kristoff +9,4003E809
 Ancient Dragon Knight Kristoff,4003E800
+Ancient Dragon Knight's Cookbook [1],401EA8EC
+Ancient Dragon Knight's Cookbook [2],401EA8F0
 Ancient Dragon Prayerbook,400022A1
 Ancient Dragon Smithing Stone,4000279C
+Ancient Dragon's Blessing,401E8CB4
 Ancient Dragonbolt Pot,40000141
 Ancient Dragons' Lightning Spear,40001B1C
 Ancient Dragons' Lightning Strike,40001AFE
+Ancient Meteoric Ore Greatsword,0044AA20
+Ancient Ruins Cross Message,401EA3DC
+Ansbach's Attire (Altered),104DFD3C
+Ansbach's Attire,104DF954
+Ansbach's Boots,104DFA1C
+Ansbach's Longbow,02796470
+Ansbach's Manchettes,104DF9B8
 Ant's Skull Plate,01EBA360
+Antiquity Scholar's Cookbook [1],401EA8FD
+Antiquity Scholar's Cookbook [2],401EA8F8
 Antspur Rapier,004CE780
+Anvil Hammer,00BEE330
 Arbalest,02915940
 Archer Ashes +1,4003CCA9
 Archer Ashes +10,4003CCB2
@@ -133,18 +152,28 @@ Aristocrat Garb (Altered),1005A99C
 Aristocrat Garb,1005A5B4
 Aristocrat Hat,1005CC60
 Aristocrat Headband,1005A550
-Arrow,02FAF080
+Armor of Night,104DAB34
+Armor of Solitude (Altered),104E4B5C
+Armor of Solitude,104E4774
 Arrow's Reach Talisman,20000834
+Arrow's Soaring Sting Talisman,20001F86
 Arrow's Sting Talisman,20000866
+Arrow,02FAF080
 Arsenal Charm +1,20000407
 Arsenal Charm,20000406
 Arteria Leaf,400050D3
+Ascetic's Ankle Guards,104F80BC
+Ascetic's Loincloth,104F7FF4
+Ascetic's Wrist Guards,104F8058
+Ash of War: Aspects of the Crucible: Wings,80030DA4
 Ash of War: Assassin's Gambit,8000EB28
 Ash of War: Barbaric Roar,8000FDE8
 Ash of War: Barrage,80009CA4
 Ash of War: Barricade Shield,80007594
 Ash of War: Beast's Roar,8000FEB0
 Ash of War: Black Flame Tornado,80005654
+Ash of War: Blind Spot,80063DA8
+Ash of War: Blinkbolt,80064D48
 Ash of War: Blood Blade,80005780
 Ash of War: Blood Tax,80002A30
 Ash of War: Bloodhound's Step,800138E4
@@ -153,17 +182,23 @@ Ash of War: Braggart's Roar,8000FF78
 Ash of War: Carian Grandeur,80005528
 Ash of War: Carian Greatsword,8000558C
 Ash of War: Carian Retaliation,80007724
+Ash of War: Carian Sovereignty,800660D0
 Ash of War: Charge Forth,80002904
 Ash of War: Chilling Mist,800058AC
 Ash of War: Cragblade,8000ED1C
 Ash of War: Determination,8000EA60
+Ash of War: Divine Beast Frost Stomp,80065900
 Ash of War: Double Slash,80002BC0
+Ash of War: Dryleaf Whirlwind,80030D40
 Ash of War: Earthshaker,800052D0
 Ash of War: Enchanted Shot,80009DD0
 Ash of War: Endure,80011170
 Ash of War: Eruption,800050DC
 Ash of War: Flame of the Redmanes,8000C544
+Ash of War: Flame Skewer,80065130
+Ash of War: Flame Spear,80065CE8
 Ash of War: Flaming Strike,80005398
+Ash of War: Ghostflame Call,80067070
 Ash of War: Giant Hunt,80002D50
 Ash of War: Glintblade Phalanx,80004E20
 Ash of War: Glintstone Pebble,80004F4C
@@ -177,6 +212,7 @@ Ash of War: Hoarah Loux's Earthshaker,8000C6D4
 Ash of War: Hoarfrost Stomp,8000C3B4
 Ash of War: Holy Ground,80011238
 Ash of War: Ice Spear,80004EE8
+Ash of War: Igon's Drake Hunt,80085CA0
 Ash of War: Impaling Thrust,80002774
 Ash of War: Kick,8000C47C
 Ash of War: Lifesteal Fist,80005014
@@ -186,27 +222,38 @@ Ash of War: Lion's Claw,80002710
 Ash of War: Loretta's Slash,80002E18
 Ash of War: Mighty Shot,80009D08
 Ash of War: No Skill,800078B4
+Ash of War: Overhead Stance,80064578
+Ash of War: Palm Blast,80061E68
 Ash of War: Parry,800075F8
 Ash of War: Phantom Slash,800057E4
 Ash of War: Piercing Fang,800027D8
+Ash of War: Piercing Throw,80062250
 Ash of War: Poison Moth Flight,80002E7C
 Ash of War: Poisonous Mist,80005910
 Ash of War: Prayerful Strike,80005140
 Ash of War: Prelate's Charge,80002C24
 Ash of War: Quickstep,80013880
+Ash of War: Raging Beast,800631F0
 Ash of War: Rain of Arrows,80009E98
 Ash of War: Raptor of the Mists,80013948
 Ash of War: Repeating Thrust,80002A94
+Ash of War: Rolling Sparks,80062E08
 Ash of War: Royal Knight's Resolve,8000EAC4
 Ash of War: Sacred Blade,80004E84
 Ash of War: Sacred Order,8000EBF0
 Ash of War: Sacred Ring of Light,800056B8
+Ash of War: Savage Claws,800635D8
+Ash of War: Savage Lion's Claw,80065518
+Ash of War: Scattershot Throw,80062638
 Ash of War: Seppuku,8000ECB8
 Ash of War: Shared Order,8000EC54
 Ash of War: Shield Bash,80007530
 Ash of War: Shield Crash,80007850
+Ash of War: Shield Strike,800C3500
+Ash of War: Shriek of Sorrow,800664B8
 Ash of War: Sky Shot,80009E34
 Ash of War: Spectral Lance,80005848
+Ash of War: Spinning Gravity Thrust,80061A80
 Ash of War: Spinning Slash,8000283C
 Ash of War: Spinning Strikes,80002B5C
 Ash of War: Spinning Weapon,80002EE0
@@ -218,7 +265,9 @@ Ash of War: Storm Blade,80005208
 Ash of War: Storm Stomp,8000C418
 Ash of War: Storm Wall,80007788
 Ash of War: Stormcaller,8000300C
+Ash of War: Swift Slash,80064190
 Ash of War: Sword Dance,80003070
+Ash of War: The Poison Flower Blooms Twice,8007B4A8
 Ash of War: Thops's Barrier,80007918
 Ash of War: Through and Through,80009C40
 Ash of War: Thunderbolt,80005460
@@ -226,17 +275,21 @@ Ash of War: Troll's Roar,8000FF14
 Ash of War: Unsheathe,80002C88
 Ash of War: Vacuum Slice,800055F0
 Ash of War: Vow of the Indomitable,800111D4
+Ash of War: Wall of Sparks,80062A20
 Ash of War: War Cry,8000FE4C
 Ash of War: Waves of Darkness,8000C670
 Ash of War: White Shadow's Lure,80014C08
 Ash of War: Wild Strikes,80002AF8
+Ash of War: Wing Stance,80064960
 Ash-of-War Scarab,101CFDE0
-Asimi_ Silver Chrysalid,40002003
-Asimi_ Silver Tear,40001FD3
 Asimi's Husk,40002000
+Asimi, Silver Chrysalid,40002003
+Asimi, Silver Tear,40001FD3
 Aspects of the Crucible,40001D4C
 Aspects of the Crucible,40001D56
 Aspects of the Crucible,40001D60
+Aspects of the Crucible: Bloom,401E9E84
+Aspects of the Crucible: Thorns,401E9E7A
 Assassin's Approach,4000196E
 Assassin's Cerulean Dagger,200013C4
 Assassin's Crimson Dagger,200013BA
@@ -276,6 +329,7 @@ Azur's Glintstone Crown,1008DD88
 Azur's Glintstone Robe,1008DDEC
 Azur's Glintstone Staff,01FB0CB0
 Azur's Manchettes,1008DE50
+Backhand Blade,03D83120
 Baldachin's Blessing,40000D20
 Ballista Bolt,0328B740
 Bandit Boots,100E31FC
@@ -314,11 +368,16 @@ Banished Knight Oleg,40031128
 Banished Knight's Greatsword,002EFF40
 Banished Knight's Halberd,01131DB0
 Banished Knight's Shield,01D97AF0
+Barbed Staff-Spear,010B5580
 Barrier of Gold,400018BA
 Bastard Sword,002DC6C0
 Bastard's Stars,00C6D270
 Battle Axe,00D59F80
 Battle Hammer,00B76920
+Battlefield Priest's Cookbook [1],401EA8F2
+Battlefield Priest's Cookbook [2],401EA8F4
+Battlefield Priest's Cookbook [3],401EA8FB
+Battlefield Priest's Cookbook [4],401EA8FF
 Battlemage Hugues +1,40035F49
 Battlemage Hugues +10,40035F52
 Battlemage Hugues +2,40035F4A
@@ -333,34 +392,40 @@ Battlemage Hugues,40035F48
 Battlemage Legwraps,100F436C
 Battlemage Manchettes,100F4308
 Battlemage Robe,100F42A4
+Bayle's Flame Lightning,401E9FE2
+Bayle's Tyranny,401E9FD8
 Beast Blood,40003AB6
 Beast Champion Armor (Altered),100B00CC
 Beast Champion Armor,100AFCE4
 Beast Champion Gauntlets,100AFD48
 Beast Champion Greaves,100AFDAC
 Beast Champion Helm,100AFC80
+Beast Claw,04153A20
 Beast Claw,40001AA4
 Beast Crest Heater Shield,01DD4B80
 Beast Eye,40002313
+Beast Horn,401EBF18
 Beast Liver,40003AA2
+Beast-Repellent Torch,016F2060
 Beastclaw Greathammer,00B964F0
 Beastlure Pot,40000187
 Beastman's Cleaver,007B4A80
 Beastman's Curved Sword,006AF6D0
 Beastman's Jar-Shield,01CAADE0
-Beast-Repellent Torch,016F2060
+Beloved Stardust,20001FFE
 Bernahl's Bell Bearing,400022D4
 Bestial Constitution,40001AC2
 Bestial Sling,40001A90
 Bestial Vitality,40001AB8
 Bewitching Branch,40000D16
+Bigmouth Imp Ashes,4021B8D0
 Black Blade,40001D6A
 Black Bow,0272ADB0
 Black Dumpling,101ED2A0
 Black Flame Blade,4000186A
 Black Flame Ritual,40001860
-Black Flame,40001842
 Black Flame's Protection,40001874
+Black Flame,40001842
 Black Hood,10155CC0
 Black Knife Armor (Altered),1002C36C
 Black Knife Armor,1002BF84
@@ -380,8 +445,20 @@ Black Knife Tiche +9,40030D49
 Black Knife Tiche,40030D40
 Black Knife,000F6950
 Black Knifeprint,40001FEC
+Black Knight Armor,104E9594
+Black Knight Captain Huw,4021B4E8
+Black Knight Commander Andreas,4021B100
+Black Knight Gauntlets,104E95F8
+Black Knight Greaves,104E965C
+Black Knight Helm,104E9530
 Black Leather Shield,01DE35E0
+Black Pyrefly,401ED2A6
+Black Steel Greathammer,00BF0A40
+Black Steel Greatshield,01EFE920
+Black Steel Twinblade,00A05EB0
+Black Syrup,401EA3D3
 Black Wolf Mask,10029810
+Black-Key Bolt,0319EA30
 Blackflame Monk Amon +1,40037AA1
 Blackflame Monk Amon +10,40037AAA
 Blackflame Monk Amon +2,40037AA2
@@ -399,23 +476,32 @@ Blackflame Monk Greaves,10055C44
 Blackflame Monk Hood,10055B18
 Blackguard's Bell Bearing,400022EE
 Blackguard's Iron Mask,100D9878
-Black-Key Bolt,0319EA30
 Blade of Calling,0011B340
+Blade of Mercy,20002026
+Blades of Stone,401E96DC
 Blaidd's Armor (Altered),10029C5C
 Blaidd's Armor,10029874
 Blaidd's Gauntlets,100298D8
 Blaidd's Greaves,1002993C
 Blasphemous Blade,002FE9A0
 Blasphemous Claw,40000820
+Blessed Blue Dew Talisman,20001F40
+Blessed Bone Shard,401ED2BF
 Blessed Dew Talisman,2000139C
+Blessing of Marika,401E8804
 Blessing of the Erdtree,4000191F
 Blessing's Boon,4000191E
 Blood Grease,400005A0
+Blood-Tainted Excrement,4000515F
 Bloodboil Aromatic,40000DDE
 Bloodbone Arrow (Fletched),02FF8460
 Bloodbone Arrow,02FFAB70
 Bloodbone Bolt,031BBEF0
 Bloodboon,400018A6
+Bloodfiend Hexer's Ashes,402195A8
+Bloodfiend's Arm,00BF3150
+Bloodfiend's Fork,00FC6160
+Bloodfiend's Sacred Spear,00FC8870
 Bloodflame Blade,400018B0
 Bloodflame Talons,4000189C
 Bloodhound Claws,014FFFA0
@@ -441,7 +527,7 @@ Bloodsoaked Manchettes,100EB280
 Bloodsoaked Mask,100EB5A0
 Bloodsoaked Tabard,101C8914
 Bloodstained Dagger,00116520
-Blood-Tainted Excrement,4000515F
+Bloodsucking Cracked Tear,401EAFAA
 Bloody Finger,40000066
 Bloody Finger,400000AC
 Bloody Helice,005B8D80
@@ -467,16 +553,22 @@ Bolt of Gransax,00F58390
 Bolt,03197500
 Boltdrake Talisman +1,20000FBF
 Boltdrake Talisman +2,20000FC0
+Boltdrake Talisman +3,20001BC6
 Boltdrake Talisman,20000FBE
+Bondstone,401E9038
 Bone Arrow (Fletched),02FB65B0
 Bone Arrow,02FC9E30
 Bone Ballista Bolt,03292C70
 Bone Bolt,031AD490
+Bone Bow,0269FB20
 Bone Dart,400006AE
 Bone Great Arrow (Fletched),030AF610
 Bone Great Arrow,030B1D20
 Bone Peddler's Bell Bearing,400022F1
+Bonny Butchering Knife,00ECA9F0
 Borealis's Mist,40001B6D
+Braided Arm Wraps,104D5D78
+Braided Cord Robe,104D5D14
 Brass Shield,01DB0190
 Briar Armor (Altered),1003389C
 Briar Armor,100334B4
@@ -488,6 +580,7 @@ Briars of Punishment,4000132E
 Briars of Sin,40001324
 Brick Hammer,00BA0130
 Broadsword,001ED2A0
+Broken Rune,401E9007
 Buckler,01C9C380
 Budding Cave Moss,40005169
 Budding Horn,40003ACA
@@ -498,10 +591,11 @@ Bull-Goat Helm,100222E0
 Bull-Goat's Talisman,200004BA
 Burial Crow's Letter,40001FDC
 Burial Crow's Letter,40001FF5
-Burn_ O Flame!,400017E8
+Burn, O Flame!,400017E8
 Burred Bolt,031A1140
 Butchering Knife,00E6B680
 Caestus,01406F40
+Call of Tibia,401E90CE
 Candletree Wooden Shield,01DCD650
 Cane Sword,0021B8D0
 Cannon of Haima,40000FF0
@@ -522,7 +616,11 @@ Carian Piercer,40001162
 Carian Regal Scepter,01F8E9D0
 Carian Retaliation,40001220
 Carian Slicer,40001158
+Carian Sorcery Sword,00269AD0
+Carian Thrusting Shield,03B9D3B0
+Castle Cross Message,401EA3DB
 Catch Flame,40001770
+Caterpillar Mask,104D5CB0
 Cave Moss,40005168
 Celebrant's Cleaver,00D689E0
 Celebrant's Rib-Rake,00F50E60
@@ -531,12 +629,15 @@ Celebrant's Skull,00B916D0
 Celestial Dew,40000852
 Cerulean Amber Medallion +1,200003F3
 Cerulean Amber Medallion +2,200003F4
+Cerulean Amber Medallion +3,20001B62
 Cerulean Amber Medallion,200003F2
 Cerulean Crystal Tear,40002AFC
 Cerulean Crystal Tear,40002AFD
 Cerulean Hidden Tear,40002B11
+Cerulean Seed Talisman +1,20001BEE
 Cerulean Seed Talisman,20001392
 Cerulean Tear Scarab,101D4C00
+Cerulean-Sapping Cracked Tear,401EAF96
 Chain Armor,1010C944
 Chain Coif,1010C8E0
 Chain Gauntlets,1010C9A8
@@ -548,16 +649,22 @@ Champion Gaiters,100B24BC
 Champion Headband,100B2390
 Champion Pauldron,100B23F4
 Champion's Song Painting,4000200A
+Charming Branch,401E9196
+Cherishing Fingers,401EA17C
+Chilling Perfume Bottle,03AA9170
 Chrysalids' Memento,40001FEB
 Cinquedea,0010EFF0
 Cipher Pata,01426B10
+Circlet of Light,105071C0
 Clarifying Boluses,400003C0
 Clarifying Cured Meat,4000046A
 Clarifying Horn Charm +1,2000049D
+Clarifying Horn Charm +2,20001B94
 Clarifying Horn Charm,2000049C
 Clarifying White Cured Meat,40000532
 Claw Talisman,20000884
 Clawmark Seal,020768C0
+Claws of Night,015752A0
 Clayman Ashes +1,40036331
 Clayman Ashes +10,4003633A
 Clayman Ashes +2,40036332
@@ -603,6 +710,10 @@ Collapsing Stars,40001271
 Comet Azur,40001068
 Comet,40000FB5
 Commander's Standard,011344C0
+Common Soldier Cloth Armor,104FF524
+Common Soldier Gauntlets,104FF588
+Common Soldier Greaves,104FF5EC
+Common Soldier Helm,104FF4C0
 Commoner's Garb (Altered),100C605C
 Commoner's Garb,100C5C74
 Commoner's Headband (Altered),100C5FF8
@@ -619,6 +730,7 @@ Confessor Boots,100D6EAC
 Confessor Gloves,100D6E48
 Confessor Hood (Altered),100D7168
 Confessor Hood,100D6D80
+Congealed Putrescence,401ED2BA
 Consort's Mask,100EA600
 Consort's Robe,100EA664
 Consort's Trousers,100EA72C
@@ -635,30 +747,37 @@ Crepus's Vial,20001770
 Crescent Moon Axe,00E556F0
 Crimson Amber Medallion +1,200003E9
 Crimson Amber Medallion +2,200003EA
+Crimson Amber Medallion +3,20001B58
 Crimson Amber Medallion,200003E8
 Crimson Bubbletear,40002AFF
 Crimson Crystal Tear,40002AFA
 Crimson Crystal Tear,40002AFB
 Crimson Hood,100B4AA0
+Crimson Seed Talisman +1,20001BE4
 Crimson Seed Talisman,20001388
 Crimson Tear Scarab,101D24F0
+Crimson-Sapping Cracked Tear,401EAF8C
 Crimsonburst Crystal Tear,40002B01
+Crimsonburst Dried Tear,401EAF82
 Crimsonspill Crystal Tear,40002AF8
 Crimsonwhorl Bubbletear,40002B0C
-Crossed-Tree Towershield,01EB5540
+Cross Map,401EA3C7
 Cross-Naginata,00F5D1B0
+Crossed-Tree Towershield,01EB5540
 Crucible Axe Armor (Altered),1008BAC4
 Crucible Axe Armor,1008B2F4
 Crucible Axe Helm,1008B290
 Crucible Feather Talisman,20000FE6
 Crucible Gauntlets,1008B358
 Crucible Greaves,1008B3BC
+Crucible Hammer-Helm,10510630
 Crucible Hornshield,01E8BD30
 Crucible Knot Talisman,2000100E
 Crucible Scale Talisman,20000FDC
 Crucible Tree Armor (Altered),1008BEAC
 Crucible Tree Armor,1008B6DC
 Crucible Tree Helm,1008B678
+Crusade Insignia,20001F72
 Crystal Barrage,40000FDC
 Crystal Bud,4000510E
 Crystal Burst,40000FFA
@@ -690,29 +809,49 @@ Cuckoo Knight Greaves,101B2A4C
 Cuckoo Knight Helm,101B2920
 Cuckoo Surcoat,101A1814
 Cure Poison,40001928
+Curseblade Mask,104F7F90
+Curseblade Meera,402191C0
+Curseblade's Cirque,03D87F40
 Cursed-Blood Pot,40000276
 Cursemark of Death,40001FFF
 Curved Club,00A84DF0
 Curved Great Club,00B85380
 Curved Sword Talisman,20000898
+D's Bell Bearing,400022D3
 Daedicar's Woe,200017AC
 Dagger Talisman,2000082A
 Dagger,000F4240
+Dancer's Bracer,104D8488
 Dancer's Castanets,40001FE8
+Dancer's Dress (Altered),104D880C
+Dancer's Dress,104D8424
+Dancer's Hood,104D83C0
+Dancer's Trousers,104D84EC
+Dancing Blade of Ranah,0072BF00
+Dane's Footwork,039B4F30
+Dane's Hat,102DC6C0
 Dappled Cured Meat,40000474
 Dappled White Cured Meat,4000053C
 Dark Moon Greatsword,002F2650
 Dark Moon Ring,40001FB9
 Darkness,40001982
+Deadly Poison Perfume Bottle,03AB06A0
+Death Knight Armor,104F58E4
+Death Knight Gauntlets,104F5948
+Death Knight Greaves,104F59AC
+Death Knight Helm,104F5880
+Death Knight's Longhaft Axe,00EC82E0
+Death Knight's Twin Axes,00DD67B0
 Death Lightning,400013B0
+Death Mask Helm,104F1230
 Death Ritual Spear,00F5F8C0
+Death's Poker,0030D400
 Deathbed Dress,101D7374
 Deathroot,4000082A
-Death's Poker,0030D400
-Deathsbane Jerky,400004C4
-Deathsbane White Jerky,40000546
 Dectus Medallion (Left),40001FA9
 Dectus Medallion (Right),40001FAA
+Deep-Purple Lily,401ED2AE
+Deflecting Hardtear,401EAFBE
 Demi-Human Ashes +1,40039211
 Demi-Human Ashes +10,4003921A
 Demi-Human Ashes +2,40039212
@@ -725,6 +864,7 @@ Demi-Human Ashes +8,40039218
 Demi-Human Ashes +9,40039219
 Demi-Human Ashes,40039210
 Demi-Human Queen's Staff,01F874A0
+Demi-Human Swordsman Yosh,4021A930
 Depraved Perfumer Carmaan +1,40034BC1
 Depraved Perfumer Carmaan +10,40034BCA
 Depraved Perfumer Carmaan +2,40034BC2
@@ -741,7 +881,9 @@ Depraved Perfumer Headscarf,10083D60
 Depraved Perfumer Robe (Altered),100841AC
 Depraved Perfumer Robe,10083DC4
 Depraved Perfumer Trousers,10083E8C
+Devonia's Hammer,016694E0
 Devourer's Scepter,00BA2840
+Dewgem,401ED2A5
 Dewkissed Herba,400050E6
 Dexterity-knot Crystal Tear,40002B0E
 Diallos's Mask,1009EEF8
@@ -751,6 +893,16 @@ Discarded Palace Key,40002007
 Discus of Light,40001A2C
 Dismounter,007A6020
 Distinguished Greatshield,01E89620
+Divine Beast Head,1050B810
+Divine Beast Helm,105023A0
+Divine Beast Tornado,401EA2B2
+Divine Beast Warrior Armor,10502404
+Divine Bird Feathers,401EA2BC
+Divine Bird Helm,10502788
+Divine Bird Warrior Armor,105027EC
+Divine Bird Warrior Gauntlets,10502850
+Divine Bird Warrior Greaves,105028B4
+Divine Bird Warrior Ornis,4021C488
 Divine Fortification,40001950
 Dolores the Sleeping Arrow Puppet +1,4003FF71
 Dolores the Sleeping Arrow Puppet +10,4003FF7A
@@ -763,6 +915,10 @@ Dolores the Sleeping Arrow Puppet +7,4003FF77
 Dolores the Sleeping Arrow Puppet +8,4003FF78
 Dolores the Sleeping Arrow Puppet +9,4003FF79
 Dolores the Sleeping Arrow Puppet,4003FF70
+Domain of Dragons Painting,401EA48A
+Dragon Communion Flesh,401E88CC
+Dragon Communion Grease,401E8A48
+Dragon Communion Harpoon,401E8B2E
 Dragon Communion Seal,02080500
 Dragon Cult Prayerbook,400022A0
 Dragon Greatclaw,015FDE20
@@ -770,7 +926,11 @@ Dragon Halberd,0114CB60
 Dragon Heart,4000274C
 Dragon King's Cragblade,005C29C0
 Dragon Towershield,01E84800
+Dragon's Calorbloom,401ED2B7
+Dragon-Hunter's Great Katana,03F6DCB0
 Dragonbolt Blessing,40001B3B
+Dragonbolt Grease,401E8A02
+Dragonbolt of Florissax,401E9F7E
 Dragonclaw Shield,01E8E440
 Dragonclaw,40001B94
 Dragoncrest Greatshield Talisman,20000FA3
@@ -781,6 +941,7 @@ Dragonfire,40001B58
 Dragonice,40001B6C
 Dragonmaw,40001BA8
 Dragonscale Blade,008A65B0
+Dragonscale Flesh,401E88D1
 Dragonwound Grease,400005C8
 Drake Knight Armor (Altered),1000EEAC
 Drake Knight Armor,1000EAC4
@@ -790,15 +951,26 @@ Drake Knight Helm (Altered),1000EE48
 Drake Knight Helm,1000EA60
 Drawing-Room Key,40001FC6
 Drawstring Blood Grease,40000604
+Drawstring Dragonbolt Grease,401E8A66
+Drawstring Eternal Sleep Grease,401E8A8E
 Drawstring Fire Grease,400005DC
-Drawstring Freezing Grease,40000622
+Drawstring Golden Grease,401E8A7A
 Drawstring Holy Grease,400005FA
 Drawstring Lightning Grease,400005E6
 Drawstring Magic Grease,400005F0
+Drawstring Messmerfire Grease,401E8A5C
 Drawstring Poison Grease,40000618
 Drawstring Rot Grease,40000636
+Drawstring Royal Magic Grease,401E8A70
 Drawstring Soporific Grease,4000060E
-D's Bell Bearing,400022D3
+Dried Bouquet,20001FA4
+Dryleaf Arm Wraps,102DC788
+Dryleaf Arts,039B2820
+Dryleaf Cuissardes,102DC7EC
+Dryleaf Robe (Altered),102DCB0C
+Dryleaf Robe,102DC724
+Dryleaf Seal,020E6DA0
+Dueling Shield,03B9ACA0
 Duelist Greataxe,015F9000
 Duelist Greaves,1004BC1C
 Duelist Helm,1004BAF0
@@ -833,7 +1005,11 @@ Elden Lord Greaves,1007060C
 Elden Remembrance,40000B93
 Elden Stars,40001A40
 Electrify Armament,40001B30
+Electrocharge,401E9F88
 Eleonora's Poleblade,009959D0
+Ember of Messmer,401ED2BE
+Empyrean-Blood Burgeon,401ED2B9
+Enraged Divine Beast,20001FF4
 Envoy Crown,100C8320
 Envoy's Greathorn,015F68F0
 Envoy's Horn,00A95F60
@@ -857,6 +1033,9 @@ Errant Sorcerer Robe (Altered),100F1F7C
 Errant Sorcerer Robe,100F1B94
 Estoc,004C4B40
 Eternal Darkness,4000122A
+Eternal Sleep Grease,401E8A2A
+Eternal Sleep Pot,401E8764
+Euporia,00A037A0
 Exalted Flesh,400004BA
 Executioner's Greataxe,00E61A40
 Exile Armor,1002E694
@@ -871,12 +1050,14 @@ Explosive Stone,40000726
 Eye of Yelough,40005104
 Eye Surcoat,1010CD2C
 Faded Erdleaf Flower,400050B4
-Faithful's Canvas Talisman,20000BE0
 Faith-knot Crystal Tear,40002B10
+Faithful's Canvas Talisman,20000BE0
 Falchion,006ACFC0
 Fallingstar Beast Jaw,01602C40
+Falx,007297F0
 Family Heads,00C6AB60
 Fan Daggers,400006D6
+Fang Helm,104C9D48
 Fanged Imp Ashes +1,400318F9
 Fanged Imp Ashes +10,40031902
 Fanged Imp Ashes +2,400318FA
@@ -893,6 +1074,7 @@ Festering Bloody Finger,4000006F
 Festering Bloody Finger,400000B7
 Festive Garb (Altered),100C394C
 Festive Garb,100C3564
+Festive Grease,401E8AC0
 Festive Hood (Altered),100C38E8
 Festive Hood,100C3500
 Fetid Pot,4000014A
@@ -900,6 +1082,7 @@ Fia's Hood,101D9A20
 Fia's Mist,4000139C
 Fia's Robe (Altered),101D9E6C
 Fia's Robe,101D9A84
+Fine Crucible Feather Talisman,20001F4A
 Finger Maiden Fillet,100DC370
 Finger Maiden Robe (Altered),100DC7BC
 Finger Maiden Robe,100DC3D4
@@ -915,19 +1098,38 @@ Finger Maiden Therolina Puppet +7,4003FB8F
 Finger Maiden Therolina Puppet +8,4003FB90
 Finger Maiden Therolina Puppet +9,4003FB91
 Finger Maiden Therolina Puppet,4003FB88
+Finger Mimic,401ED2B8
+Finger Robe,104D3DD4
 Finger Seal,0206CC80
 Finger Severer,40000067
+Finger-Weaver's Cookbook [1],401EA8FE
+Finger-Weaver's Cookbook [2],401EA8DC
+Fingercreeper Ashes,4021D428
 Fingerprint Armor (Altered),100E833C
 Fingerprint Armor,100E7F54
 Fingerprint Gauntlets,100E7FB8
 Fingerprint Grape,40001FBE
 Fingerprint Greaves,100E801C
 Fingerprint Helm,100E7EF0
+Fingerprint Nostrum,401E88D6
 Fingerprint Stone Shield,01EA43D0
 Fingerslayer Blade,40001FDF
 Fire Arrow,02FB1790
 Fire Blossom,400050CA
+Fire Coil,401E90EC
 Fire Grease,40000578
+Fire Knight Armor (Altered),104F0EAC
+Fire Knight Armor,104F0AC4
+Fire Knight Gauntlets,104F0B28
+Fire Knight Greaves,104F0B8C
+Fire Knight Helm,104F0A60
+Fire Knight Hilde,40219D78
+Fire Knight Queelign,4021D810
+Fire Knight's Cookbook [1],401EA8EF
+Fire Knight's Cookbook [2],401EA8FC
+Fire Knight's Greatsword,0044F840
+Fire Knight's Seal,020E94B0
+Fire Knight's Shortsword,00170A70
 Fire Monk Armor,10055794
 Fire Monk Ashes +1,400376B9
 Fire Monk Ashes +10,400376C2
@@ -951,40 +1153,56 @@ Fire Prelate Gauntlets,10057F08
 Fire Prelate Greaves,10057F6C
 Fire Prelate Helm,10057E40
 Fire Scorpion Charm,200007E4
+Fire Serpent,401EA2F8
+Fire Spritestone,401E90F6
+Fire's Deadly Sin,40001EDC
 Firebone Arrow (Fletched),02FCEC50
 Firebone Arrow,02FD1360
 Firebone Bolt,031AFBA0
 Fireproof Dried Liver,40000488
-Fire's Deadly Sin,40001EDC
+Fireproof Pickled Liver,401E88EA
+Firespark Perfume Bottle,03AA6A60
 Flail,00C68450
 Flamberge,002E8A10
 Flame Crest Wooden Shield,01DCFD60
 Flame Fortification,40001932
 Flame of the Fell God,400017DE
 Flame Sling,4000177A
-Flame_ Cleanse Me,40001798
-Flame_ Fall Upon Them,40001784
-Flame_ Grant Me Strength,400017A2
-Flame_ Protect Me,400017AC
+Flame, Cleanse Me,40001798
+Flame, Fall Upon Them,40001784
+Flame, Grant Me Strength,400017A2
+Flame, Protect Me,400017AC
+Flame-Shrouding Cracked Tear,40002B14
 Flamedrake Talisman +1,20000FB5
 Flamedrake Talisman +2,20000FB6
+Flamedrake Talisman +3,20001BBC
 Flamedrake Talisman,20000FB4
-Flame-Shrouding Cracked Tear,40002B14
 Flaming Bolt,031C5B30
 Flask of Wondrous Physick,400000FA
 Flask of Wondrous Physick,400000FB
+Fleeting Microcosm,401EA172
 Flight Pinion,40003AD4
 Flightless Bird Painting,4000200D
 Flock's Canvas Talisman,20000BEA
+Flowerstone Gavel,00AF79E0
 Flowing Curved Sword,006BBA20
+Fly Mold,401EBF40
 Foot Soldier Cap,101BEC70
 Foot Soldier Gauntlets,101BED38
 Foot Soldier Greaves,101BED9C
 Foot Soldier Helm,101C61A0
 Foot Soldier Helmet,101C1380
 Foot Soldier Tabard,101C13E4
+Forager Brood Cookbook [1],401EA8D6
+Forager Brood Cookbook [2],401EA8D7
+Forager Brood Cookbook [3],401EA8D8
+Forager Brood Cookbook [4],401EA8D9
+Forager Brood Cookbook [5],401EA8DA
+Forager Brood Cookbook [6],401EA8D5
+Forager Brood Cookbook [7],401EA8F5
 Forked Greatsword,002DEDD0
 Forked Hatchet,00D5C690
+Forked-Tongue Hatchet,00DDDCE0
 Formic Rock,40005174
 Fortissax's Lightning Spear,40001B1D
 Founding Rain of Stars,40001072
@@ -993,19 +1211,37 @@ Freezing Grease,400005BE
 Freezing Mist,40001144
 Freezing Pot,40000168
 Frenzied Burst,40001C98
+Frenzied Flame Pot,401E8746
 Frenzied Flame Seal,02082C10
+Frenzyflame Perfume Bottle,03AAB880
 Frenzyflame Stone,40000CEF
+Freyja's Armor (Altered),104E244C
+Freyja's Armor,104E2064
+Freyja's Gauntlets,104E20C8
+Freyja's Greatsword,0081DA30
+Freyja's Greaves,104E212C
+Freyja's Helm,104E2000
 Frozen Armament,4000118A
 Frozen Lightning Spear,40001B09
+Frozen Maggot,401ED2AD
 Frozen Needle,004D0E90
 Frozen Raisin,4000032C
 Fulgurbloom,400050AC
 Full Moon Crossbow,02910B20
 Fur Leggings,1004950C
 Fur Raiment,10049444
+Furious Blade of Ansbach,401E9D1C
 Furlcalling Finger Remedy,40000096
 Furlcalling Finger Remedy,400000B6
 Furled Finger's Trick-Mirror,200017C0
+Furnace Keeper's Note,401EA3D9
+Furnace Visage,401ED2C3
+Gaius's Armor,102DEE34
+Gaius's Gauntlets,102DEE98
+Gaius's Greaves,102DEEFC
+Gaius's Helm,102DEDD0
+Gaol Lower Level Key,401EA3C6
+Gaol Upper Level Key,401EA3C5
 Gargoyle's Black Axe,00E704A0
 Gargoyle's Black Blades,0099F610
 Gargoyle's Black Halberd,01151980
@@ -1014,7 +1250,11 @@ Gargoyle's Great Axe,00E6DD90
 Gargoyle's Greatsword,0030ACF0
 Gargoyle's Halberd,0114F270
 Gargoyle's Twinblade,0099CF00
+Gas Stone,401ED2B4
+Gauntlets of Night,104DAB98
+Gauntlets of Solitude,104E47D8
 Gavel of Haima,40001018
+Gazing Finger,0166E300
 Gelmir Glintstone Staff,01F84D90
 Gelmir Knight Armor (Altered),101ADF4C
 Gelmir Knight Armor,101ADB64
@@ -1032,10 +1272,13 @@ Ghost Glovewort [6],40002AA3
 Ghost Glovewort [7],40002AA4
 Ghost Glovewort [8],40002AA5
 Ghost Glovewort [9],40002AA6
-Ghostflame Torch,016EF950
 Ghost-Glovewort Picker's Bell Bearing [1],40002303
 Ghost-Glovewort Picker's Bell Bearing [2],40002304
 Ghost-Glovewort Picker's Bell Bearing [3],40002305
+Ghostflame Bloom,401ED2B5
+Ghostflame Breath,401E9FEC
+Ghostflame Torch,016EF950
+Giant Golden Arc,401EA29E
 Giant Rat Ashes +1,40038E29
 Giant Rat Ashes +10,40038E32
 Giant Rat Ashes +2,40038E2A
@@ -1047,10 +1290,10 @@ Giant Rat Ashes +7,40038E2F
 Giant Rat Ashes +8,40038E30
 Giant Rat Ashes +9,40038E31
 Giant Rat Ashes,40038E28
-Giant-Crusher,0160A170
 Giant's Prayerbook,40002298
 Giant's Red Braid,01321760
 Giant's Seal,02071AA0
+Giant-Crusher,0160A170
 Giantsflame Fire Pot,4000012E
 Giantsflame Take Thee,400017D4
 Gilded Foot Soldier Cap,101C3A90
@@ -1059,12 +1302,17 @@ Gilded Iron Shield,01CBBF50
 Glaive,01140810
 Glass Shard,40002710
 Glintblade Phalanx,400010CC
+Glintblade Trio,401E9556
+Glinting Nail,401E9100
+Glintslab Firefly,401ED2A7
 Glintstone Arc,40000FE6
 Glintstone Breath,40001B80
 Glintstone Cometshard,40000FB4
 Glintstone Firefly,4000514C
 Glintstone Icecrag,40001130
 Glintstone Kris,001053B0
+Glintstone Nail,401E9614
+Glintstone Nails,401E961E
 Glintstone Pebble,40000FA0
 Glintstone Scarab,101D05B0
 Glintstone Scrap,40000BEA
@@ -1081,6 +1329,8 @@ Glintstone Sorcerer Ashes +9,40035399
 Glintstone Sorcerer Ashes,40035390
 Glintstone Staff,01F78A40
 Glintstone Stars,40000FC8
+Gloried Attire,104F31D4
+Glovewort Crystal Tear,401EAFB4
 Glovewort Picker's Bell Bearing [1],40002300
 Glovewort Picker's Bell Bearing [2],40002301
 Glovewort Picker's Bell Bearing [3],40002302
@@ -1126,25 +1376,32 @@ Gold Firefly,4000514B
 Gold Scarab,20000456
 Gold Sewing Needle,40001FE2
 Gold Waistwrap,100FDFAC
+Gold-Pickled Fowl Foot,400004B0
+Gold-Tinged Excrement,4000515E
+Golden Arcs,401EA294
 Golden Arrow,02FC5010
 Golden Beast Crest Shield,01E9A790
 Golden Bolt,031A8670
+Golden Braid,20001BD0
 Golden Centipede,40005154
 Golden Epitaph,001F95F0
+Golden Grease,401E8A16
 Golden Great Arrow,030A80E0
 Golden Greatshield,01EC3FA0
 Golden Halberd,0113E100
+Golden Horn Tender,401E894E
 Golden Lightning Fortification,40001EDF
+Golden Lion Shield,01E11C10
 Golden Order Greatsword,00305ED0
 Golden Order Principia,4000229E
 Golden Order Principles,4000229F
 Golden Order Seal,0207B6E0
 Golden Rowa,400050F1
-Golden Rune [1],40000B54
 Golden Rune [10],40000B5D
 Golden Rune [11],40000B5E
 Golden Rune [12],40000B5F
 Golden Rune [13],40000B60
+Golden Rune [1],40000B54
 Golden Rune [2],40000B55
 Golden Rune [3],40000B56
 Golden Rune [4],40000B57
@@ -1157,19 +1414,22 @@ Golden Seed,4000271A
 Golden Sunflower,400050CB
 Golden Tailoring Tools,40001FFC
 Golden Vow,400019C8
+Golden Vow,401E90E2
 Goldmask's Rags,100FDEE4
-Gold-Pickled Fowl Foot,400004B0
-Gold-Tinged Excrement,4000515E
+Golem Fist,0148ACA0
 Golem Greatbow,02810590
 Golem's Great Arrow,030A59D0
 Golem's Halberd,0160C880
 Golem's Magic Arrow,030AA7F0
 Gostoc's Bell Bearing,400022D6
+Gourmet Scorpion Stew,401E8931
+Gourmet Scorpion Stew,401E8933
 Gowry's Bell Bearing,400022F0
 Grace Mimic,40000802
 Grafted Blade Greatsword,003E8FA0
 Grafted Dragon,014159A0
 Grass Hair Ornament,100E09C0
+Grave Cricket,401ED2B6
 Grave Glovewort [1],40002A94
 Grave Glovewort [2],40002A95
 Grave Glovewort [3],40002A96
@@ -1179,27 +1439,38 @@ Grave Glovewort [6],40002A99
 Grave Glovewort [7],40002A9A
 Grave Glovewort [8],40002A9B
 Grave Glovewort [9],40002A9C
+Grave Keeper's Brainpan,401ED2B2
+Grave Keeper's Cookbook [1],401EA900
+Grave Keeper's Cookbook [2],401EA8F7
 Grave Scythe,012211D0
 Grave Violet,400050AE
+Gravebird Anklets,104FCEDC
+Gravebird Armor,104FD1FC
+Gravebird Ashes,40219990
+Gravebird Bracelets,104FCE78
+Gravebird Helm,104FCDB0
+Gravebird's Blackquill Armor,104FCE14
 Gravekeeper Cloak (Altered),1004BF3C
 Gravekeeper Cloak,1004BB54
 Gravel Stone Seal,020741B0
 Gravel Stone,40005177
 Graven-Mass Talisman,20000BB9
 Graven-School Talisman,20000BB8
+Gravitational Missile,401E96E6
 Gravity Stone Chunk,40000BFE
 Gravity Stone Fan,40000BF4
 Gravity Stone Peddler's Bell Bearing,400022F4
 Gravity Well,40001270
+Greasemonger's Bell Bearing,401EA749
 Great Arrow,030A32C0
 Great Club,015F41E0
 Great Dragonfly Head,40003B06
-Great Épée,005BDBA0
 Great Ghost Glovewort,40002AA7
 Great Glintstone Shard,40000FA1
 Great Grave Glovewort,40002A9D
 Great Heal,40001916
 Great Horned Headband,100493E0
+Great Katana,03F6B5A0
 Great Knife,0010A1D0
 Great Mace,00B80560
 Great Omenkiller Cleaver,00E52FE0
@@ -1207,13 +1478,29 @@ Great Oracular Bubble,400013F6
 Great Rune of the Unborn,40002760
 Great Stars,00B9DA20
 Great Turtle Shell,01DB28A0
+Great Épée,005BDBA0
+Great-Jar's Arsenal,20000408
 Greataxe,00E4E1C0
 Greatblade Phalanx,400010CE
 Greatbow,02817AC0
+Greater Potentate's Cookbook [10],401EA8E3
+Greater Potentate's Cookbook [11],401EA8E4
+Greater Potentate's Cookbook [12],401EA8E0
+Greater Potentate's Cookbook [13],401EA8E8
+Greater Potentate's Cookbook [14],401EA8E9
+Greater Potentate's Cookbook [1],401EA8DD
+Greater Potentate's Cookbook [2],401EA8EB
+Greater Potentate's Cookbook [3],401EA8E7
+Greater Potentate's Cookbook [4],401EA8DE
+Greater Potentate's Cookbook [5],401EA8DF
+Greater Potentate's Cookbook [6],401EA8EA
+Greater Potentate's Cookbook [7],401EA8E1
+Greater Potentate's Cookbook [8],401EA8E6
+Greater Potentate's Cookbook [9],401EA8E2
 Greathelm,1010CCC8
 Greathood,10186A00
 Greathorn Hammer,00B74210
-Great-Jar's Arsenal,20000408
+Greatjar,10512D40
 Greatshield Soldier Ashes +1,4003C8C1
 Greatshield Soldier Ashes +10,4003C8CA
 Greatshield Soldier Ashes +2,4003C8C2
@@ -1226,7 +1513,13 @@ Greatshield Soldier Ashes +8,4003C8C8
 Greatshield Soldier Ashes +9,4003C8C9
 Greatshield Soldier Ashes,4003C8C0
 Greatshield Talisman,20001004
+Greatsword of Damnation,00358EF0
+Greatsword of Radahn (Light),00456D70
+Greatsword of Radahn (Lord),00451F50
+Greatsword of Solitude,00362B30
 Greatsword,003D0900
+Greaves of Night,104DABFC
+Greaves of Solitude,104E483C
 Green Turtle Talisman,2000047E
 Greenburst Crystal Tear,40002B02
 Greenspill Crystal Tear,40002AF9
@@ -1279,12 +1572,33 @@ Hand Ballista,029F6300
 Hand of Malenia,0089A260
 Harp Bow,0262CF30
 Hawk Crest Wooden Shield,01DD2470
+Heal from Afar,401E9D80
 Heal,40001915
+Heart of Bayle,401EA3CB
 Heater Shield,01DE0ED0
 Heavy Crossbow,029095F0
 Hefty Beast Bone,40003BED
+Hefty Cracked Pot,401EA99C
+Hefty Fetid Pot,401E85CA
+Hefty Fire Pot,401E85AC
+Hefty Fly Pot,401E85D4
+Hefty Freezing Pot,401E85E8
+Hefty Frenzied Flame Pot,401E86EC
+Hefty Furnace Pot,401E8728
+Hefty Lightning Pot,401E85C0
+Hefty Magic Pot,401E8714
+Hefty Oil Pot,401E85FC
+Hefty Poison Pot,401E85F2
+Hefty Rancor Pot,401E870A
+Hefty Red Lightning Pot,401E8732
+Hefty Rock Pot,401E85B6
+Hefty Rot Pot,401E871E
+Hefty Volcano Pot,401E86D8
+Helm of Night,104DAAD0
+Helm of Solitude,104E4710
 Helphen's Steeple,002FC290
 Herba,400050D2
+Herbalist's Bell Bearing,401EA746
 Hermit Merchant's Bell Bearing [1],400022E1
 Hermit Merchant's Bell Bearing [2],400022E8
 Hermit Merchant's Bell Bearing [3],400022EA
@@ -1297,19 +1611,35 @@ Hierodas Glintstone Crown,100F1B30
 High Page Clothes (Altered),101E61BC
 High Page Clothes,101E5DD4
 High Page Hood,101E5D70
+High Priest Gloves,104D3668
+High Priest Hat,104D35A0
+High Priest Robe,104D3604
+High Priest Undergarments,104D36CC
+Highland Attire,104F35BC
 Highland Axe,00D72620
 Highwayman Cloth Armor,101E36C4
 Highwayman Gauntlets,101E3728
 Highwayman Hood,101E3660
+Hole-Laden Necklace,401EA3C8
 Holy Grease,40000596
 Holy Water Grease,40000CE4
 Holy Water Pot,4000015E
-Holyproof Dried Liver,4000049C
 Holy-Shrouding Cracked Tear,40002B17
+Holyproof Dried Liver,4000049C
+Holyproof Pickled Liver,401E88FE
 Homing Instinct Painting,40002008
 Honed Bolt,40001B12
 Hookclaws,014FB180
 Horn Bow,0271EA60
+Horn-Strewn Excrement,401ED2B3
+Horned Bairn,401E90BA
+Horned Warrior Armor,10501C34
+Horned Warrior Ashes,4021C870
+Horned Warrior Gauntlets,10501C98
+Horned Warrior Greaves,10501CFC
+Horned Warrior Helm,10501BD0
+Horned Warrior's Greatsword,00820140
+Horned Warrior's Sword,0072E610
 Horse Crest Wooden Shield,01DCAF40
 Hoslow's Armor (Altered),1009F344
 Hoslow's Armor,1009EB74
@@ -1323,12 +1653,25 @@ Human Bone Shard,40003AFC
 Ice Crest Shield,01CBE660
 Icerind Hatchet,00D6D800
 Icon Shield,01EA6AE0
+Igon's Armor (Altered),104DD62C
+Igon's Armor,104DD244
+Igon's Bell Bearing,401EA74B
+Igon's Cookbook [1],401EA8F3
+Igon's Cookbook [2],401EA8DB
+Igon's Furled Finger,401EA3C3
+Igon's Gauntlets,104DD2A8
+Igon's Greatbow,02887FA0
+Igon's Harpoon,0311D3E0
+Igon's Helm (Altered),104DD5C8
+Igon's Helm,104DD1E0
+Igon's Loincloth,104DD30C
 Iji's Bell Bearing,400022EC
 Iji's Confession,40001FFD
 Iji's Mirrorhelm,1013DA08
 Imbued Sword Key,40001FFA
 Immunizing Cured Meat,40000456
 Immunizing Horn Charm +1,20000493
+Immunizing Horn Charm +2,20001B8A
 Immunizing Horn Charm,20000492
 Immunizing White Cured Meat,4000051E
 Immutable Shield,40001A54
@@ -1336,11 +1679,16 @@ Imp Head (Cat),10107AC0
 Imp Head (Corpse),10108678
 Imp Head (Elder),10108E48
 Imp Head (Fanged),10107EA8
+Imp Head (Lion),10515450
 Imp Head (Long-Tongued),10108290
 Imp Head (Wolf),10108A60
+Impenetrable Thorns,401E97AE
 Imprisoned Merchant's Bell Bearing,400022EB
 Incantation Scarab,101D01C8
+Incursion Painting,401EA488
 Inescapable Frenzy,40001C84
+Innard Meat,401E8B24
+Inquisitor Ashes,4021A548
 Inquisitor's Girandole,00F61FD0
 Inseparable Sword,001FE410
 Intelligence-knot Crystal Tear,40002B0F
@@ -1349,12 +1697,17 @@ Inverted Hawk Towershield,01EB7C50
 Invigorating Cured Meat,40000460
 Invigorating White Cured Meat,40000528
 Irina's Letter,40001FC3
+Iris of Grace,401E8CC8
+Iris of Occultation,401E8CD2
 Iron Ball,014180B0
 Iron Cleaver,00D63BC0
 Iron Gauntlets,10009D08
 Iron Greatsword,002E14E0
 Iron Helmet,10009C40
 Iron Kasa,100249F0
+Iron Rivet Armor,104C99C4
+Iron Rivet Gauntlets,104C9A28
+Iron Rivet Greaves,104C9A8C
 Iron Roundshield,01CB9840
 Iron Spear,00F66DF0
 Ironjar Aromatic,40000DC0
@@ -1378,6 +1731,7 @@ Jarwight Puppet +9,40040361
 Jarwight Puppet,40040358
 Jawbone Axe,00D614B0
 Jellyfish Shield,01EA1CC0
+Jolán and Anna,4021DFE0
 Juvenile Scholar Cap,100FB770
 Juvenile Scholar Robe,100FB7D4
 Kaiden Armor,1000C3B4
@@ -1398,6 +1752,7 @@ Kaiden Trousers,1000C47C
 Kalé's Bell Bearing,400022D8
 Karolos Glintstone Crown,100CB5E8
 Katar,0141F5E0
+Keep Wall Key,401EA3D7
 Kindred of Rot Ashes +1,40036B01
 Kindred of Rot Ashes +10,40036B0A
 Kindred of Rot Ashes +2,40036B02
@@ -1417,7 +1772,12 @@ Knight Gauntlets,1016E428
 Knight Greaves,1016E48C
 Knight Helm,1016E360
 Knight's Greatsword,002E6300
+Knight's Lightning Spear,401E9F74
+Knot Resin,401ED2A4
 Kukri,400006C2
+Lacerating Crossed-Tree,20001FCC
+Lamenter's Mask,401E8C6E
+Lamenting Visage,0175FE30
 Lance Talisman,2000085C
 Lance,010450A0
 Land Octopus Ovary,40003B24
@@ -1426,6 +1786,7 @@ Land of Reeds Armor,100D46D4
 Land of Reeds Gauntlets,100D4738
 Land of Reeds Greaves,100D479C
 Land of Reeds Helm,100D4670
+Land of Shadow,401E9E98
 Land Squirt Ashes +1,4003B921
 Land Squirt Ashes +10,4003B92A
 Land Squirt Ashes +2,4003B922
@@ -1444,6 +1805,7 @@ Large Club,00B71B00
 Large Glintstone Scrap,40000BEB
 Large Leather Shield,01DC8830
 Larval Tear,40001FF9
+Larval Tear,401EA3E1
 Latenna the Albinauric +1,40031CE1
 Latenna the Albinauric +10,40031CEA
 Latenna the Albinauric +2,40031CE2
@@ -1461,11 +1823,20 @@ Lazuli Glintstone Crown,100CB200
 Lazuli Glintstone Sword,00225510
 Lazuli Robe,101EF9B0
 Leaden Hardtear,40002B0A
+Leather Arm Wraps,104F3238
 Leather Armor,10155D24
 Leather Boots,10155DEC
+Leather Crown,104F3558
 Leather Gloves,10155D88
+Leather Headband,104F3170
+Leather Leg Wraps,104F329C
 Leather Trousers,10009D6C
 Leather-Draped Tabard,101C3AF4
+Leda's Armor,104C4BA4
+Leda's Rune,401E9006
+Leda's Sword,04061EF0
+Let Us Go Together,401EA7AB
+Letter for Freyja,401EA3CF
 Letter from Volcano Manor,40001FBF
 Letter from Volcano Manor,40001FC4
 Letter to Bernahl,40001FED
@@ -1501,19 +1872,22 @@ Lhutel the Headless +8,4003EFD8
 Lhutel the Headless +9,4003EFD9
 Lhutel the Headless,4003EFD0
 Light Crossbow,02906EE0
+Light of Miquella,401E9EAC
 Lightning Bolt,03199C10
 Lightning Fortification,40001946
 Lightning Grease,40000582
 Lightning Greatbolt,0328DE50
+Lightning Perfume Bottle,03AADF90
 Lightning Pot,40000140
 Lightning Scorpion Charm,200007DA
 Lightning Spear,40001AF4
 Lightning Strike,40001B08
+Lightning-Shrouding Cracked Tear,40002B16
 Lightningbone Arrow (Fletched),02FDFDC0
 Lightningbone Arrow,02FE24D0
 Lightningbone Bolt,031B22B0
 Lightningproof Dried Liver,40000492
-Lightning-Shrouding Cracked Tear,40002B16
+Lightningproof Pickled Liver,401E88F4
 Lion Greatbow,0280DE80
 Lionel's Armor (Altered),1009C84C
 Lionel's Armor,1009C464
@@ -1522,6 +1896,7 @@ Lionel's Greaves,1009C52C
 Lionel's Helm,1009C400
 Litany of Proper Death,40001A5E
 Living Jar Shard,40003C32
+Lizard Greatsword,0035B600
 Lone Wolf Ashes +1,40038A41
 Lone Wolf Ashes +10,40038A4A
 Lone Wolf Ashes +2,40038A42
@@ -1554,15 +1929,20 @@ Loretta's Greatbow,4000111C
 Loretta's Mastery,4000111D
 Loretta's War Sickle,01142F20
 Lost Ashes of War,40002756
+Loyal Knight's Cookbook,401EA8F1
 Lucent Baldachin's Blessing,40001FA6
 Lucerne,0112F6A0
 Lucidity,40001180
+Lulling Branch,401E880E
 Lump of Flesh,40003AAC
 Lusat's Glintstone Crown,1008D9A0
 Lusat's Glintstone Staff,01FB33C0
 Lusat's Manchettes,1008DA68
 Lusat's Robe,1008DA04
 Mace,00A7D8C0
+Mad Craftsman's Cookbook [1],401EA8ED
+Mad Craftsman's Cookbook [2],401EA8E5
+Mad Craftsman's Cookbook [3],401EA8FA
 Mad Pumpkin Head Ashes +1,4003B539
 Mad Pumpkin Head Ashes +10,4003B542
 Mad Pumpkin Head Ashes +2,4003B53A
@@ -1574,21 +1954,23 @@ Mad Pumpkin Head Ashes +7,4003B53F
 Mad Pumpkin Head Ashes +8,4003B540
 Mad Pumpkin Head Ashes +9,4003B541
 Mad Pumpkin Head Ashes,4003B538
+Madding Hand,01488590
 Magic Downpour,40001112
 Magic Fortification,4000193C
 Magic Glintblade,40001126
 Magic Grease,4000058C
 Magic Pot,40000294
 Magic Scorpion Charm,200007D0
+Magic-Shrouding Cracked Tear,40002B15
 Magicbone Arrow (Fletched),02FEE820
 Magicbone Arrow,02FF0F30
 Magicbone Bolt,031B49C0
-Magic-Shrouding Cracked Tear,40002B15
 Magma Blade,006B9310
 Magma Breath,40001B62
 Magma Shot,400012C0
 Magma Whip Candlestick,0131A230
 Magma Wyrm's Scalesword,007AAE40
+Main-gauche,0016E360
 Malenia's Armor (Altered),100BC41C
 Malenia's Armor,100BC034
 Malenia's Gauntlet,100BC098
@@ -1606,7 +1988,7 @@ Maliketh's Black Blade,003D5720
 Maliketh's Gauntlets,100B9988
 Maliketh's Greaves,100B99EC
 Maliketh's Helm,100B98C0
-Manor Towershield,01EB2E30
+Man-Fly Ashes,4021BCB8
 Man-Serpent Ashes +1,40037E89
 Man-Serpent Ashes +10,40037E92
 Man-Serpent Ashes +2,40037E8A
@@ -1619,12 +2001,20 @@ Man-Serpent Ashes +8,40037E90
 Man-Serpent Ashes +9,40037E91
 Man-Serpent Ashes,40037E88
 Man-Serpent's Shield,01CA11A0
+Manor Towershield,01EB2E30
 Mantis Blade,006CA480
+Mantle of Thorns,401E97A4
+Map: Abyss,401EA61C
+Map: Gravesite Plain,401EA618
+Map: Rauh Ruins,401EA61B
+Map: Scadu Altus,401EA619
+Map: Southern Shore,401EA61A
 Marais Executioner's Sword,003010B0
 Marais Mask,100EB1B8
 Marais Robe,100EB21C
 Margit's Shackle,4000085C
 Marika's Hammer,00AA22B0
+Marika's Rune,401E9010
 Marika's Scarseal,200004C4
 Marika's Soreseal,200004C5
 Marionette Soldier Armor,100CD1A4
@@ -1644,6 +2034,8 @@ Marionette Soldier Helm,100CD140
 Marred Leather Shield,01D92CD0
 Marred Wooden Shield,01D953E0
 Mask of Confidence,100DE698
+Mass of Putrescence,401E9CC2
+Maternal Staff,01FF7980
 Mausoleum Gauntlets,101A8DA8
 Mausoleum Greaves,101A8E0C
 Mausoleum Knight Armor (Altered),101BA29C
@@ -1662,6 +2054,7 @@ Mausoleum Soldier Ashes +8,4003E038
 Mausoleum Soldier Ashes +9,4003E039
 Mausoleum Soldier Ashes,4003E030
 Mausoleum Surcoat,101A8D44
+May the Best Win,401EA7A9
 Meat Peddler's Bell Bearing,400022F2
 Medicine Peddler's Bell Bearing,400022F3
 Meeting Place Map,40002006
@@ -1671,11 +2064,31 @@ Memory Stone,4000272E
 Mending Rune of Perfect Order,40001FF6
 Mending Rune of the Death-Prince,40001FF7
 Mending Rune of the Fell Curse,40001FF8
+Message from Leda,401EA3E2
+Messmer Soldier Armor (Altered),104E726C
+Messmer Soldier Armor,104E6E84
+Messmer Soldier Ashes,4021AD18
+Messmer Soldier Gauntlets,104E6EE8
+Messmer Soldier Greaves,104E6F4C
+Messmer Soldier Helm,104E6E20
+Messmer Soldier Shield,01E0A6E0
+Messmer Soldier's Axe,00DD8EC0
+Messmer Soldier's Spear,010B2E70
+Messmer's Armor,104FA704
+Messmer's Gauntlets,104FA768
+Messmer's Greaves,104FA7CC
+Messmer's Helm (Altered),104FAA88
+Messmer's Helm,104FA6A0
+Messmer's Kindling,401EA3D5
+Messmer's Orb,401EA30C
+Messmerfire Grease,401E89F8
 Meteor Bolt,031A3850
 Meteoric Ore Blade,0089C970
 Meteorite of Astel,4000125D
 Meteorite Staff,01FB5AD0
 Meteorite,4000125C
+Midra's Flame of Frenzy,401EA104
+Milady,0405F7E0
 Millicent's Prosthesis,200004E2
 Mimic Tear Ashes +1,40032899
 Mimic Tear Ashes +10,400328A2
@@ -1691,9 +2104,11 @@ Mimic Tear Ashes,40032898
 Mimic's Veil,40000BE0
 Miniature Ranni,40001FD2
 Miniature Ranni,40001FFB
-Miquellan Knight's Sword,002191C0
+Minor Erdtree,401E9E8E
+Miquella's Great Rune,401EA3C0
 Miquella's Lily,400050AD
 Miquella's Needle,4000088E
+Miquellan Knight's Sword,002191C0
 Mirage Riddle,400021D4
 Miranda Powder,40003B2E
 Miranda Sprout Ashes +1,4003BD09
@@ -1707,6 +2122,7 @@ Miranda Sprout Ashes +7,4003BD0F
 Miranda Sprout Ashes +8,4003BD10
 Miranda Sprout Ashes +9,4003BD11
 Miranda Sprout Ashes,4003BD08
+Miriam's Vanishing,401E954C
 Miriel's Bell Bearing,400022D5
 Misbegotten Shortbow,02628110
 Miséricorde,000FB770
@@ -1714,25 +2130,36 @@ Mohg's Great Rune,400000C3
 Mohg's Great Rune,40001FD8
 Mohg's Shackle,40000866
 Mohgwyn's Sacred Spear,01038D50
+Moldmonger's Bell Bearing,401EA74A
 Monk's Flameblade,007B2370
 Monk's Flamemace,00A93850
+Monk's Missive,401EA3DD
 Moon of Nokstella,20000474
+Moonrithyll's Knight Sword,00454660
 Moonveil,008A3EA0
+Moore's Bell Bearing,401EA744
 Morgott's Cursed Sword,007B98A0
 Morgott's Great Rune,400000C1
 Morgott's Great Rune,40001FD6
 Morning Star,00A89C10
 Mottled Necklace +1,200004B1
+Mottled Necklace +2,20001BA8
 Mottled Necklace,200004B0
+Multilayered Ring of Light,401E9EB6
 Mushroom Arms,10113ED8
 Mushroom Body,10113E74
 Mushroom Crown,101EAB90
 Mushroom Head,10113E10
 Mushroom Legs,10113F3C
 Mushroom,40005118
+Mushroom-Seller's Bell Bearing [1],401EA747
+Mushroom-Seller's Bell Bearing [2],401EA748
 Nagakiba,00897B50
+Nailstone,401ED2C1
+Nanaya's Torch,0175D720
 Nascent Butterfly,40005140
 Navy Hood,100B4E88
+Nectarblood Burgeon,401ED2AF
 Nepheli Loux Puppet +1,4003F3B9
 Nepheli Loux Puppet +10,4003F3C2
 Nepheli Loux Puppet +2,4003F3BA
@@ -1745,30 +2172,31 @@ Nepheli Loux Puppet +8,4003F3C0
 Nepheli Loux Puppet +9,4003F3C1
 Nepheli Loux Puppet,4003F3B8
 Neutralizing Boluses,40000384
+New Cross Map,401EA3CC
 Night Comet,4000120C
 Night Maiden Armor,100478EC
 Night Maiden Twin Crown,10047888
 Night Maiden's Mist,40001964
 Night Shard,40001202
-Nightmaiden &amp; Swordstress Puppets +1,400324B1
-Nightmaiden &amp; Swordstress Puppets +10,400324BA
-Nightmaiden &amp; Swordstress Puppets +2,400324B2
-Nightmaiden &amp; Swordstress Puppets +3,400324B3
-Nightmaiden &amp; Swordstress Puppets +4,400324B4
-Nightmaiden &amp; Swordstress Puppets +5,400324B5
-Nightmaiden &amp; Swordstress Puppets +6,400324B6
-Nightmaiden &amp; Swordstress Puppets +7,400324B7
-Nightmaiden &amp; Swordstress Puppets +8,400324B8
-Nightmaiden &amp; Swordstress Puppets +9,400324B9
-Nightmaiden &amp; Swordstress Puppets,400324B0
-Nightrider Flail,00C65D40
-Nightrider Glaive,01136BD0
 Night's Cavalry Armor (Altered),100386BC
 Night's Cavalry Armor,100382D4
 Night's Cavalry Gauntlets,10038338
 Night's Cavalry Greaves,1003839C
 Night's Cavalry Helm (Altered),10038658
 Night's Cavalry Helm,10038270
+Nightmaiden & Swordstress Puppets +1,400324B1
+Nightmaiden & Swordstress Puppets +10,400324BA
+Nightmaiden & Swordstress Puppets +2,400324B2
+Nightmaiden & Swordstress Puppets +3,400324B3
+Nightmaiden & Swordstress Puppets +4,400324B4
+Nightmaiden & Swordstress Puppets +5,400324B5
+Nightmaiden & Swordstress Puppets +6,400324B6
+Nightmaiden & Swordstress Puppets +7,400324B7
+Nightmaiden & Swordstress Puppets +8,400324B8
+Nightmaiden & Swordstress Puppets +9,400324B9
+Nightmaiden & Swordstress Puppets,400324B0
+Nightrider Flail,00C65D40
+Nightrider Glaive,01136BD0
 Noble Presence,4000187E
 Noble Sorcerer Ashes +1,4003AD69
 Noble Sorcerer Ashes +10,4003AD72
@@ -1797,8 +2225,8 @@ Nomad Ashes +7,400320CF
 Nomad Ashes +8,400320D0
 Nomad Ashes +9,400320D1
 Nomad Ashes,400320C8
-Nomadic Merchant's Bell Bearing [1],400022D9
 Nomadic Merchant's Bell Bearing [10],400022E5
+Nomadic Merchant's Bell Bearing [1],400022D9
 Nomadic Merchant's Bell Bearing [2],400022DA
 Nomadic Merchant's Bell Bearing [3],400022DB
 Nomadic Merchant's Bell Bearing [4],400022DC
@@ -1811,8 +2239,6 @@ Nomadic Merchant's Chapeau,1003D090
 Nomadic Merchant's Finery (Altered),1003D4DC
 Nomadic Merchant's Finery,1003D0F4
 Nomadic Merchant's Trousers,1003D1BC
-None,00000000
-None,FFFFFFFF
 Note: Demi-human Mobs,40002204
 Note: Demi-human Mobs,40002236
 Note: Flame Chariots,40002203
@@ -1836,6 +2262,8 @@ Note: Land Squirts,40002237
 Note: Miquella's Needle,4000220A
 Note: Revenants,40002207
 Note: Revenants,40002239
+Note: Sealed Spiritsprings,401EA3DF
+Note: Sealed Spiritsprings,401EA443
 Note: Stonedigger Trolls,400021FF
 Note: Stonedigger Trolls,40002231
 Note: The Lord of Frenzied Flame,4000220C
@@ -1859,10 +2287,17 @@ Nox Swordstress Armor,10047504
 Nox Swordstress Crown (Altered),10047C70
 Nox Swordstress Crown,100474A0
 Numen's Rune,40000B61
-O_ Flame!,40001771
+O Mother,401EA7AC
+O, Flame!,40001771
+Oathseeker Knight Armor,104C5374
+Oathseeker Knight Gauntlets,104C4C08
+Oathseeker Knight Greaves,104C4C6C
+Oathseeker Knight Helm,104C4B40
+Obsidian Lamina,01298BE0
 Octopus Head,1010EFF0
 Official's Attire,100EB604
 Oil Pot,4000017C
+Oil-Soaked Tear,401EAFA0
 Okina Mask,100D4E40
 Old Aristocrat Cowl,1005F370
 Old Aristocrat Gown,1005F3D4
@@ -1896,6 +2331,7 @@ One-Eyed Shield,01EA91F0
 Onyx Lord's Greatsword,007A3910
 Opaline Bubbletear,40002B00
 Opaline Hardtear,40002B03
+Opaline Pickled Liver,401E8908
 Oracle Bubbles,400013EC
 Oracle Envoy Ashes +1,400343F1
 Oracle Envoy Ashes +10,400343FA
@@ -1912,6 +2348,7 @@ Order Healing,40001A7C
 Order's Blade,40001A72
 Ordovis's Greatsword,002EB120
 Ornamental Straight Sword,001F6EE0
+Outer God Heirloom,20001F54
 Page Ashes +1,40035B61
 Page Ashes +10,40035B6A
 Page Ashes +2,40035B62
@@ -1929,11 +2366,17 @@ Page Hood,10035B60
 Page Trousers,10035C8C
 Parrying Dagger,000F9060
 Partisan,00F4E750
+Pata,01483770
 Patches' Bell Bearing,400022D0
+Pearl Shield Talisman,20001F9A
 Pearldrake Talisman +1,20000FD3
 Pearldrake Talisman +2,20000FD4
+Pearldrake Talisman +3,20001BDA
 Pearldrake Talisman,20000FD2
+Pearlescent Scale,401EBF2C
+Pelt of Ralva,104C9960
 Perfume Bottle,40002526
+Perfumed Oil of Ranah,401E90C4
 Perfumer Gloves,10016058
 Perfumer Hood,10015F90
 Perfumer Robe (Altered),100163DC
@@ -1953,10 +2396,12 @@ Perfumer Tricia,40034FA8
 Perfumer's Bolt,0319C320
 Perfumer's Shield,01C9EA90
 Perfumer's Talisman,200008AC
+Perfumer's Talisman,200008AC
 Perfumer's Traveling Garb (Altered),10018AEC
 Perfumer's Traveling Garb,10018704
 Pest Threads,40001C20
 Pest's Glaive,0112CF90
+Pest-Thread Spears,401EA0AA
 Phantom Bloody Finger,4000006B
 Phantom Bloody Finger,40000071
 Phantom Great Rune,40000087
@@ -1966,6 +2411,9 @@ Pickled Turtle Neck,4000044C
 Pidia's Bell Bearing,400022CE
 Pike,00F53570
 Pillory Shield,01CA5FC0
+Piquebone Arrow (Fletched),03032DE0
+Piquebone Arrow,030354F0
+Piquebone Bolt,03216440
 Placidusax's Ruin,40001B8A
 Poison Armament,40001C3E
 Poison Grease,400005B4
@@ -1977,16 +2425,21 @@ Poisonbone Arrow (Fletched),02FD3A70
 Poisonbone Arrow,02FD6180
 Poisonbone Bolt,031B97E0
 Poisonbone Dart,400006B8
+Poisoned Hand,01485E80
 Poisoned Stone Clump,40000731
 Poisoned Stone,40000730
+Poleblade of the Bud,011A70B0
+Polter Stone,401E8C50
 Prattling Pate "Apologies",4000089A
 Prattling Pate "Hello",40000898
+Prattling Pate "Lamentation",401E8CE6
 Prattling Pate "Let's get to it",4000089E
 Prattling Pate "My beloved",4000089D
 Prattling Pate "Please help",4000089C
 Prattling Pate "Thank you",40000899
 Prattling Pate "Wonderful",4000089B
 Prattling Pate "You're beautiful",4000089F
+Prayer Room Key,401EA3E4
 Preceptor's Big Hat,100DE2B0
 Preceptor's Gloves,100DE378
 Preceptor's Long Gown (Altered),100DE6FC
@@ -1994,6 +2447,7 @@ Preceptor's Long Gown,100DE314
 Preceptor's Trousers,100DE3DC
 Prelate's Inferno Crozier,015EF3C0
 Preserving Boluses,400003AC
+Priestess Heart,401E8C64
 Primal Glintstone Blade,20000C08
 Prince of Death's Cyst,200004A7
 Prince of Death's Pustule,200004A6
@@ -2013,6 +2467,7 @@ Pulley Crossbow,0290E410
 Pumpkin Helm,1006B6C0
 Pureblood Knight's Medal,40000870
 Purifying Crystal Tear,40002B13
+Putrescence Cleaver,0081B320
 Putrid Corpse Ashes +1,400347D9
 Putrid Corpse Ashes +10,400347E2
 Putrid Corpse Ashes +2,400347DA
@@ -2024,10 +2479,14 @@ Putrid Corpse Ashes +7,400347DF
 Putrid Corpse Ashes +8,400347E0
 Putrid Corpse Ashes +9,400347E1
 Putrid Corpse Ashes,400347D8
+Queelign's Greatsword,00632EA0
 Queen's Bracelets,1007C8F8
 Queen's Crescent Crown,1007C830
 Queen's Leggings,1007C95C
 Queen's Robe,1007C894
+Rabbath's Cannon,02A70420
+Rabbath's Greatbolt,03305860
+Rada Fruit,401ED2A1
 Radagon Icon,20000BFE
 Radagon's Rings of Light,40001A36
 Radagon's Scarseal,2000041A
@@ -2061,16 +2520,23 @@ Raging Wolf Armor,100D1FC4
 Raging Wolf Gauntlets,100D2028
 Raging Wolf Greaves,100D208C
 Raging Wolf Helm,100D1F60
+Rain of Fire,401EA302
 Rainbow Stone Arrow (Fletched),02FC2900
 Rainbow Stone Arrow,02FE4BE0
 Rainbow Stone,400007E4
 Rainbow Stone,400007E4
+Rakshasa Armor,104EBCA4
+Rakshasa Gauntlets,104EBD08
+Rakshasa Greaves,104EBD6C
+Rakshasa Helm,104EBC40
+Rakshasa's Great Katana,03F703C0
 Rancor Pot,4000028A
 Rancorcall,40001388
 Ranni's Dark Moon,40001109
 Rapier,004C9960
 Raptor Talons,015026B0
 Raptor's Black Feathers,100E3134
+Rauh Burrow,401ED2BD
 Raw Meat Dumpling,400004D3
 Raya Lucaria Soldier Ashes +1,4003D479
 Raya Lucaria Soldier Ashes +10,4003D482
@@ -2089,11 +2555,15 @@ Raya Lucarian Helm,101A17B0
 Raya Lucarian Robe,100CAA94
 Recusant Finger,40000070
 Recusant Finger,400000B8
+Red Bear's Claw,04156130
 Red Branch Shortbow,0262A820
 Red Crest Heater Shield,01DD7290
+Red Fulgurbloom,401ED2C0
 Red Letter,40001FC5
+Red Lightning Pot,401E873C
 Red Thorn Roundshield,01CAD4F0
 Red-Feathered Branchsword,200007F8
+Redflesh Mushroom,401ED2A2
 Redmane Fire Pot,4000012D
 Redmane Greatshield,01EBCA70
 Redmane Knight Armor (Altered),101B7B8C
@@ -2119,27 +2589,49 @@ Regal Omen Bairn,40000BC3
 Regalia of Eochaid,0021DFE0
 Rejection,40001900
 Rejuvenating Boluses,400003B6
+Rellana's Armor,10504344
+Rellana's Cameo,2000201C
+Rellana's Gloves,105043A8
+Rellana's Greaves,1050440C
+Rellana's Helm,105042E0
+Rellana's Twin Blades,04064600
+Rellana's Twin Moons,401E9560
+Remembrance of a God and a Lord,401E8FDB
 Remembrance of Hoarah Loux,40000B8D
+Remembrance of Putrescence,401E8FDE
 Remembrance of the Black Blade,40000B8C
 Remembrance of the Blasphemous,40000B89
 Remembrance of the Blood Lord,40000B8B
+Remembrance of the Dancing Lion,401E8FD9
 Remembrance of the Dragonlord,40000B8E
 Remembrance of the Fire Giant,40000B91
 Remembrance of the Full Moon Queen,40000B8F
 Remembrance of the Grafted,40000B86
+Remembrance of the Impaler,401E8FD5
 Remembrance of the Lichdragon,40000B90
+Remembrance of the Lord of Frenzied Flame,401E8FDC
+Remembrance of the Mother of Fingers,401E8FDD
 Remembrance of the Naturalborn,40000B94
 Remembrance of the Omen King,40000B88
 Remembrance of the Regal Ancestor,40000B92
 Remembrance of the Rot Goddess,40000B8A
+Remembrance of the Saint of the Bud,401E8FD8
+Remembrance of the Shadow Sunflower,401E8FD6
 Remembrance of the Starscourge,40000B87
+Remembrance of the Twin Moon Knight,401E8FD7
+Remembrance of the Wild Boar Rider,401E8FD4
 Rennala's Full Moon,40001108
+Repeating Crossbow,0297C1E0
 Resurrection Painting,40002009
+Retaliatory Crossed-Tree,20001FC2
+Revered Spirit Ash,401EABF4
 Rickety Shield,01CA38B0
 Rift Shield,01CB7130
 Rimed Crystal Bud,4000510F
 Rimed Rowa,400050F2
+Ring of Miquella,401EA7A8
 Ringed Finger,00A9D490
+Rings of Spectral Light,401E9808
 Ripple Blade,00D662D0
 Ripple Crescent Halberd,011392E0
 Ritual Pot,4000251D
@@ -2148,7 +2640,9 @@ Ritual Sword Talisman,20000802
 Rivers of Blood,0089F080
 Riveted Wooden Shield,01CB2310
 Roar Medallion,2000088E
+Roar of Rugalea,401E9F10
 Rock Blaster,4000100E
+Rock Heart,401E8C5A
 Rock Sling,40001266
 Rogier's Bell Bearing,400022ED
 Rogier's Letter,4000201F
@@ -2163,6 +2657,7 @@ Root Resin,40005127
 Roped Fetid Pot,400001AE
 Roped Fire Pot,40000190
 Roped Fly Pot,400001D6
+Roped Frenzied Flame Pot,401E8778
 Roped Holy Water Pot,400001FE
 Roped Lightning Pot,400001A4
 Roped Magic Pot,400001CC
@@ -2177,6 +2672,7 @@ Rotbone Arrow,030047B0
 Rotbone Bolt,031C0D10
 Rotten Battle Hammer,00BA4F50
 Rotten Breath,40001B76
+Rotten Butterflies,401EA0A0
 Rotten Crystal Spear,00F69500
 Rotten Crystal Staff,01FBA8F0
 Rotten Crystal Sword,00227C20
@@ -2199,6 +2695,7 @@ Rotten Stray Ashes +9,40039601
 Rotten Stray Ashes,400395F8
 Rotten Winged Sword Insignia,20000821
 Round Shield,01DA1730
+Roundrock,401ED2BB
 Rowa Fruit,400050F0
 Rowa Raisin,4000032A
 Royal Greatsword,003DF360
@@ -2208,15 +2705,20 @@ Royal Knight Armor,10044624
 Royal Knight Gauntlets,10044688
 Royal Knight Greaves,100446EC
 Royal Knight Helm,100445C0
+Royal Magic Grease,401E8A0C
 Royal Remains Armor,100A87B4
 Royal Remains Gauntlets,100A8818
 Royal Remains Greaves,100A887C
 Royal Remains Helm,100A8750
 Ruin Fragment,400006E0
 Ruins Greatsword,003E4180
+Ruins Map (2nd),401EA3D1
+Ruins Map (3rd),401EA3D2
+Ruins Map,401EA3D0
 Ruler's Mask,100EA9E8
 Ruler's Robe,100EAA4C
 Rune Arc,400000BE
+Rune of an Unsung Hero,401E900F
 Ruptured Crystal Tear,40002B08
 Ruptured Crystal Tear,40002B09
 Rusted Anchor,00E5CC20
@@ -2227,6 +2729,7 @@ Rykard's Great Rune,400000C2
 Rykard's Great Rune,40001FD7
 Rykard's Rancor,400012DE
 Sacramental Bud,40005111
+Sacred Bloody Flesh,401E893A
 Sacred Crown Helm,101CAFC0
 Sacred Order Pot,4000015F
 Sacred Relic Sword,002F4D60
@@ -2237,10 +2740,13 @@ Sacrificial Twig,200017B6
 Sage Hood,10068FB0
 Sage Robe,10069014
 Sage Trousers,100690DC
+Salza's Hood,104F1A00
 Sanctuary Stone,4000513B
+Sanguine Amaryllis,401ED2AC
 Sanguine Noble Hood,1004E200
 Sanguine Noble Robe,1004E264
 Sanguine Noble Waistcloth,1004E32C
+Scadutree Fragment,401EAB90
 Scale Armor,10009CA4
 Scaled Armor (Altered),10013CCC
 Scaled Armor,100138E4
@@ -2248,6 +2754,7 @@ Scaled Gauntlets,10013948
 Scaled Greaves,100139AC
 Scaled Helm,10013880
 Scarlet Aeonia,40001C48
+Scarlet Bud,401ED2AB
 Scarlet Tabard,101C6204
 Scavenger's Curved Sword,006C0840
 Scepter of the All-Knowing,00A98670
@@ -2255,41 +2762,64 @@ Scholar's Armament,4000116C
 Scholar's Shield,40001176
 Scimitar,006CF2A0
 Scorpion Kite Shield,01DA3E40
+Scorpion Liver,401EBF36
+Scorpion Stew,401E8930
+Scorpion Stew,401E8932
 Scorpion's Stinger,00107AC0
 Scouring Black Flame,40001856
 Scriptstone,40000CF8
 Scripture Wooden Shield,01CAFC00
 Scythe,0121EAC0
+Secret Rite Scroll,401EA3CE
 Seedbed Curse,40002001
 Sellen's Bell Bearing,400022D1
 Sellen's Primal Glintstone,40001FD0
-Sellian Sealbreaker,40001FE9
 Sellia's Secret,40002312
+Sellian Sealbreaker,40001FE9
 Seluvis's Bell Bearing,400022CF
 Seluvis's Introduction,40001FCF
 Seluvis's Potion,40001FE4
 Sentry's Torch,016F4770
 Serpent Arrow,02FB3EA0
 Serpent Bow,02723880
-Serpentbone Blade,008A8CC0
+Serpent Crest Shield,01E0F500
+Serpent Flail,00CDFE60
+Serpent's Amnion,40001FC1
 Serpent-God's Curved Sword,006C7D70
 Serpent-Hunter,0103DB70
-Serpent's Amnion,40001FC1
+Serpentbone Blade,008A8CC0
 Sewer-Gaol Key,40002005
 Sewing Needle,40001FE1
 Shabriri Grape,400004D8
 Shabriri's Woe,200017A2
 Shadow Bait,40001978
+Shadow Militiaman Armor,10509164
+Shadow Militiaman Gauntlets,105091C8
+Shadow Militiaman Greaves,1050922C
+Shadow Militiaman Helm,10509100
+Shadow Realm Rune [1],401E9008
+Shadow Realm Rune [2],401E9009
+Shadow Realm Rune [3],401E900A
+Shadow Realm Rune [4],401E900B
+Shadow Realm Rune [5],401E900C
+Shadow Realm Rune [6],401E900D
+Shadow Realm Rune [7],401E900E
+Shadow Sunflower Blossom,0166BBF0
+Shadow Sunflower,401ED2A9
 Shaman Furs,1004982C
 Shaman Leggings,100498F4
 Shamshir,006B44F0
 Shard of Alexander,200004CF
 Shard Spiral,40000FBE
+Sharp Gravel Stone,401ED2C2
+Sharpshot Talisman,20001FD6
 Shatter Earth,40001004
+Shattered Stone Talisman,20001F5E
 Shattering Crystal,40001194
 Shattershard Arrow (Fletched),02FBDAE0
 Shattershard Arrow,02FE72F0
 Shield Grease,4000069A
+Shield of Night,0148D3B0
 Shield of the Guilty,01DB9DD0
 Shining Horned Headband,100497C8
 Short Spear,00F42400
@@ -2298,6 +2828,7 @@ Shortbow,02625A00
 Shotel,006B1DE0
 Siluria's Tree,0103B460
 Silver Firefly,4000514A
+Silver Horn Tender,401E8944
 Silver Mirrorshield,01D9F020
 Silver Scarab,2000044C
 Silver Tear Husk,40005159
@@ -2345,10 +2876,17 @@ Smithing Stone [5],40002778
 Smithing Stone [6],40002779
 Smithing Stone [7],4000277A
 Smithing Stone [8],4000277B
+Smithing Talisman,20001FAE
 Smithing-Stone Miner's Bell Bearing [1],400022F7
 Smithing-Stone Miner's Bell Bearing [2],400022F8
 Smithing-Stone Miner's Bell Bearing [3],400022F9
 Smithing-Stone Miner's Bell Bearing [4],400022FA
+Smithscript Axe,00DD40A0
+Smithscript Cirque,03D85830
+Smithscript Dagger,03C8EEE0
+Smithscript Greathammer,00BEBC20
+Smithscript Shield,01D18BB0
+Smithscript Spear,00FBC520
 Smoldering Butterfly,40005142
 Smoldering Shield,01CC0D70
 Snow Witch Hat,100F6950
@@ -2357,6 +2895,7 @@ Snow Witch Robe,100F69B4
 Snow Witch Skirt,100F6A7C
 Soap,40000848
 Soft Cotton,40000834
+Soiled Loincloth,104D5DDC
 Soldier's Crossbow,029020C0
 Soldjars of Fortune Ashes +1,4003C0F1
 Soldjars of Fortune Ashes +10,4003C0FA
@@ -2389,6 +2928,7 @@ Sorcerer Leggings,100CAB5C
 Sorcerer Manchettes,100CAAF8
 Sorcerer Painting,4000200B
 Spark Aromatic,40000DB6
+Spear of the Impaler,010B0760
 Spear Talisman,2000080C
 Spear,00F44B10
 Speckled Hardtear,40002AFE
@@ -2401,15 +2941,23 @@ Spellblade's Traveling Attire,1001FC34
 Spellblade's Trousers,1001FCFC
 Spelldrake Talisman +1,20000FAB
 Spelldrake Talisman +2,20000FAC
+Spelldrake Talisman +3,20001BB2
 Spelldrake Talisman,20000FAA
+Spellmachinist's Bell Bearing,401EA74C
 Spellproof Dried Liver,4000047E
+Spellproof Pickled Liver,401E88E0
+Spider Scorpion Ashes,4021A160
 Spiked Caestus,01409650
 Spiked Club,00A8EA30
 Spiked Cracked Tear,40002B06
 Spiked Palisade Shield,01EAE010
 Spiked Spear,00F646E0
+Spira,401EA2A8
 Spiralhorn Shield,01CCA9B0
+Spiraltree Seal,020EBBC0
+Spirit Calculus,401EBF22
 Spirit Calling Bell,40001FDE
+Spirit Glaive,011A49A0
 Spirit Jellyfish Ashes +1,400399E1
 Spirit Jellyfish Ashes +10,400399EA
 Spirit Jellyfish Ashes +2,400399E2
@@ -2421,17 +2969,30 @@ Spirit Jellyfish Ashes +7,400399E7
 Spirit Jellyfish Ashes +8,400399E8
 Spirit Jellyfish Ashes +9,400399E9
 Spirit Jellyfish Ashes,400399E0
+Spirit Raisin,401E87A0
+Spirit Sword,007270E0
 Spiritflame Arrow,02FE9A00
+Spiritgrave Stone,401ED2BC
+Spread Crossbow,0297E8F0
+Spritestone,401E9039
+St. Trina Disciple's Cookbook [1],401EA8EE
+St. Trina Disciple's Cookbook [2],401EA901
+St. Trina Disciple's Cookbook [3],401EA8F6
 St. Trina's Arrow,02FB8CC0
+St. Trina's Blossom,1050DF20
+St. Trina's Smile,20001FE0
 St. Trina's Torch,016ED240
 Staff of Loss,01FBD000
 Staff of the Avatar,01600530
+Staff of the Great Beyond,01FF5270
 Staff of the Guilty,01FB81E0
 Stalwart Horn Charm +1,20000489
+Stalwart Horn Charm +2,20001B80
 Stalwart Horn Charm,20000488
 Stanching Boluses,4000038E
 Star Fist,0141A7C0
 Star Shower,40000FD2
+Star-Lined Sword,002673C0
 Stargazer Heirloom,20000438
 Starlight Shards,4000050A
 Starlight,4000102C
@@ -2442,8 +3003,11 @@ Steel-Wire Torch,016E8420
 Stimulating Boluses,400003A2
 Stone Club,00A9FBA0
 Stone of Gurranq,40001A9A
+Stone-Sheathed Sword,0026C1E0
 Stonebarb Cracked Tear,40002B12
 Stonesword Key,40001F40
+Storehouse Cross Message,401EA3DE
+Storeroom Key,401EA3CD
 Stormhawk Axe,00D7C260
 Stormhawk Deenh +1,4003A1B1
 Stormhawk Deenh +10,4003A1BA
@@ -2460,18 +3024,31 @@ Stormhawk Feather,40003C46
 Stormwing Bone Arrow,02FDD6B0
 Strength-knot Crystal Tear,40002B0D
 String,40003C28
+String-Seller's Bell Bearing,401EA74D
 Strip of White Flesh,40003B38
 Sun Realm Shield,01D9C910
-Surge_ O Flame!,4000184C
+Sunwarmth Stone,401E916E
+Surge, O Flame!,4000184C
+Surging Frenzied Flame,401E90D8
 Swarm of Flies,40001C2A
 Swarm Pot,40000154
 Sweet Raisin,4000032B
 Swift Glintstone Shard,40000FAA
+Swift Spear,00FC1340
+Swollen Grape,401ED2B1
+Sword Lance,003567E0
+Sword of Darkness,00271000
+Sword of Light,0026E8F0
 Sword of Milos,003037C0
 Sword of Night and Flame,0020A760
+Sword of Night,0090F560
 Sword of St. Trina,00216AB0
+Swordhand of Night Jolán,4021DBF8
 Tailoring Tools,40001FE3
 Taker's Cameo,200013A6
+Talisman of All Crucibles,20002030
+Talisman of Lord's Bestowal,20002008
+Talisman of the Dread,20001FEA
 Talisman Pouch,40002738
 Tarnished Golden Sunflower,400050CD
 Tarnished's Furled Finger,40000064
@@ -2479,22 +3056,37 @@ Tarnished's Furled Finger,400000AA
 Tarnished's Wizened Finger,4000006A
 Taunter's Tongue,4000006C
 Taunter's Tongue,400000B2
+Taylew the Golem Smith,4021C0A0
 Telescope,400007F8
 Terra Magicus,40001022
 Thawfrost Boluses,40000398
 The Flame of Frenzy,40001C8E
+The Sacred Tower Painting,401EA489
 The Stormhawk King,40002002
+The Two Fingers,401EA7AA
 Theodorix's Magma,40001B63
 Thin Beast Bones,40003BEC
+Thiollier's Concoction,401E8CDC
+Thiollier's Garb (Altered),104CC4BC
+Thiollier's Garb,104CC0D4
+Thiollier's Gloves,104CC138
+Thiollier's Hidden Needle,01481060
+Thiollier's Mask,104CC070
+Thiollier's Trousers,104CC19C
 Thops's Barrier,40001216
 Thops's Bell Bearing,400022D7
 Thorned Whip,01317B20
 Thorny Cracked Tear,40002B05
 Throwing Dagger,400006A4
+Tibia's Cookbook,401EA8F9
 Tibia's Summons,400013A6
 Tonic of Forgetfulness,40001FC0
+Tooth Whip,0138CE20
 Torch,016E3600
 Torchpole,00F55C80
+Torn Diary Page,401EA3E0
+Tower of Shadow Message,401EA3E5
+Toxic Mossling,401ED2AA
 Toxic Mushroom,40005122
 Traveler's Boots,100F918C
 Traveler's Clothes,100F90C4
@@ -2545,6 +3137,8 @@ Twinsage Sorcerer Ashes +9,40035781
 Twinsage Sorcerer Ashes,40035778
 Two Fingers Heirloom,20000442
 Two Fingers' Prayerbook,4000229A
+Two-Handed Sword Talisman,20001F68
+Two-Headed Turtle Talisman,20001B76
 Uchigatana,00895440
 Unalloyed Gold Needle,40002004
 Unalloyed Gold Needle,4000230F
@@ -2563,7 +3157,14 @@ Vagabond Knight Greaves,100A134C
 Vagabond Knight Helm,100A1220
 Valkyrie's Prosthesis,40002311
 Varré's Bouquet,00A8C320
+Velvet Sword of St. Trina,00264CB0
 Venomous Fang,014FD890
+Verdigris Armor,104C72B4
+Verdigris Discus,20002012
+Verdigris Gauntlets,104C7318
+Verdigris Greatshield,01F03740
+Verdigris Greaves,104C737C
+Verdigris Helm,104C7250
 Veteran's Armor (Altered),100BEB2C
 Veteran's Armor,100BE744
 Veteran's Gauntlets,100BE7A8
@@ -2572,11 +3173,14 @@ Veteran's Helm,100BE6E0
 Veteran's Prosthesis,01424400
 Viridian Amber Medallion +1,200003FD
 Viridian Amber Medallion +2,200003FE
+Viridian Amber Medallion +3,20001B6C
 Viridian Amber Medallion,200003FC
+Viridian Hidden Tear,401EAF78
 Visage Shield,01EAB900
 Volcanic Stone,40005172
 Volcano Manor Invitation,40001FC9
 Volcano Pot,40000258
+Vortex of Putrescence,401E9CB8
 Vulgar Militia Armor,10066904
 Vulgar Militia Ashes +1,4003B151
 Vulgar Militia Ashes +10,4003B15A
@@ -2632,17 +3236,21 @@ Warrior Greaves,100A3A5C
 Warrior Jar Shard,200004CE
 Watchdog's Greatsword,003D3010
 Watchdog's Staff,015F1AD0
+Watchful Spirit,401EA230
 Weathered Dagger,40002314
 Weathered Straight Sword,001F47D0
+Well Depths Key,401EA3C4
+Well-Pickled Turtle Neck,401E8912
 Whetstone Knife,4000218E
 Whip,01312D00
-Whirl_ O Flame!,4000178E
+Whirl, O Flame!,4000178E
 White Cipher Ring,40000068
 White Cipher Ring,400000AE
 White Mask,100A6040
 White Reed Armor,100D4EA4
 White Reed Gauntlets,100D4F08
 White Reed Greaves,100D4F6C
+Whiteflesh Mushroom,401ED2A3
 Windy Crystal Tear,40002B07
 Wing of Astel,006BE130
 Winged Crystal Tear,40002B04
@@ -2659,12 +3267,24 @@ Winged Misbegotten Ashes + 8,40033458
 Winged Misbegotten Ashes + 9,40033459
 Winged Misbegotten Ashes,40033450
 Winged Scythe,0122D520
+Winged Serpent Helm,104F1618
 Winged Sword Insignia,20000820
+Winter-Lantern Fly,401ED2B0
+Wise Man's Mask,104DF8F0
 Witch's Glintstone Crown,100CB9D0
+Wolf Crest Shield,01E0CDF0
 Wooden Greatshield,01ECB4D0
 Wraith Calling Bell,40000C08
+Wrath from Afar,401E9EA2
 Wrath of Gold,4000190A
 Yellow Ember,4000516D
+Yellow Fulgurbloom,401ED2A8
+Ymir's Bell Bearing,401EA745
+Young Lion's Armor (Altered),10506E3C
+Young Lion's Armor,10506A54
+Young Lion's Gauntlets,10506AB8
+Young Lion's Greaves,10506B1C
+Young Lion's Helm,105069F0
 Zamor Armor,10105414
 Zamor Bracelets,10105478
 Zamor Curved Sword,007AD550
