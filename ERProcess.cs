@@ -1712,9 +1712,11 @@ namespace EldenRingTool
                     string line = "";
                     while ((line = reader.ReadLine()) != null)
                     {
-                        var lineSplit = line.Split(',');
-                        var nm = lineSplit[0];
-                        var id = uint.Parse(lineSplit[1], numType);
+                        var lastCommaPos = line.LastIndexOf(',');
+                        if (lastCommaPos < 0) { continue; }
+                        var nm = line.Substring(0, lastCommaPos);
+                        var idStr = line.Substring(lastCommaPos + 1);
+                        var id = uint.Parse(idStr, numType);
                         ret.Add((nm, id));
                     }
                 }
