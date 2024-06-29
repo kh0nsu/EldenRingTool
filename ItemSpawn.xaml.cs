@@ -10,6 +10,9 @@ namespace EldenRingTool
         {
             _process = process;
             InitializeComponent();
+            txtInfusion.Items.Clear();
+            txtInfusion.ItemsSource = ItemDB.Infusions.Select(x => x.Item1).ToList();
+            txtInfusion.SelectedIndex = 0;
             updateMatch();
         }
 
