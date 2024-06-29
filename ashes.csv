@@ -1,11 +1,14 @@
 Name,ID
 Default,FFFFFFFF
+Aspects of the Crucible: Wings,80030DA4
 Assassin's Gambit,8000EB28
 Barbaric Roar,8000FDE8
 Barrage,80009CA4
 Barricade Shield,80007594
 Beast's Roar,8000FEB0
 Black Flame Tornado,80005654
+Blind Spot,80063DA8
+Blinkbolt,80064D48
 Blood Blade,80005780
 Blood Tax,80002A30
 Bloodhound's Step,800138E4
@@ -14,17 +17,23 @@ Braggart's Roar,8000FF78
 Carian Grandeur,80005528
 Carian Greatsword,8000558C
 Carian Retaliation,80007724
+Carian Sovereignty,800660D0
 Charge Forth,80002904
 Chilling Mist,800058AC
 Cragblade,8000ED1C
 Determination,8000EA60
+Divine Beast Frost Stomp,80065900
 Double Slash,80002BC0
+Dryleaf Whirlwind,80030D40
 Earthshaker,800052D0
 Enchanted Shot,80009DD0
 Endure,80011170
 Eruption,800050DC
+Flame Skewer,80065130
+Flame Spear,80065CE8
 Flame of the Redmanes,8000C544
 Flaming Strike,80005398
+Ghostflame Call,80067070
 Giant Hunt,80002D50
 Glintblade Phalanx,80004E20
 Glintstone Pebble,80004F4C
@@ -38,6 +47,7 @@ Hoarah Loux's Earthshaker,8000C6D4
 Hoarfrost Stomp,8000C3B4
 Holy Ground,80011238
 Ice Spear,80004EE8
+Igon's Drake Hunt,80085CA0
 Impaling Thrust,80002774
 Kick,8000C47C
 Lifesteal Fist,80005014
@@ -47,27 +57,38 @@ Lion's Claw,80002710
 Loretta's Slash,80002E18
 Mighty Shot,80009D08
 No Skill,800078B4
+Overhead Stance,80064578
+Palm Blast,80061E68
 Parry,800075F8
 Phantom Slash,800057E4
 Piercing Fang,800027D8
+Piercing Throw,80062250
 Poison Moth Flight,80002E7C
 Poisonous Mist,80005910
 Prayerful Strike,80005140
 Prelate's Charge,80002C24
 Quickstep,80013880
+Raging Beast,800631F0
 Rain of Arrows,80009E98
 Raptor of the Mists,80013948
 Repeating Thrust,80002A94
+Rolling Sparks,80062E08
 Royal Knight's Resolve,8000EAC4
 Sacred Blade,80004E84
 Sacred Order,8000EBF0
 Sacred Ring of Light,800056B8
+Savage Claws,800635D8
+Savage Lion's Claw,80065518
+Scattershot Throw,80062638
 Seppuku,8000ECB8
 Shared Order,8000EC54
 Shield Bash,80007530
 Shield Crash,80007850
+Shield Strike,800C3500
+Shriek of Sorrow,800664B8
 Sky Shot,80009E34
 Spectral Lance,80005848
+Spinning Gravity Thrust,80061A80
 Spinning Slash,8000283C
 Spinning Strikes,80002B5C
 Spinning Weapon,80002EE0
@@ -79,7 +100,9 @@ Storm Blade,80005208
 Storm Stomp,8000C418
 Storm Wall,80007788
 Stormcaller,8000300C
+Swift Slash,80064190
 Sword Dance,80003070
+The Poison Flower Blooms Twice,8007B4A8
 Thops's Barrier,80007918
 Through and Through,80009C40
 Thunderbolt,80005460
@@ -87,7 +110,9 @@ Troll's Roar,8000FF14
 Unsheathe,80002C88
 Vacuum Slice,800055F0
 Vow of the Indomitable,800111D4
+Wall of Sparks,80062A20
 War Cry,8000FE4C
 Waves of Darkness,8000C670
 White Shadow's Lure,80014C08
 Wild Strikes,80002AF8
+Wing Stance,80064960
