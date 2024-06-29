@@ -10,12 +10,26 @@ namespace EldenRingTool
         {
             _process = process;
             InitializeComponent();
+            updateMatch();
         }
+
+        void updateMatch()
+        {
+            spawnItem(null, null);
+            btnSpawn.Content = "Spawn " + matchingItem;
+        }
+
+        string matchingItem = "";
 
         private void spawnItem(object sender, RoutedEventArgs e)
         {
             try
             {
+                if (txtItem.Text.Length < 1)
+                {
+                    matchingItem = "";
+                    return;
+                }
                 var itemExact = ItemDB.Items.Where(x => x.Item1.ToLower().Equals(txtItem.Text.ToLower()));
                 var itemStart = ItemDB.Items.Where(x => x.Item1.ToLower().StartsWith(txtItem.Text.ToLower()));
                 var itemContain = ItemDB.Items.Where(x => x.Item1.ToLower().Contains(txtItem.Text.ToLower()));
@@ -34,9 +48,15 @@ namespace EldenRingTool
                 }
                 else
                 {
-                    MessageBox.Show("Item not found");
+                    matchingItem = "";
+                    if (sender != null)
+                    {
+                        MessageBox.Show("Item not found");
+                    }
                     return;
                 }
+                matchingItem = item.Item1;
+                if (null == sender) { return; }
                 txtItem.Text = item.Item1;
                 uint level;
                 if (!uint.TryParse(txtLevel.Text, out level)) { level = 0; }
@@ -51,7 +71,10 @@ namespace EldenRingTool
             }
             catch
             {
-                MessageBox.Show("Error");
+                if (sender != null)
+                {
+                    MessageBox.Show("Error");
+                }
                 return;
             }
         }
@@ -61,6 +84,11 @@ namespace EldenRingTool
             var sel = new Selection(ItemDB.Items.Select(x => x.Item1).ToList<object>(), (x) => { txtItem.Text = x as string; }, "Choose an item");
             sel.Owner = this;
             sel.Show();
+        }
+
+        private void txtItem_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            updateMatch();
         }
     }
 }
