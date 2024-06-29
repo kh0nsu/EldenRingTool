@@ -29,8 +29,8 @@
                     <Button Click="spawnItem" Content="Spawn Item" Margin="1,0,5,0"/>
                     <Button Click="editStats" Margin="1,0,5,0" Content="Edit Stats"/>
                     <Button Click="addSouls" Content="Add 1M Runes" Margin="1,0,5,0" RenderTransformOrigin="1.746,-20.477"/>
-                    <Button Click="btnSetPlayerHP_Click" x:Name="btnSetPlayerHP" Content="Set HP" Margin="0,0,5,0"/>
-                    <Button Click="instantDeath" x:Name="btnDie" Margin="0,0,5,0" Content="Die"/>
+                    <Button Click="btnSetPlayerHP_Click" x:Name="btnSetPlayerHP" Content="Set HP" Margin="1,0,5,0"/>
+                    <Button Click="instantDeath" x:Name="btnDie" Margin="1,0,5,0" Content="Die"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                 </StackPanel>
@@ -47,7 +47,7 @@
                     <CheckBox Checked="torNoMapColOn" Unchecked="torNomapColOff" Margin="5,0" x:Name="chkTorNoMapCol" Content="No Map Collision"/>
                 </StackPanel>
                 <DockPanel Height="16">
-                    <TextBlock Text="NPCs / Enemies" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Enemies" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel Orientation="Horizontal">
@@ -79,6 +79,22 @@
                 </StackPanel>
                 <TextBlock FontSize="10" Margin="0,2,0,0"><Run Text="Hold ctrl/shift/alt to go further"/></TextBlock>
                 <DockPanel Height="16">
+                    <TextBlock Text="Teleport" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <Separator Margin="0,5,0,0"/>
+                </DockPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                    <Button Margin="2,0" Click="savePos" Content="Save"/>
+                    <Button Margin="2,0" Click="restorePos" x:Name="restorePosButton" IsEnabled="False" Content="Restore"/>
+                    <Button Margin="2,0" Click="savePosDB" Content="Save to DB"/>
+                    <Button Margin="2,0" Click="restorePosDB" Content="Restore from DB"/>
+                </StackPanel>
+                <StackPanel x:Name="positionPanel" Visibility="Collapsed">
+                    <TextBlock x:Name="localPos"><Run Text="Local:"/></TextBlock>
+                    <TextBlock x:Name="mapPos"><Run Text="Map:"/></TextBlock>
+                    <TextBlock x:Name="mapID"><Run Text="Map ID:"/></TextBlock>
+                    <TextBlock x:Name="globalPos"><Run Text="Global:"/></TextBlock>
+                </StackPanel>
+                <DockPanel Height="16">
                     <TextBlock Text="Hitboxes" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -100,16 +116,6 @@
                     <Button Click="changeMeshColours" Content="Change Colours" FontSize="10"/>
                 </StackPanel>
                 <DockPanel Height="16">
-                    <TextBlock Text="Teleport" Margin="2,0,2,0" FontWeight="Bold"/>
-                    <Separator Margin="0,5,0,0"/>
-                </DockPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                    <Button Margin="1,0,2,0" Click="savePos" Content="Save"/>
-                    <Button Margin="2,0" Click="restorePos" x:Name="restorePosButton" IsEnabled="False" Content="Restore"/>
-                    <Button Margin="2,0" Click="savePosDB" Content="Save to DB"/>
-                    <Button Margin="2,0" Click="restorePosDB" Content="Restore from DB"/>
-                </StackPanel>
-                <DockPanel Height="16">
                     <TextBlock Text="Views" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -122,7 +128,7 @@
                     <CheckBox Checked="soundViewOn" Unchecked="soundViewOff" x:Name="chkSoundView" Margin="5,0" Content="Sound View"/>
                 </StackPanel>
                 <DockPanel Height="16">
-                    <TextBlock Text="Control" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Misc" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <!--<StackPanel Orientation="Horizontal">
@@ -131,7 +137,7 @@
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="eventStopOn" Unchecked="eventStopOff" Margin="0,0,5,0" x:Name="chkEventStop" Content="Disable Events"/>
                     <CheckBox Checked="combatMapOn" Unchecked="combatMapOff" x:Name="chkCombatMap" Content="Combat Map"/>
-                    <CheckBox Checked="freeUpgOn" Unchecked="freeUpgOff" x:Name="chkFreeUpg" Margin="5,0,5,0" Content="Free Upgrades"/>
+                    <CheckBox Checked="freeUpgOn" Unchecked="freeUpgOff" x:Name="chkFreeUpg" Margin="5,0,5,0" Content="Free Upgr./Craft"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                 </StackPanel>
@@ -146,12 +152,6 @@
                 <StackPanel Orientation="Horizontal">
                     <CheckBox Checked="steamInputEnumDisableOn" Unchecked="steamInputEnumDisableOff" x:Name="chkSteamInputEnum" Content="Stutter Fix"/>
                     <CheckBox Checked="disableAchieveOn" Unchecked="disableAchieveOff" x:Name="chkSteamAchieve" Margin="5,0" Content="Disable Achievements (Freeze Fix)"/>
-                </StackPanel>
-                <StackPanel x:Name="positionPanel" Visibility="Collapsed">
-                    <TextBlock x:Name="localPos"><Run Text="Local:"/></TextBlock>
-                    <TextBlock x:Name="mapPos"><Run Text="Map:"/></TextBlock>
-                    <TextBlock x:Name="mapID"><Run Text="Map ID:"/></TextBlock>
-                    <TextBlock x:Name="globalPos"><Run Text="Global:"/></TextBlock>
                 </StackPanel>
                 <Button Click="installTargetHook" Margin="0,5" x:Name="targetHookButton" Content="Enable target options"/>
             </StackPanel>
@@ -212,8 +212,8 @@
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" x:Name="bottomPanel">
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0" x:Name="updatePanel">
                 <CheckBox Checked="enableUpdateCheck" Unchecked="disableUpdateCheck" FontSize="10" Margin="5,0" x:Name="chkAutoUpdate">Auto update check</CheckBox>
-                <Button Click="goToWebsite" FontSize="10" x:Name="websiteButton" Margin="5,0">Visit Homepage</Button>
-                <Button Click="hotkeySetup" FontSize="10" HorizontalAlignment="Right" Margin="5,0" x:Name="btnHotkeys">Hotkey Setup</Button>
+                <Button Click="goToWebsite" FontSize="10" x:Name="websiteButton" Margin="2,0">Visit Homepage</Button>
+                <Button Click="hotkeySetup" FontSize="10" HorizontalAlignment="Right" Margin="2,0" x:Name="btnHotkeys">Hotkey Setup</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,0" x:Name="resizePanel">
                 <CheckBox Checked="stayOnTop" Unchecked="dontStayOnTop" FontSize="10" Margin="5,0" x:Name="chkStayOnTop">Stay on top</CheckBox>
