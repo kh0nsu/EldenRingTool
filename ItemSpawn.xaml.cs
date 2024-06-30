@@ -13,6 +13,14 @@ namespace EldenRingTool
             txtInfusion.Items.Clear();
             txtInfusion.ItemsSource = ItemDB.Infusions.Select(x => x.Item1).ToList();
             txtInfusion.SelectedIndex = 0;
+
+            txtAsh.Items.Clear();
+            var ashesOfWar = ItemDB.Items.Where(x => x.Item1.Contains("Ash of War: ")) 
+                                             .Select(x => x.Item1.Replace("Ash of War: ", "")) // removes the repetitive "ash of war" text for display.
+                                             .ToList();
+            ashesOfWar.Insert(0, "Default");
+            txtAsh.ItemsSource = ashesOfWar;
+            txtAsh.SelectedIndex = 0;
             updateMatch();
         }
 
@@ -67,7 +75,6 @@ namespace EldenRingTool
                 txtInfusion.Text = infus.Item1;
                 uint itemID = item.Item2 + level + infus.Item2;
                 var ash = ItemDB.Ashes.Where(x => x.Item1.ToLower().Contains(txtAsh.Text.ToLower())).FirstOrDefault();
-                txtAsh.Text = ash.Item1;
                 uint qty;
                 if (!uint.TryParse(txtQuantity.Text, out qty)) { qty = 1; }
                 _process.spawnItem(itemID, qty, ash.Item2);
