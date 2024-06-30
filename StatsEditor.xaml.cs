@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace EldenRingTool
 {
@@ -9,6 +10,8 @@ namespace EldenRingTool
     {
         List<(string, int)> _stats;
         Action<List<(string, int)>> _callback = null;
+        List<Button> _decButtons = new List<Button>();
+        List<Button> _incButtons = new List<Button>();
         List<TextBox> _boxes = new List<TextBox>();
         public StatsEditor(List<(string, int)> stats, Action<List<(string, int)>> callback)
         {
@@ -25,14 +28,39 @@ namespace EldenRingTool
                 statsGrid.Children.Add(lbl);
                 Grid.SetRow(lbl, i);
                 Grid.SetColumn(lbl, 0);
+
                 var txt = new TextBox();
                 txt.HorizontalAlignment = HorizontalAlignment.Stretch;
                 txt.VerticalAlignment = VerticalAlignment.Center;
                 txt.Text = stats[i].Item2.ToString();
-                statsGrid.Children.Add(txt);
-                Grid.SetRow(txt, i);
-                Grid.SetColumn(txt, 1);
                 _boxes.Add(txt);
+
+                var decButton = new Button();
+                decButton.Height = 18;
+                decButton.HorizontalAlignment = HorizontalAlignment.Stretch;
+                decButton.IsTabStop = false;
+                decButton.Content = "-";
+                decButton.Click += (sender, e) => Button_DecreaseStat(txt);
+                _decButtons.Add(decButton);
+
+                var incButton = new Button();
+                incButton.Height = 18;
+                incButton.HorizontalAlignment = HorizontalAlignment.Stretch;
+                incButton.IsTabStop = false;
+                incButton.Content = "+";
+                incButton.Click += (sender, e) => Button_IncreaseStat(txt);
+                _incButtons.Add(incButton);
+
+                Grid.SetRow(decButton, i);
+                Grid.SetColumn(decButton, 1);
+                Grid.SetRow(txt, i);
+                Grid.SetColumn(txt, 2);
+                Grid.SetRow(incButton, i);
+                Grid.SetColumn(incButton, 3);
+
+                statsGrid.Children.Add(txt);
+                statsGrid.Children.Add(decButton);
+                statsGrid.Children.Add(incButton);
             }
         }
 
@@ -47,6 +75,26 @@ namespace EldenRingTool
             }
             _callback(_stats);
             Close();
+        }
+
+        private void TextBox_GotKeyboardFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
+        }
+
+        private void Button_DecreaseStat(TextBox txt)
+        {
+            if (int.TryParse(txt.Text, out int value)) { 
+                txt.Text = (--value).ToString();
+            }
+        }
+
+        private void Button_IncreaseStat(TextBox txt)
+        {
+            if (int.TryParse(txt.Text, out int value)) { 
+                txt.Text = (++value).ToString();
+            }
         }
     }
 }

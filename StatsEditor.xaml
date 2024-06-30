@@ -6,15 +6,24 @@
         xmlns:local="clr-namespace:EldenRingTool"
         mc:Ignorable="d"
         Title="Stats Editor" Width="150" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <EventSetter Event="GotKeyboardFocus" Handler="TextBox_GotKeyboardFocus"/>
+        </Style>
+    </Window.Resources>
     <StackPanel Orientation="Vertical" x:Name="mainPanel">
         <StackPanel Orientation="Vertical" x:Name="statsPanel">
             <Grid x:Name="statsGrid">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" x:Name="lblExample">SomeStat</Label>
-                <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" x:Name="txtExample">99</TextBox>
+                <Button Grid.Row="0" Grid.Column="1" Height="18" FontSize="10" Name="decreaseExample" KeyboardNavigation.IsTabStop="False">-</Button>
+                <TextBox Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" x:Name="txtExample" TextAlignment="Center">99</TextBox>
+                <Button Grid.Row="0" Grid.Column="3" Height="18" FontSize="10" Name="increaseExample" KeyboardNavigation.IsTabStop="False">+</Button>
             </Grid>
         </StackPanel>
         <Button Click="okClicked">OK</Button>
