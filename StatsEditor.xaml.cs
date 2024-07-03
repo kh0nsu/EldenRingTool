@@ -10,8 +10,6 @@ namespace EldenRingTool
     {
         List<(string, int)> _stats;
         Action<List<(string, int)>> _callback = null;
-        List<Button> _decButtons = new List<Button>();
-        List<Button> _incButtons = new List<Button>();
         List<TextBox> _boxes = new List<TextBox>();
         public StatsEditor(List<(string, int)> stats, Action<List<(string, int)>> callback)
         {
@@ -41,7 +39,6 @@ namespace EldenRingTool
                 decButton.IsTabStop = false;
                 decButton.Content = "-";
                 decButton.Click += (sender, e) => Button_DecreaseStat(txt);
-                _decButtons.Add(decButton);
 
                 var incButton = new Button();
                 incButton.Height = 18;
@@ -49,7 +46,6 @@ namespace EldenRingTool
                 incButton.IsTabStop = false;
                 incButton.Content = "+";
                 incButton.Click += (sender, e) => Button_IncreaseStat(txt);
-                _incButtons.Add(incButton);
 
                 Grid.SetRow(decButton, i);
                 Grid.SetColumn(decButton, 1);
@@ -79,8 +75,7 @@ namespace EldenRingTool
 
         private void TextBox_GotKeyboardFocus(object sender, RoutedEventArgs e)
         {
-            TextBox tb = (TextBox)sender;
-            tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
+            (sender as TextBox)?.SelectAll();
         }
 
         private void Button_DecreaseStat(TextBox txt)
