@@ -1734,6 +1734,7 @@ namespace EldenRingTool
             ashes = importNameIDCSV("ashes.csv");
             infusions = importNameIDCSV("infusions.csv", System.Globalization.NumberStyles.Number);
             items = importNameIDCSV("items.csv");
+            items.Sort((x, y) => { return x.Item1.CompareTo(y.Item1); }); //sort order can be a bit jank so just re sort it now
 
             _loaded = true;
         }
