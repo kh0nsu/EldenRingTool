@@ -10,18 +10,19 @@ namespace EldenRingTool
         {
             _process = process;
             InitializeComponent();
-            txtInfusion.Items.Clear();
-            txtInfusion.ItemsSource = ItemDB.Infusions.Select(x => x.Item1).ToList();
-            txtInfusion.SelectedIndex = 0;
-
-            txtAsh.Items.Clear();
-            var ashesOfWar = ItemDB.Items.Where(x => x.Item1.Contains("Ash of War: ")) 
-                                             .Select(x => x.Item1.Replace("Ash of War: ", "")) // removes the repetitive "ash of war" text for display.
-                                             .ToList();
-            ashesOfWar.Insert(0, "Default");
-            txtAsh.ItemsSource = ashesOfWar;
-            txtAsh.SelectedIndex = 0;
+            populate();
             updateMatch();
+        }
+
+        void populate()
+        {
+            comboInfusion.Items.Clear();
+            comboInfusion.ItemsSource = ItemDB.Infusions.Select(x => x.Item1).ToList();
+            comboInfusion.SelectedIndex = 0;
+
+            comboAsh.Items.Clear();
+            comboAsh.ItemsSource = ItemDB.Ashes.Select(x => x.Item1).ToList();
+            comboAsh.SelectedIndex = 0;
         }
 
         void updateMatch()
@@ -71,10 +72,9 @@ namespace EldenRingTool
                 txtItem.Text = item.Item1;
                 uint level;
                 if (!uint.TryParse(txtLevel.Text, out level)) { level = 0; }
-                var infus = ItemDB.Infusions.Where(x => x.Item1.ToLower().Contains(txtInfusion.Text.ToLower())).FirstOrDefault();
-                txtInfusion.Text = infus.Item1;
+                var infus = ItemDB.Infusions.Where(x => x.Item1.ToLower().Contains(comboInfusion.Text.ToLower())).FirstOrDefault();
                 uint itemID = item.Item2 + level + infus.Item2;
-                var ash = ItemDB.Ashes.Where(x => x.Item1.ToLower().Contains(txtAsh.Text.ToLower())).FirstOrDefault();
+                var ash = ItemDB.Ashes.Where(x => x.Item1.ToLower().Contains(comboAsh.Text.ToLower())).FirstOrDefault();
                 uint qty;
                 if (!uint.TryParse(txtQuantity.Text, out qty)) { qty = 1; }
                 _process.spawnItem(itemID, qty, ash.Item2);
