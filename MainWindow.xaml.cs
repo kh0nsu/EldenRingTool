@@ -75,6 +75,7 @@ namespace EldenRingTool
             ADD_SOULS,
             GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
             FPS_30, FPS_60, FPS_120, FPS_144, FPS_240, FPS_1000,
+            TOGGLE_STATS_FULL, TOGGLE_RESISTS, TOGGLE_COORDS,
         }
 
         ERProcess _process = null;
@@ -478,6 +479,9 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.FPS_144: _process.getSetFrameTimeTarget(1 / 144.0f); break;
                 case HOTKEY_ACTIONS.FPS_240: _process.getSetFrameTimeTarget(1 / 240.0f); break;
                 case HOTKEY_ACTIONS.FPS_1000: _process.getSetFrameTimeTarget(1 / 1000.0f); break;
+                case HOTKEY_ACTIONS.TOGGLE_STATS_FULL: toggleStatsFull(null, null); break;
+                case HOTKEY_ACTIONS.TOGGLE_RESISTS: toggleResists(null, null); break;
+                case HOTKEY_ACTIONS.TOGGLE_COORDS: toggleCoords(null, null); break;
                 default: Utils.debugWrite("Action not handled: " + act.ToString()); break;
             }
         }
@@ -1180,7 +1184,7 @@ namespace EldenRingTool
         }
 
         
-        private void hpPoiseOnly(object sender, RoutedEventArgs e)
+        private void toggleStatsFull(object sender, RoutedEventArgs e)
         {
             if (!isCompact)
             {
