@@ -1234,20 +1234,38 @@ namespace EldenRingTool
         }
 
         private void restorePosDB(object sender, RoutedEventArgs e)
-        {//TODO: use selection window?
+        {
+            var dbLocations = File.ReadAllLines(posDbFile());
+            List<string> plaintextLocations = new List<string>();
+            for (int i = 1; i < dbLocations.Length; i++) // skip blank line at start
+            {
+                plaintextLocations.Add(dbLocations[i].Split(',')[5]);
+            }
+
+            var sel = new Selection(plaintextLocations.Select(x=>x).ToList<object>(), (x) => { doTeleport(dbLocations, x as string); } , "Choose a location: ");
+            sel.Owner = this;
+            sel.Show();
+        }
+
+        private void doTeleport(string[] lines, string loc)
+        {
             try
             {
-                var lines = File.ReadAllLines(posDbFile());
-                string allNames = "";
+                int selID = -1;
+
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    allNames += i + ": " + lines[i].Split(',')[5] + Environment.NewLine;
+                    if (lines[i].Split(',')[5] == loc)
+                    {
+                        selID = i;
+                        break;
+                    }
                 }
-                var selection = Microsoft.VisualBasic.Interaction.InputBox("Select a location:" + Environment.NewLine + allNames, "Location selection", "0");
-                int selID = int.Parse(selection);
-                var sel = lines[selID];
-                var pos = TeleportHelper.mapCoordsFromString(sel);
-                doGlobalTP(pos);
+                if (selID !=  -1)
+                {
+                    var pos = TeleportHelper.mapCoordsFromString(lines[selID]);
+                    doGlobalTP(pos);
+                }
             }
             catch { }
         }
