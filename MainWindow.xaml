@@ -30,7 +30,7 @@
                     <Button Click="editStats" Margin="1,0,5,0" Content="Edit Stats"/>
                     <Button Click="addSouls" Content="Add 1M Runes" Margin="1,0,5,0" RenderTransformOrigin="1.746,-20.477"/>
                     <Button Click="btnSetPlayerHP_Click" x:Name="btnSetPlayerHP" Content="Set HP" Margin="0,0,5,0"/>
-                    <Button Click="instantDeath" x:Name="btnDie" Margin="0,0,5,0" Content="Die"/>
+                    <Button Click="instantDeath" x:Name="btnDie" Margin="1,0,5,0" Content="Die"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                 </StackPanel>
