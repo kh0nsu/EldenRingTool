@@ -1225,12 +1225,15 @@ namespace EldenRingTool
         {
             var pos = _process.getMapCoords();
             var name = Microsoft.VisualBasic.Interaction.InputBox("Enter a name for this location", "Location name", "Somewhere");
-            var str = TeleportHelper.mapCoordsToString(pos) + "," + name;
-            try
+            if (!string.IsNullOrEmpty(name))
             {
-                File.AppendAllText(posDbFile(), str + Environment.NewLine);
+                var str = TeleportHelper.mapCoordsToString(pos) + "," + name;
+                try
+                {
+                    File.AppendAllText(posDbFile(), str + Environment.NewLine);
+                }
+                catch { }
             }
-            catch { }
         }
 
         private void restorePosDB(object sender, RoutedEventArgs e)
