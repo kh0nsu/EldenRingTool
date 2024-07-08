@@ -1236,38 +1236,15 @@ namespace EldenRingTool
         private void restorePosDB(object sender, RoutedEventArgs e)
         {
             var dbLocations = File.ReadAllLines(posDbFile());
-            List<string> plaintextLocations = new List<string>();
+            List<TeleportLocation> locations = new List<TeleportLocation>();
             for (int i = 0; i < dbLocations.Length; i++) 
             {
-                plaintextLocations.Add(dbLocations[i].Split(',')[5]);
+                locations.Add(new TeleportLocation(dbLocations[i]));   
             }
 
-            var sel = new Selection(plaintextLocations.Select(x=>x).ToList<object>(), (x) => { doTeleport(dbLocations, x as string); } , "Choose a location: ");
+            var sel = new Selection(locations.ToList<object>(), (x) => { doGlobalTP((x as TeleportLocation).getCoords()); }, "Choose a location: ");
             sel.Owner = this;
             sel.Show();
-        }
-
-        private void doTeleport(string[] lines, string loc)
-        {
-            try
-            {
-                int selID = -1;
-
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    if (lines[i].Split(',')[5] == loc)
-                    {
-                        selID = i;
-                        break;
-                    }
-                }
-                if (selID !=  -1)
-                {
-                    var pos = TeleportHelper.mapCoordsFromString(lines[selID]);
-                    doGlobalTP(pos);
-                }
-            }
-            catch { }
         }
 
         private void combatMapOn(object sender, RoutedEventArgs e)
