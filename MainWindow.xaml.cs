@@ -1475,5 +1475,13 @@ namespace EldenRingTool
                 _process.getSetPlayerHP(newValInt);
             }
         }
+
+        private void dockPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DockPanel dockPanel && dockPanel.Tag is StackPanel stackPanel)
+            {
+                stackPanel.Visibility = stackPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
     }
 }
