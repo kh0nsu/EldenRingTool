@@ -1763,4 +1763,31 @@ namespace EldenRingTool
             }
         }
     }
+
+    public class TeleportLocation
+    {
+        float x;
+        float y;
+        float z;
+        float w;
+        uint id;
+        string locationName;
+
+        public TeleportLocation() { }
+
+        public TeleportLocation(float x, float y, float z, float w, uint id, string locationName)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+            this.id = id;
+            this.locationName = locationName;
+        }
+
+        public TeleportLocation(string dbString)
+        {
+
+        }
+    }
 }

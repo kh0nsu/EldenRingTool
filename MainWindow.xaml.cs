@@ -1237,7 +1237,7 @@ namespace EldenRingTool
         {
             var dbLocations = File.ReadAllLines(posDbFile());
             List<string> plaintextLocations = new List<string>();
-            for (int i = 1; i < dbLocations.Length; i++) // skip blank line at start
+            for (int i = 0; i < dbLocations.Length; i++) 
             {
                 plaintextLocations.Add(dbLocations[i].Split(',')[5]);
             }
