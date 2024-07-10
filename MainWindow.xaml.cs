@@ -1243,7 +1243,7 @@ namespace EldenRingTool
         private void restorePosDB(object sender, RoutedEventArgs e)
         {
             var dbLocations = File.ReadAllLines(posDbFile());
-            List<TeleportLocation> locations = new List<TeleportLocation>();
+            var locations = new List<TeleportLocation>();
             for (int i = 0; i < dbLocations.Length; i++) 
             {
                 locations.Add(new TeleportLocation(dbLocations[i]));   

@@ -9,7 +9,6 @@ using System.Threading;
 using System.Reflection;
 using System.IO;
 using MiscUtils;
-using System.CodeDom;
 
 namespace EldenRingTool
 {
@@ -1773,7 +1772,7 @@ namespace EldenRingTool
         public TeleportLocation(string dbString)
         {
             coords = TeleportHelper.mapCoordsFromString(dbString);
-            name = dbString.Split(',')[5];
+            name = string.Join(",", dbString.Split(',').Skip(5));
         }
 
         public (float, float, float, float, uint) getCoords()
