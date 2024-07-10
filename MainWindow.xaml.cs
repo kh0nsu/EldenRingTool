@@ -203,7 +203,7 @@ namespace EldenRingTool
         {
             try
             {
-                var windowInfo = $"{Left} {Top} {isCompact} {resistsPanel.Visibility}";
+                var windowInfo = $"{Left} {Top} {isCompact} {resistsPanel.Visibility} {chkSteamInputEnum.IsChecked} {chkSteamAchieve.IsChecked} {chkMuteMusic.IsChecked}";
                 File.WriteAllText(windowStateFile(), windowInfo);
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
@@ -231,6 +231,13 @@ namespace EldenRingTool
                 }
                 if (compact) { setCompact(); } //default full
                 if (vis == Visibility.Visible.ToString()) { toggleResists(null, null); } //default hidden
+
+                if (spl.Length >= 7)
+                {
+                    chkSteamInputEnum.IsChecked = bool.Parse(spl[4]);
+                    chkSteamAchieve.IsChecked = bool.Parse(spl[5]);
+                    chkMuteMusic.IsChecked = bool.Parse(spl[6]);
+                }
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
         }
