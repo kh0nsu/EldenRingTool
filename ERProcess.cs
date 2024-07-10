@@ -1391,6 +1391,7 @@ namespace EldenRingTool
         }
 
         int statsOffset = 0x3c; //possible but unlikely to change between patches. TODO: scan?
+        int levelOffset = 0x68; //same
         public readonly string[] STAT_NAMES = new string[] { "Vigor", "Mind", "Endurance", "Strength", "Dexterity", "Intelligence", "Faith", "Arcane" };
         public readonly string[] DLC_STAT_NAMES = new string[] { "Scadu", "Ash" };
         public List<(string, int)> getSetPlayerStats(List<(string,int)> newStats = null)
@@ -1407,7 +1408,10 @@ namespace EldenRingTool
                 if (newStats != null) { WriteInt32(ptr + statOffset, newStats[i].Item2); newLevel += newStats[i].Item2; }
                 ret.Add((STAT_NAMES[i], currentVal));
             }
-            //TODO: update level if we're setting stats
+            if (newStats != null)
+            {
+                WriteInt32(ptr + levelOffset, newLevel);
+            }
 
             if (exeSupportsDlc())
             {//could be simplified i guess, except these stats are one byte for some reason
