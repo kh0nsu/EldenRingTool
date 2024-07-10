@@ -71,7 +71,7 @@ namespace EldenRingTool
             SOUND_VIEW, TARGETING_VIEW,
             EVENT_VIEW, EVENT_STOP,
             FREE_CAMERA, FREE_CAMERA_CONTROL, NO_CLIP, ALLOW_MAP_COMBAT, TORRENT_ANYWHERE,
-            DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIEVEMENTS,
+            DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIEVEMENTS, MUTE_MUSIC,
             ADD_SOULS,
             GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
             FPS_30, FPS_60, FPS_120, FPS_144, FPS_240, FPS_1000,
@@ -465,6 +465,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.TORRENT_ANYWHERE: chkTorrentAnywhere.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.DISABLE_STEAM_INPUT_ENUM: chkSteamInputEnum.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.DISABLE_STEAM_ACHIEVEMENTS: chkSteamAchieve.IsChecked ^= true; break;
+                case HOTKEY_ACTIONS.MUTE_MUSIC: chkMuteMusic.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.ADD_SOULS: addSouls(null, null); break;
                 case HOTKEY_ACTIONS.GAME_SPEED_50PC: _process.getSetGameSpeed(0.5f); break;
                 case HOTKEY_ACTIONS.GAME_SPEED_75PC: _process.getSetGameSpeed(0.75f); break;
@@ -1489,6 +1490,16 @@ namespace EldenRingTool
         private void oneShotOff(object sender, RoutedEventArgs e)
         {
             _process.offAndUnFreeze(ERProcess.DebugOpts.ONE_SHOT);
+        }
+
+        private void muteMusic(object sender, RoutedEventArgs e)
+        {
+            _process.doMusicMutePatch(true);
+        }
+
+        private void unmuteMusic(object sender, RoutedEventArgs e)
+        {
+            _process.doMusicMutePatch(false);
         }
     }
 }

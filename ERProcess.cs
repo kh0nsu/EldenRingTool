@@ -428,6 +428,8 @@ namespace EldenRingTool
         int scadOffset = 0; //should be 0xfc or close to it
         bool exeSupportsDlc() { return scadOffset > 0 && scadOffset < 0x10000; } //if no plausible value is found then the exe is too old
 
+        int musicMuteLoc = 0;
+
         //scanning for above addresses
         void aobScan()
         {//see https://github.com/kh0nsu/FromAobScan
@@ -520,6 +522,8 @@ namespace EldenRingTool
             torrentIDOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B81 ????0000 48 C702 FFFFFFFF 48 85C0 74 0A 48 8B80 ????0000 48 8902 48 8BC2", "TorrentIDOffset", 3 + 4 + 3 + 4 + 3 + 2 + 3, startIndex: 6400000);
 
             scadOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "80 b9 ?? ?? 00 00 00 74 08 0f b6 81 ?? ?? 00 00 c3 0f b6 81 ?? ?? 00 00 c3", "CS::PlayerGameData::GetScadutreeBlessing (scadu offset in pgdata)", readoffset32: 20, startIndex: 2000000);
+
+            musicMuteLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "0f b6 48 04 0f 29 74 24 70 0f 57 f6 0f 29 7c 24 60", "Music volume read (patch 31C99090 to mute)", startIndex: 13000000);
 
             var cave = "";
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
@@ -619,6 +623,9 @@ namespace EldenRingTool
 
         const byte enemyRepeatActionPatchVal108 = 0xC2;
         const byte enemyRepeatActionOrigVal108 = 0xC1;
+
+        readonly byte[] musicMuteOrig = { 0x0f, 0xb6, 0x48, 0x04 }; //MOVZX ECX,byte ptr[RAX + 0x4]
+        readonly byte[] musicMutePatch = { 0x31, 0xC9, 0x90, 0x90 }; //xor ecx,ecx; nop; nop
 
         //patch functions, helper functions, etc.
 
@@ -860,6 +867,24 @@ namespace EldenRingTool
             if (!ReadBytes(erBase + EventPatchLoc2, 2).SequenceEqual(eventPatch))
             {
                 WriteBytes(erBase + EventPatchLoc2, eventPatch);
+            }
+        }
+
+        public void doMusicMutePatch(bool on)
+        {
+            if (on)
+            {
+                if (ReadBytes(erBase + musicMuteLoc, 4).SequenceEqual(musicMuteOrig))
+                {
+                    WriteBytes(erBase + musicMuteLoc, musicMutePatch);
+                }
+            }
+            else
+            {
+                if (ReadBytes(erBase + musicMuteLoc, 4).SequenceEqual(musicMutePatch))
+                {
+                    WriteBytes(erBase + musicMuteLoc, musicMuteOrig);
+                }
             }
         }
 
