@@ -299,7 +299,7 @@ namespace EldenRingTool
             ONE_HP,
             MAX_HP, RUNE_ARC,
             TARGET_HP,
-            DISABLE_AI, NO_STAM, NO_FP, NO_GOODS, //TODO: one shot?
+            DISABLE_AI, NO_STAM, NO_FP, NO_GOODS, NO_ARROWS, ONE_SHOT,
             NO_GRAVITY_ALTERNATE, NO_MAP_COLLISION, NO_GRAVITY,
             TORRENT_NO_DEATH, TORRENT_NO_GRAV_ALT, TORRENT_NO_MAP_COLL, TORRENT_NO_GRAV,
             TOP_DEBUG_MENU,
@@ -1042,6 +1042,14 @@ namespace EldenRingTool
                 case DebugOpts.NO_FP:
                 {
                     return (erBase + noGoodsConsume + 2, 1);
+                }
+                case DebugOpts.NO_ARROWS:
+                {
+                    return (erBase + noGoodsConsume + 3, 1);
+                }
+                case DebugOpts.ONE_SHOT:
+                {
+                    return (erBase + noGoodsConsume - 1, 1);
                 }
                 case DebugOpts.NO_GRAVITY_ALTERNATE: //not currently used
                 {//this is the "another no gravity" pointer. there is another flag available (the not-another one)

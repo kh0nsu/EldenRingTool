@@ -1267,11 +1267,13 @@ namespace EldenRingTool
         private void noGoodsOn(object sender, RoutedEventArgs e)
         {
             _process.freezeOn(ERProcess.DebugOpts.NO_GOODS);
+            _process.freezeOn(ERProcess.DebugOpts.NO_ARROWS);
         }
 
         private void noGoodsOff(object sender, RoutedEventArgs e)
         {
             _process.offAndUnFreeze(ERProcess.DebugOpts.NO_GOODS);
+            _process.offAndUnFreeze(ERProcess.DebugOpts.NO_ARROWS);
         }
 
         private void moveCamToPlayer(object sender, RoutedEventArgs e)
