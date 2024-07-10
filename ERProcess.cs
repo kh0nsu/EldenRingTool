@@ -1576,13 +1576,23 @@ namespace EldenRingTool
         }
 
         public void addRunes(int amount = 1000000)
-        {//TODO: also update 'soul memory', otherwise servers could easily check this and see that rune count is artificial.
+        {//also update 'soul memory', otherwise servers could easily check this and see that rune count is artificial. still no guarantees.
             var ptr = (IntPtr)getCharPtrGameData() + 0x6c; //this location is close to player name (9c) and multiplayer group passwords a bit later.
             var souls = ReadInt32(ptr);
-            souls += amount;
-            if (souls < 0) { souls = 0; }
-            if (souls > 999999999) { souls = 999999999; }//rune cap
-            WriteInt32(ptr, souls);
+            var soulMemory = ReadInt32(ptr + 4);
+
+            var newSouls = souls + amount;
+            if (newSouls < 0) { newSouls = 0; }
+            if (newSouls > 999999999) { newSouls = 999999999; }//rune cap
+
+            var increase = newSouls - souls;
+            var newSoulMemory = soulMemory;
+            if (increase > 0)
+            {
+                newSoulMemory += increase;
+            }
+            WriteInt32(ptr, newSouls);
+            WriteInt32(ptr + 4, newSoulMemory);
         }
 
         public bool isRiding()
