@@ -1229,31 +1229,29 @@ namespace EldenRingTool
         {
             var pos = _process.getMapCoords();
             var name = Microsoft.VisualBasic.Interaction.InputBox("Enter a name for this location", "Location name", "Somewhere");
-            var str = TeleportHelper.mapCoordsToString(pos) + "," + name;
-            try
+            if (!string.IsNullOrEmpty(name))
             {
-                File.AppendAllText(posDbFile(), str + Environment.NewLine);
+                var str = TeleportHelper.mapCoordsToString(pos) + "," + name;
+                try
+                {
+                    File.AppendAllText(posDbFile(), str + Environment.NewLine);
+                }
+                catch { }
             }
-            catch { }
         }
 
         private void restorePosDB(object sender, RoutedEventArgs e)
-        {//TODO: use selection window?
-            try
+        {
+            var dbLocations = File.ReadAllLines(posDbFile());
+            List<TeleportLocation> locations = new List<TeleportLocation>();
+            for (int i = 0; i < dbLocations.Length; i++) 
             {
-                var lines = File.ReadAllLines(posDbFile());
-                string allNames = "";
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    allNames += i + ": " + lines[i].Split(',')[5] + Environment.NewLine;
-                }
-                var selection = Microsoft.VisualBasic.Interaction.InputBox("Select a location:" + Environment.NewLine + allNames, "Location selection", "0");
-                int selID = int.Parse(selection);
-                var sel = lines[selID];
-                var pos = TeleportHelper.mapCoordsFromString(sel);
-                doGlobalTP(pos);
+                locations.Add(new TeleportLocation(dbLocations[i]));   
             }
-            catch { }
+
+            var sel = new Selection(locations.ToList<object>(), (x) => { doGlobalTP((x as TeleportLocation).getCoords()); }, "Choose a location: ");
+            sel.Owner = this;
+            sel.Show();
         }
 
         private void combatMapOn(object sender, RoutedEventArgs e)
