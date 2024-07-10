@@ -64,17 +64,18 @@ namespace EldenRingTool
             NO_DEATH, ALL_NO_DEATH,
             ONE_HP, MAX_HP, DIE, RUNE_ARC,
             DISABLE_AI, REPEAT_ENEMY_ACTIONS,
-            INF_STAM, INF_FP, INF_CONSUM,
+            INF_STAM, INF_FP, INF_CONSUM, ONE_SHOT,
             NO_GRAVITY, NO_MAP_COL,
             TORRENT_NO_DEATH, TORRENT_NO_GRAV, TORRENT_NO_MAP_COL,
             POISE_VIEW,
             SOUND_VIEW, TARGETING_VIEW,
             EVENT_VIEW, EVENT_STOP,
             FREE_CAMERA, FREE_CAMERA_CONTROL, NO_CLIP, ALLOW_MAP_COMBAT, TORRENT_ANYWHERE,
-            DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIEVEMENTS,
+            DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIEVEMENTS, MUTE_MUSIC,
             ADD_SOULS,
             GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
             FPS_30, FPS_60, FPS_120, FPS_144, FPS_240, FPS_1000,
+            TOGGLE_STATS_FULL, TOGGLE_RESISTS, TOGGLE_COORDS,
         }
 
         ERProcess _process = null;
@@ -202,7 +203,7 @@ namespace EldenRingTool
         {
             try
             {
-                var windowInfo = $"{Left} {Top} {isCompact} {resistsPanel.Visibility}";
+                var windowInfo = $"{Left} {Top} {isCompact} {resistsPanel.Visibility} {chkSteamInputEnum.IsChecked} {chkSteamAchieve.IsChecked} {chkMuteMusic.IsChecked}";
                 File.WriteAllText(windowStateFile(), windowInfo);
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
@@ -230,6 +231,13 @@ namespace EldenRingTool
                 }
                 if (compact) { setCompact(); } //default full
                 if (vis == Visibility.Visible.ToString()) { toggleResists(null, null); } //default hidden
+
+                if (spl.Length >= 7)
+                {
+                    chkSteamInputEnum.IsChecked = bool.Parse(spl[4]);
+                    chkSteamAchieve.IsChecked = bool.Parse(spl[5]);
+                    chkMuteMusic.IsChecked = bool.Parse(spl[6]);
+                }
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
         }
@@ -446,6 +454,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.INF_STAM: chkInfStam.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.INF_FP: chkInfFP.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.INF_CONSUM: chkInfConsum.IsChecked ^= true; break;
+                case HOTKEY_ACTIONS.ONE_SHOT: chkOneShot.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.NO_GRAVITY: chkPlayerNoGrav.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.NO_MAP_COL: chkPlayerNoMapCol.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.TORRENT_NO_DEATH: chkTorNoDeath.IsChecked ^= true; break;
@@ -463,6 +472,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.TORRENT_ANYWHERE: chkTorrentAnywhere.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.DISABLE_STEAM_INPUT_ENUM: chkSteamInputEnum.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.DISABLE_STEAM_ACHIEVEMENTS: chkSteamAchieve.IsChecked ^= true; break;
+                case HOTKEY_ACTIONS.MUTE_MUSIC: chkMuteMusic.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.ADD_SOULS: addSouls(null, null); break;
                 case HOTKEY_ACTIONS.GAME_SPEED_50PC: _process.getSetGameSpeed(0.5f); break;
                 case HOTKEY_ACTIONS.GAME_SPEED_75PC: _process.getSetGameSpeed(0.75f); break;
@@ -478,6 +488,9 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.FPS_144: _process.getSetFrameTimeTarget(1 / 144.0f); break;
                 case HOTKEY_ACTIONS.FPS_240: _process.getSetFrameTimeTarget(1 / 240.0f); break;
                 case HOTKEY_ACTIONS.FPS_1000: _process.getSetFrameTimeTarget(1 / 1000.0f); break;
+                case HOTKEY_ACTIONS.TOGGLE_STATS_FULL: toggleStatsFull(null, null); break;
+                case HOTKEY_ACTIONS.TOGGLE_RESISTS: toggleResists(null, null); break;
+                case HOTKEY_ACTIONS.TOGGLE_COORDS: toggleCoords(null, null); break;
                 default: Utils.debugWrite("Action not handled: " + act.ToString()); break;
             }
         }
@@ -1180,7 +1193,7 @@ namespace EldenRingTool
         }
 
         
-        private void hpPoiseOnly(object sender, RoutedEventArgs e)
+        private void toggleStatsFull(object sender, RoutedEventArgs e)
         {
             if (!isCompact)
             {
@@ -1225,31 +1238,29 @@ namespace EldenRingTool
         {
             var pos = _process.getMapCoords();
             var name = Microsoft.VisualBasic.Interaction.InputBox("Enter a name for this location", "Location name", "Somewhere");
-            var str = TeleportHelper.mapCoordsToString(pos) + "," + name;
-            try
+            if (!string.IsNullOrEmpty(name))
             {
-                File.AppendAllText(posDbFile(), str + Environment.NewLine);
+                var str = TeleportHelper.mapCoordsToString(pos) + "," + name;
+                try
+                {
+                    File.AppendAllText(posDbFile(), str + Environment.NewLine);
+                }
+                catch { }
             }
-            catch { }
         }
 
         private void restorePosDB(object sender, RoutedEventArgs e)
-        {//TODO: use selection window?
-            try
+        {
+            var dbLocations = File.ReadAllLines(posDbFile());
+            var locations = new List<TeleportLocation>();
+            for (int i = 0; i < dbLocations.Length; i++) 
             {
-                var lines = File.ReadAllLines(posDbFile());
-                string allNames = "";
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    allNames += i + ": " + lines[i].Split(',')[5] + Environment.NewLine;
-                }
-                var selection = Microsoft.VisualBasic.Interaction.InputBox("Select a location:" + Environment.NewLine + allNames, "Location selection", "0");
-                int selID = int.Parse(selection);
-                var sel = lines[selID];
-                var pos = TeleportHelper.mapCoordsFromString(sel);
-                doGlobalTP(pos);
+                locations.Add(new TeleportLocation(dbLocations[i]));   
             }
-            catch { }
+
+            var sel = new Selection(locations.ToList<object>(), (x) => { doGlobalTP((x as TeleportLocation).getCoords()); }, "Choose a location: ");
+            sel.Owner = this;
+            sel.Show();
         }
 
         private void combatMapOn(object sender, RoutedEventArgs e)
@@ -1265,11 +1276,13 @@ namespace EldenRingTool
         private void noGoodsOn(object sender, RoutedEventArgs e)
         {
             _process.freezeOn(ERProcess.DebugOpts.NO_GOODS);
+            _process.freezeOn(ERProcess.DebugOpts.NO_ARROWS);
         }
 
         private void noGoodsOff(object sender, RoutedEventArgs e)
         {
             _process.offAndUnFreeze(ERProcess.DebugOpts.NO_GOODS);
+            _process.offAndUnFreeze(ERProcess.DebugOpts.NO_ARROWS);
         }
 
         private void moveCamToPlayer(object sender, RoutedEventArgs e)
@@ -1474,6 +1487,26 @@ namespace EldenRingTool
             {
                 _process.getSetPlayerHP(newValInt);
             }
+        }
+
+        private void oneShotOn(object sender, RoutedEventArgs e)
+        {
+            _process.freezeOn(ERProcess.DebugOpts.ONE_SHOT);
+        }
+
+        private void oneShotOff(object sender, RoutedEventArgs e)
+        {
+            _process.offAndUnFreeze(ERProcess.DebugOpts.ONE_SHOT);
+        }
+
+        private void muteMusic(object sender, RoutedEventArgs e)
+        {
+            _process.doMusicMutePatch(true);
+        }
+
+        private void unmuteMusic(object sender, RoutedEventArgs e)
+        {
+            _process.doMusicMutePatch(false);
         }
 
         private void dockPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

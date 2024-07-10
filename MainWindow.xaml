@@ -15,7 +15,7 @@
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="PlayerPanel">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,8,0" >
+                    <StackPanel Orientation="Horizontal" Margin="0,0,8,0">
                         <CheckBox Checked="noDeathOn" Unchecked="noDeathOff" x:Name="chkPlayerNoDeath" Content="No Death" Margin="0,0,10,0"/>
                         <CheckBox Checked="oneHPOn" Unchecked="oneHPOff" x:Name="chkOneHP" Content="1 HP" Margin="0,0,10,0"/>
                         <CheckBox Checked="maxHPOn" Unchecked="maxHPOff" Margin="0,0,10,0" x:Name="chkMaxHP" Content="Max HP"/>
@@ -25,13 +25,14 @@
                         <CheckBox Checked="noStamOn" Unchecked="noStamOff" x:Name="chkInfStam" Content="Inf Stam" Margin="0,0,10,0"/>
                         <CheckBox Checked="noFPOn" Unchecked="noFPOff" Margin="0,0,10,0" x:Name="chkInfFP" Content="Inf FP"/>
                         <CheckBox Checked="noGoodsOn" Unchecked="noGoodsOff" Margin="0,0,10,0" x:Name="chkInfConsum" Content="Inf Consum."/>
+                        <CheckBox Checked="oneShotOn" Unchecked="oneShotOff" Margin="0,0,10,0" x:Name="chkOneShot" Content="One-Shot"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                         <Button Click="spawnItem" Content="Spawn Item" Margin="1,0,5,0"/>
                         <Button Click="editStats" Margin="1,0,5,0" Content="Edit Stats"/>
                         <Button Click="addSouls" Content="Add 1M Runes" Margin="1,0,5,0" RenderTransformOrigin="1.746,-20.477"/>
-                        <Button Click="btnSetPlayerHP_Click" x:Name="btnSetPlayerHP" Content="Set HP" Margin="0,0,5,0"/>
-                        <Button Click="instantDeath" x:Name="btnDie" Margin="0,0,5,0" Content="Die"/>
+                        <Button Click="btnSetPlayerHP_Click" x:Name="btnSetPlayerHP" Content="Set HP" Margin="1,0,5,0"/>
+                        <Button Click="instantDeath" x:Name="btnDie" Margin="1,0,5,0" Content="Die"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
@@ -172,6 +173,9 @@
                         <CheckBox Checked="steamInputEnumDisableOn" Unchecked="steamInputEnumDisableOff" x:Name="chkSteamInputEnum" Content="Stutter Fix"/>
                         <CheckBox Checked="disableAchieveOn" Unchecked="disableAchieveOff" x:Name="chkSteamAchieve" Margin="5,0" Content="Disable Achievements (Freeze Fix)"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Checked="muteMusic" Unchecked="unmuteMusic" x:Name="chkMuteMusic" Content="Mute Music"/>
+                    </StackPanel>
                 </StackPanel>
                 <Button Click="installTargetHook" Margin="0,5" x:Name="targetHookButton" Content="Enable target options"/>
             </StackPanel>
@@ -237,7 +241,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,0" x:Name="resizePanel">
                 <CheckBox Checked="stayOnTop" Unchecked="dontStayOnTop" FontSize="10" Margin="5,0" x:Name="chkStayOnTop">Stay on top</CheckBox>
-                <Button FontSize="10" Click="hpPoiseOnly" x:Name="compactButton">Toggle Stats/Full</Button>
+                <Button FontSize="10" Click="toggleStatsFull" x:Name="compactButton">Toggle Stats/Full</Button>
                 <Button FontSize="10" Click="toggleResists" x:Name="resistsToggle" Margin="5,0">Toggle Resists</Button>
                 <Button FontSize="10" Click="toggleCoords" x:Name="coordsToggle" Margin="0,0">Toggle Coords</Button>
             </StackPanel>

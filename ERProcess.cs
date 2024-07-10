@@ -299,7 +299,7 @@ namespace EldenRingTool
             ONE_HP,
             MAX_HP, RUNE_ARC,
             TARGET_HP,
-            DISABLE_AI, NO_STAM, NO_FP, NO_GOODS, //TODO: one shot?
+            DISABLE_AI, NO_STAM, NO_FP, NO_GOODS, NO_ARROWS, ONE_SHOT,
             NO_GRAVITY_ALTERNATE, NO_MAP_COLLISION, NO_GRAVITY,
             TORRENT_NO_DEATH, TORRENT_NO_GRAV_ALT, TORRENT_NO_MAP_COLL, TORRENT_NO_GRAV,
             TOP_DEBUG_MENU,
@@ -425,6 +425,11 @@ namespace EldenRingTool
         uint pgDataOffset = 0x570; //patch stable so far
         uint torrentIDOffset = 0x930; //also appears patch stable
 
+        int scadOffset = 0; //should be 0xfc or close to it
+        bool exeSupportsDlc() { return scadOffset > 0 && scadOffset < 0x10000; } //if no plausible value is found then the exe is too old
+
+        int musicMuteLoc = 0;
+
         //scanning for above addresses
         void aobScan()
         {//see https://github.com/kh0nsu/FromAobScan
@@ -515,6 +520,10 @@ namespace EldenRingTool
             chrSetOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B8CFE ??????00 48 85C9 74 ?? 4C 8B01 8BD0 41 FF50 ?? 48 8B7C24 ?? 48 8B5C24 ?? 48 83C4 ??", "worldChrManChrSetOffset", 4, startIndex: 5000000);
             pgDataOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B81 ????0000 48 C702 FFFFFFFF 48 85C0 74 0A 48 8B80 ????0000 48 8902 48 8BC2", "PGDataOffset", 3, startIndex: 6400000);
             torrentIDOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B81 ????0000 48 C702 FFFFFFFF 48 85C0 74 0A 48 8B80 ????0000 48 8902 48 8BC2", "TorrentIDOffset", 3 + 4 + 3 + 4 + 3 + 2 + 3, startIndex: 6400000);
+
+            scadOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "80 b9 ?? ?? 00 00 00 74 08 0f b6 81 ?? ?? 00 00 c3 0f b6 81 ?? ?? 00 00 c3", "CS::PlayerGameData::GetScadutreeBlessing (scadu offset in pgdata)", readoffset32: 20, startIndex: 2000000);
+
+            musicMuteLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "0f b6 48 04 0f 29 74 24 70 0f 57 f6 0f 29 7c 24 60", "Music volume read (patch 31C99090 to mute)", startIndex: 13000000);
 
             var cave = "";
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
@@ -614,6 +623,9 @@ namespace EldenRingTool
 
         const byte enemyRepeatActionPatchVal108 = 0xC2;
         const byte enemyRepeatActionOrigVal108 = 0xC1;
+
+        readonly byte[] musicMuteOrig = { 0x0f, 0xb6, 0x48, 0x04 }; //MOVZX ECX,byte ptr[RAX + 0x4]
+        readonly byte[] musicMutePatch = { 0x31, 0xC9, 0x90, 0x90 }; //xor ecx,ecx; nop; nop
 
         //patch functions, helper functions, etc.
 
@@ -858,6 +870,24 @@ namespace EldenRingTool
             }
         }
 
+        public void doMusicMutePatch(bool on)
+        {
+            if (on)
+            {
+                if (ReadBytes(erBase + musicMuteLoc, 4).SequenceEqual(musicMuteOrig))
+                {
+                    WriteBytes(erBase + musicMuteLoc, musicMutePatch);
+                }
+            }
+            else
+            {
+                if (ReadBytes(erBase + musicMuteLoc, 4).SequenceEqual(musicMutePatch))
+                {
+                    WriteBytes(erBase + musicMuteLoc, musicMuteOrig);
+                }
+            }
+        }
+
         public bool patchLogos()
         {//see https://github.com/bladecoding/DarkSouls3RemoveIntroScreens/blob/master/SoulsSkipIntroScreen/dllmain.cpp, or my fork i guess
             if (logoScreenBase < 0) { return false; }
@@ -1037,6 +1067,14 @@ namespace EldenRingTool
                 case DebugOpts.NO_FP:
                 {
                     return (erBase + noGoodsConsume + 2, 1);
+                }
+                case DebugOpts.NO_ARROWS:
+                {
+                    return (erBase + noGoodsConsume + 3, 1);
+                }
+                case DebugOpts.ONE_SHOT:
+                {
+                    return (erBase + noGoodsConsume - 1, 1);
                 }
                 case DebugOpts.NO_GRAVITY_ALTERNATE: //not currently used
                 {//this is the "another no gravity" pointer. there is another flag available (the not-another one)
@@ -1352,19 +1390,38 @@ namespace EldenRingTool
             return ret;
         }
 
-        int statsOffset = 0x3c; //possible but unlikely to change between patches
-        readonly string[] STAT_NAMES = new string[] { "Vigor", "Mind", "Endurance", "Strength", "Dexterity", "Intelligence", "Faith", "Arcane" };
+        int statsOffset = 0x3c; //possible but unlikely to change between patches. TODO: scan?
+        int levelOffset = 0x68; //same
+        public readonly string[] STAT_NAMES = new string[] { "Vigor", "Mind", "Endurance", "Strength", "Dexterity", "Intelligence", "Faith", "Arcane" };
+        public readonly string[] DLC_STAT_NAMES = new string[] { "Scadu", "Ash" };
         public List<(string, int)> getSetPlayerStats(List<(string,int)> newStats = null)
         {
             var ptr = (IntPtr)getCharPtrGameData();
             var ret = new List<(string, int)>();
 
-            for (int i = 0; i < STAT_NAMES.Length; i++)
+            int newLevel = -79; //+ 10 * 8 stats = RL1
+            int i = 0;
+            for (; i < STAT_NAMES.Length; i++)
             {
                 int statOffset = statsOffset + i * 4;
                 int currentVal = ReadInt32(ptr + statOffset);
-                if (newStats != null) { WriteInt32(ptr + statOffset, newStats[i].Item2); }
+                if (newStats != null) { WriteInt32(ptr + statOffset, newStats[i].Item2); newLevel += newStats[i].Item2; }
                 ret.Add((STAT_NAMES[i], currentVal));
+            }
+            if (newStats != null)
+            {
+                WriteInt32(ptr + levelOffset, newLevel);
+            }
+
+            if (exeSupportsDlc())
+            {//could be simplified i guess, except these stats are one byte for some reason
+                for (int j = 0; j < DLC_STAT_NAMES.Length; j++)
+                {
+                    int statOffset = scadOffset + j;
+                    var currentVal = ReadUInt8(ptr + statOffset);
+                    if (newStats != null) { WriteUInt8(ptr + statOffset, (byte)newStats[i + j].Item2); }
+                    ret.Add((DLC_STAT_NAMES[j], currentVal));
+                }
             }
             return ret;
         }
@@ -1519,13 +1576,23 @@ namespace EldenRingTool
         }
 
         public void addRunes(int amount = 1000000)
-        {//TODO: also update 'soul memory', otherwise servers could easily check this and see that rune count is artificial.
+        {//also update 'soul memory', otherwise servers could easily check this and see that rune count is artificial. still no guarantees.
             var ptr = (IntPtr)getCharPtrGameData() + 0x6c; //this location is close to player name (9c) and multiplayer group passwords a bit later.
             var souls = ReadInt32(ptr);
-            souls += amount;
-            if (souls < 0) { souls = 0; }
-            if (souls > 999999999) { souls = 999999999; }//rune cap
-            WriteInt32(ptr, souls);
+            var soulMemory = ReadInt32(ptr + 4);
+
+            var newSouls = souls + amount;
+            if (newSouls < 0) { newSouls = 0; }
+            if (newSouls > 999999999) { newSouls = 999999999; }//rune cap
+
+            var increase = newSouls - souls;
+            var newSoulMemory = soulMemory;
+            if (increase > 0)
+            {
+                newSoulMemory += increase;
+            }
+            WriteInt32(ptr, newSouls);
+            WriteInt32(ptr + 4, newSoulMemory);
         }
 
         public bool isRiding()
@@ -1761,6 +1828,28 @@ namespace EldenRingTool
                 loadDB();
                 return ashes;
             }
+        }
+    }
+
+    public class TeleportLocation
+    {
+        (float, float, float, float, uint) coords;
+        string name;
+
+        public TeleportLocation(string dbString)
+        {
+            coords = TeleportHelper.mapCoordsFromString(dbString);
+            name = string.Join(",", dbString.Split(',').Skip(5));
+        }
+
+        public (float, float, float, float, uint) getCoords()
+        {
+            return coords;
+        }
+
+        public override string ToString()
+        {
+            return name;
         }
     }
 }
