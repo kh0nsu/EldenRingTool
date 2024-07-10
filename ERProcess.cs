@@ -425,6 +425,9 @@ namespace EldenRingTool
         uint pgDataOffset = 0x570; //patch stable so far
         uint torrentIDOffset = 0x930; //also appears patch stable
 
+        int scadOffset = 0; //should be 0xfc or close to it
+        bool exeSupportsDlc() { return scadOffset > 0 && scadOffset < 0x10000; } //if no plausible value is found then the exe is too old
+
         //scanning for above addresses
         void aobScan()
         {//see https://github.com/kh0nsu/FromAobScan
@@ -515,6 +518,8 @@ namespace EldenRingTool
             chrSetOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B8CFE ??????00 48 85C9 74 ?? 4C 8B01 8BD0 41 FF50 ?? 48 8B7C24 ?? 48 8B5C24 ?? 48 83C4 ??", "worldChrManChrSetOffset", 4, startIndex: 5000000);
             pgDataOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B81 ????0000 48 C702 FFFFFFFF 48 85C0 74 0A 48 8B80 ????0000 48 8902 48 8BC2", "PGDataOffset", 3, startIndex: 6400000);
             torrentIDOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B81 ????0000 48 C702 FFFFFFFF 48 85C0 74 0A 48 8B80 ????0000 48 8902 48 8BC2", "TorrentIDOffset", 3 + 4 + 3 + 4 + 3 + 2 + 3, startIndex: 6400000);
+
+            scadOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "80 b9 ?? ?? 00 00 00 74 08 0f b6 81 ?? ?? 00 00 c3 0f b6 81 ?? ?? 00 00 c3", "CS::PlayerGameData::GetScadutreeBlessing (scadu offset in pgdata)", readoffset32: 20, startIndex: 2000000);
 
             var cave = "";
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
@@ -1352,19 +1357,34 @@ namespace EldenRingTool
             return ret;
         }
 
-        int statsOffset = 0x3c; //possible but unlikely to change between patches
-        readonly string[] STAT_NAMES = new string[] { "Vigor", "Mind", "Endurance", "Strength", "Dexterity", "Intelligence", "Faith", "Arcane" };
+        int statsOffset = 0x3c; //possible but unlikely to change between patches. TODO: scan?
+        public readonly string[] STAT_NAMES = new string[] { "Vigor", "Mind", "Endurance", "Strength", "Dexterity", "Intelligence", "Faith", "Arcane" };
+        public readonly string[] DLC_STAT_NAMES = new string[] { "Scadu", "Ash" };
         public List<(string, int)> getSetPlayerStats(List<(string,int)> newStats = null)
         {
             var ptr = (IntPtr)getCharPtrGameData();
             var ret = new List<(string, int)>();
 
-            for (int i = 0; i < STAT_NAMES.Length; i++)
+            int newLevel = -79; //+ 10 * 8 stats = RL1
+            int i = 0;
+            for (; i < STAT_NAMES.Length; i++)
             {
                 int statOffset = statsOffset + i * 4;
                 int currentVal = ReadInt32(ptr + statOffset);
-                if (newStats != null) { WriteInt32(ptr + statOffset, newStats[i].Item2); }
+                if (newStats != null) { WriteInt32(ptr + statOffset, newStats[i].Item2); newLevel += newStats[i].Item2; }
                 ret.Add((STAT_NAMES[i], currentVal));
+            }
+            //TODO: update level if we're setting stats
+
+            if (exeSupportsDlc())
+            {//could be simplified i guess, except these stats are one byte for some reason
+                for (int j = 0; j < DLC_STAT_NAMES.Length; j++)
+                {
+                    int statOffset = scadOffset + j;
+                    var currentVal = ReadUInt8(ptr + statOffset);
+                    if (newStats != null) { WriteUInt8(ptr + statOffset, (byte)newStats[i + j].Item2); }
+                    ret.Add((DLC_STAT_NAMES[j], currentVal));
+                }
             }
             return ret;
         }
