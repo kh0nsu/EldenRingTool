@@ -64,7 +64,7 @@ namespace EldenRingTool
             NO_DEATH, ALL_NO_DEATH,
             ONE_HP, MAX_HP, DIE, RUNE_ARC,
             DISABLE_AI, REPEAT_ENEMY_ACTIONS,
-            INF_STAM, INF_FP, INF_CONSUM,
+            INF_STAM, INF_FP, INF_CONSUM, ONE_SHOT,
             NO_GRAVITY, NO_MAP_COL,
             TORRENT_NO_DEATH, TORRENT_NO_GRAV, TORRENT_NO_MAP_COL,
             POISE_VIEW,
@@ -447,6 +447,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.INF_STAM: chkInfStam.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.INF_FP: chkInfFP.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.INF_CONSUM: chkInfConsum.IsChecked ^= true; break;
+                case HOTKEY_ACTIONS.ONE_SHOT: chkOneShot.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.NO_GRAVITY: chkPlayerNoGrav.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.NO_MAP_COL: chkPlayerNoMapCol.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.TORRENT_NO_DEATH: chkTorNoDeath.IsChecked ^= true; break;
@@ -1478,6 +1479,16 @@ namespace EldenRingTool
             {
                 _process.getSetPlayerHP(newValInt);
             }
+        }
+
+        private void oneShotOn(object sender, RoutedEventArgs e)
+        {
+            _process.freezeOn(ERProcess.DebugOpts.ONE_SHOT);
+        }
+
+        private void oneShotOff(object sender, RoutedEventArgs e)
+        {
+            _process.offAndUnFreeze(ERProcess.DebugOpts.ONE_SHOT);
         }
     }
 }

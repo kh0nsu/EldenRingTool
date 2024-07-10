@@ -24,6 +24,7 @@
                     <CheckBox Checked="noStamOn" Unchecked="noStamOff" x:Name="chkInfStam" Content="Inf Stam" Margin="0,0,10,0"/>
                     <CheckBox Checked="noFPOn" Unchecked="noFPOff" Margin="0,0,10,0" x:Name="chkInfFP" Content="Inf FP"/>
                     <CheckBox Checked="noGoodsOn" Unchecked="noGoodsOff" Margin="0,0,10,0" x:Name="chkInfConsum" Content="Inf Consum."/>
+                    <CheckBox Checked="oneShotOn" Unchecked="oneShotOff" Margin="0,0,10,0" x:Name="chkOneShot" Content="One-Shot"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                     <Button Click="spawnItem" Content="Spawn Item" Margin="1,0,5,0"/>
