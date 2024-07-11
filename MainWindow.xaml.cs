@@ -1258,7 +1258,7 @@ namespace EldenRingTool
                 locations.Add(new TeleportLocation(dbLocations[i]));   
             }
 
-            var sel = new Selection(locations.ToList<object>(), (x) => { doGlobalTP((x as TeleportLocation).getCoords()); }, "Choose a location: ");
+            var sel = new Selection(locations.ToList<object>(), (x) => { if (x != null) { doGlobalTP((x as TeleportLocation).getCoords()); } }, "Choose a location: ");
             sel.Owner = this;
             sel.Show();
         }
