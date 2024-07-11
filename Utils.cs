@@ -326,7 +326,7 @@ namespace MiscUtils
 
         public bool outputConsole = true;
 
-        public int findAddr(byte[] buf, int blockVirtualAddr, string find, string desc, int readoffset32 = -1000, int nextInstOffset = -1000, int justOffset = -1000, int startIndex = 0, bool singleMatch = true)
+        public int findAddr(byte[] buf, int blockVirtualAddr, string find, string desc, int readoffset32 = -1000, int nextInstOffset = -1000, int justOffset = -1000, int startIndex = 0, bool singleMatch = true, Action<int> callback = null)
         {//TODO: for single match and non-zero start index, try zero start index if no match is found?
             int count = 0;
 
@@ -370,6 +370,7 @@ namespace MiscUtils
                     if (outputConsole) { Console.WriteLine(output); }
                     index += fb.Length; //keep searching in case there's multiple.
                 }
+                if (index != -1 && callback != null) { callback(result); }
             }
             while (index != -1 && !singleMatch);
             if (0 == count) { Console.WriteLine("Nothing found for " + desc); }

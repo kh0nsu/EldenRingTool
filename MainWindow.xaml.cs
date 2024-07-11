@@ -1508,5 +1508,12 @@ namespace EldenRingTool
         {
             _process.doMusicMutePatch(false);
         }
+
+        private void openMenu(object sender, RoutedEventArgs e)
+        {
+            var sel = new Selection(_process.MENUS.ToList<object>(), x => _process.openMenuByName(x as string));
+            sel.Owner = this;
+            sel.Show();
+        }
     }
 }

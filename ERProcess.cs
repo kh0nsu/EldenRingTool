@@ -46,9 +46,9 @@ namespace EldenRingTool
         [DllImport("kernel32.dll")]
         private static extern bool CloseHandle(IntPtr hObject);
 
-        public uint RunThread(IntPtr address, uint timeout = 0xFFFFFFFF)
+        public uint RunThread(IntPtr address, uint timeout = 0xFFFFFFFF, IntPtr? param = null)
         {
-            var thread = CreateRemoteThread(_targetProcessHandle, IntPtr.Zero, 0, address, IntPtr.Zero, 0, IntPtr.Zero);
+            var thread = CreateRemoteThread(_targetProcessHandle, IntPtr.Zero, 0, address, param ?? IntPtr.Zero, 0, IntPtr.Zero);
             var ret = WaitForSingleObject(thread, timeout);
             CloseHandle(thread); //return value unimportant
             return ret;
@@ -349,6 +349,8 @@ namespace EldenRingTool
 
         int codeCaveCodeLoc { get { return codeCavePtrLoc + 0x10; } }
 
+        List<int> menuOffsets = new List<int>();
+
         int noGoodsConsume = 0x3C312B3;
         int noAiUpdate = 0x3C312BF;
 
@@ -524,6 +526,11 @@ namespace EldenRingTool
             scadOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "80 b9 ?? ?? 00 00 00 74 08 0f b6 81 ?? ?? 00 00 c3 0f b6 81 ?? ?? 00 00 c3", "CS::PlayerGameData::GetScadutreeBlessing (scadu offset in pgdata)", readoffset32: 20, startIndex: 2000000);
 
             musicMuteLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "0f b6 48 04 0f 29 74 24 70 0f 57 f6 0f 29 7c 24 60", "Music volume read (patch 31C99090 to mute)", startIndex: 13000000);
+
+            scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4c 8b dc 53 56 57 48 81 ec 90 00 00 00 49 c7 43 88 fe ff ff ff 48 8b d9", "bonfire menu (6 matches)", startIndex: 7500000, singleMatch: false,
+                callback: x => menuOffsets.Add(x));
+            scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4c 8b dc 53 48 81 ec 90 00 00 00 49 c7 43 88 fe ff ff ff 48 8b 05 ?? ?? ?? ?? 48 33 c4 48 89 84 24 80 00 00 00 48 8b d9 49 c7 43 e0 00 00 00 00 49 8d 43 a8 49 89 43 90 49 8d 43 a8 49 89 43 98 48 8d 05 ?? ?? ?? ?? 49 89 43 a8 48 8d 05 ?? ?? ?? ?? 49 89 43 a8 48 8d 05 ?? ?? ?? ?? 49 89 43 b0", "three more menus", startIndex: 7500000, singleMatch: false,
+                callback: x => menuOffsets.Add(x));
 
             var cave = "";
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
@@ -760,6 +767,21 @@ namespace EldenRingTool
             WriteUInt32(erBase + itemSpawnData + 0x2C, 0); //unused?
             WriteUInt32(erBase + itemSpawnData + 0x30, ashOfWar);
             RunThread(erBase + itemSpawnStart);
+        }
+
+        void openMenuByAddr(int menuAddr)
+        {//give menu calls scratch space to write result pointer/code
+            RunThread(erBase + menuAddr, param: erBase + zeroCaveOffset);
+        }
+
+        public readonly string[] MENUS = { "Credits", "Great Rune", "Mix Physick", "Ashes of War", "Send player home", "Memorise Spell", "Level Up", "Sort Chest", "Rebirth" };
+
+        public void openMenuByName(string name)
+        {
+            for (int i = 0; i < MENUS.Length; i++)
+            {
+                if (MENUS[i] == name && i < menuOffsets.Count) { openMenuByAddr(menuOffsets[i]); break; }
+            }
         }
 
         public void setEnemyRepeatActionPatch(bool on)
