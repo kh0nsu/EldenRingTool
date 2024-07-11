@@ -844,12 +844,17 @@ namespace EldenRingTool
             restorePosButton.IsEnabled = true;
         }
 
+        bool inWarp = false;
+
         void doGlobalTP((float, float, float, float, uint) pos)
         {//TODO: move this into erprocess
+            if (inWarp) { return; } //block trying to warp multiple times at once as this can break the game
+            inWarp = true;
             var mapCoordsNow = _process.getMapCoords();
             if (pos.Item5 == mapCoordsNow.Item5)
             {//same map region. don't attempt warp.
                 _process.teleportToGlobal(pos);
+                inWarp = false;
                 return;
             }
 
@@ -878,6 +883,7 @@ namespace EldenRingTool
                 {
                     chkPlayerNoGrav.IsChecked = noGravState;
                     chkPlayerNoDeath.IsChecked = noDeathState;
+                    inWarp = false;
                 });
             });
             t.Start();
