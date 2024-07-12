@@ -216,8 +216,8 @@ namespace EldenRingTool
                 var windowInfo = File.ReadAllText(windowStateFile());
                 if (string.IsNullOrEmpty(windowInfo)) { return; }
                 var spl = windowInfo.Split(' ');
-                int left = int.Parse(spl[0]);
-                int top = int.Parse(spl[1]);
+                var left = double.Parse(spl[0]);
+                var top = double.Parse(spl[1]);
                 bool compact = bool.Parse(spl[2]);
                 string vis = spl[3];
                 if ((left + Width) > System.Windows.SystemParameters.VirtualScreenWidth || (top + Height) > System.Windows.SystemParameters.VirtualScreenHeight)
