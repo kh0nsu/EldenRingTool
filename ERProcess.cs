@@ -1679,7 +1679,7 @@ namespace EldenRingTool
             int walkCount = 0;
             while (!isLeaf)
             {
-                if (++walkCount > 10000) { return (IntPtr.Zero, 0); } //something is wrong
+                if (++walkCount > 1000) { return (IntPtr.Zero, 0); } //something is wrong
                 int currentGroup = ReadInt32(current + (int)EventFlagGroupNode.Group);
                 var next = IntPtr.Zero;
                 if (currentGroup < groupNum)
@@ -1753,18 +1753,18 @@ namespace EldenRingTool
 
         public void runFlagTests()
         {
-            //getSetEventFlag(65610, true);
-            //Console.WriteLine(getSetEventFlag(2200));
-            //Console.WriteLine(isGameLoaded());
-            //var sw = new Stopwatch();
-            //sw.Start();
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    var val = getSetEventFlag(i);
-            //    //if (val) { System.Diagnostics.Debugger.Break(); }
-            //}
-            //sw.Stop();
-            //Console.WriteLine($"kiloflag time {sw.ElapsedMilliseconds} ms"); //~50ms on my machine
+            Console.WriteLine(isGameLoaded());
+            var rand = new Random();
+            var sw = new Stopwatch();
+            sw.Start();
+            for (int i = 0; i < 1000; i++)
+            {
+                var val = getSetEventFlag(i);
+                //var val = getSetEventFlag(rand.Next(1000000));
+                //if (val) { System.Diagnostics.Debugger.Break(); }
+            }
+            sw.Stop();
+            Console.WriteLine($"kiloflag time {sw.ElapsedMilliseconds} ms"); //~50ms on my machine
         }
     }
 

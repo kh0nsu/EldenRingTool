@@ -1521,5 +1521,17 @@ namespace EldenRingTool
             sel.Owner = this;
             sel.Show();
         }
+
+        private void getSetFlag(object sender, RoutedEventArgs e)
+        {
+            //_process.runFlagTests();
+
+            var flagNum = Microsoft.VisualBasic.Interaction.InputBox("Enter flag number", "Flag", "");
+            if (!int.TryParse(flagNum, out var flagNumInt)) { return; }
+            var val = _process.getSetEventFlag(flagNumInt);
+            var flagVal = Microsoft.VisualBasic.Interaction.InputBox("Enter value", "Flag " + flagNumInt, val.ToString());
+            if (!bool.TryParse(flagVal, out var flagValBool)) { return; }
+            _process.getSetEventFlag(flagNumInt, flagValBool);
+        }
     }
 }
