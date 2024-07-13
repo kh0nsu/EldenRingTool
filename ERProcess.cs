@@ -432,6 +432,8 @@ namespace EldenRingTool
 
         int musicMuteLoc = 0;
 
+        int csEventFlagMan = 0;
+
         //scanning for above addresses
         void aobScan()
         {//see https://github.com/kh0nsu/FromAobScan
@@ -530,7 +532,8 @@ namespace EldenRingTool
             scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4c 8b dc 53 56 57 48 81 ec 90 00 00 00 49 c7 43 88 fe ff ff ff 48 8b d9", "bonfire menu (6 matches)", startIndex: 7500000, singleMatch: false,
                 callback: x => menuOffsets.Add(x));
             scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4c 8b dc 53 48 81 ec 90 00 00 00 49 c7 43 88 fe ff ff ff 48 8b 05 ?? ?? ?? ?? 48 33 c4 48 89 84 24 80 00 00 00 48 8b d9 49 c7 43 e0 00 00 00 00 49 8d 43 a8 49 89 43 90 49 8d 43 a8 49 89 43 98 48 8d 05 ?? ?? ?? ?? 49 89 43 a8 48 8d 05 ?? ?? ?? ?? 49 89 43 a8 48 8d 05 ?? ?? ?? ?? 49 89 43 b0", "three more menus", startIndex: 7500000, singleMatch: false,
-                callback: x => menuOffsets.Add(x));
+            callback: x => menuOffsets.Add(x));
+            csEventFlagMan = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 833D ???????? 00 0F84 ????0000 44 8BE6 85 C0 0F 84 ????0000", "GLOBAL_CSEventFlagMan", 1 + 2, 1 + 2 + 4 + 1, startIndex: 2000000);
 
             var cave = "";
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
@@ -1623,6 +1626,124 @@ namespace EldenRingTool
             var ptr2 = ReadInt64((IntPtr)ptr) + 0x160;
             var rideStatus = ReadUInt32((IntPtr)ptr2);
             return (rideStatus >> 24) == 0x01;
+        }
+
+        //thanks nord!
+        enum CSFD4VirtualMemoryFlag
+        {
+            EventFlagDivisor = 0x1C,
+            FlagHolderEntrySize = 0x20,
+            FlagHolderEntryCount = 0x24,
+            FlagHolder = 0x28,
+            FlagGroupAllocator = 0x30,
+            FlagGroupRootNode = 0x38,
+            FlagGroupEntryCount = 0x40
+        }
+        enum EventFlagGroupNode
+        {
+            Left = 0x0,
+            Parent = 0x8,
+            Right = 0x10,
+            IsLeaf = 0x19,
+            Group = 0x20,
+            LocationMode = 0x28,
+            Location = 0x30,
+        }
+        public (IntPtr,int) getEventFlagLocAndBit(int flag)
+        {
+            var evtFlagMan = (IntPtr)ReadUInt64(erBase + csEventFlagMan);
+            int divisor = ReadInt32(evtFlagMan + (int)CSFD4VirtualMemoryFlag.EventFlagDivisor); //in practice this should never change. could just hardcode to 1000
+            int entrySize = ReadInt32(evtFlagMan + (int)CSFD4VirtualMemoryFlag.FlagHolderEntrySize); //usually 125?
+            if (divisor == 0 || entrySize == 0) { return (IntPtr.Zero, 0); } //game hasn't loaded yet
+            int groupNum = flag / divisor;
+            int bitNumFull = flag % divisor;
+
+            var root = (IntPtr)ReadUInt64(evtFlagMan + (int)CSFD4VirtualMemoryFlag.FlagGroupRootNode);
+            var parent = (IntPtr)ReadUInt64(root + (int)EventFlagGroupNode.Parent);
+            var current = parent;
+            bool isLeaf = ReadUInt8(current + (int)EventFlagGroupNode.IsLeaf) != 0;
+
+            var found = root;
+
+            int walkCount = 0;
+            while (!isLeaf)
+            {
+                if (++walkCount > 10000) { return (IntPtr.Zero, 0); } //something is wrong
+                int currentGroup = ReadInt32(current + (int)EventFlagGroupNode.Group);
+                var next = IntPtr.Zero;
+                if (currentGroup < groupNum)
+                {
+                    next = (IntPtr)ReadUInt64(current + (int)EventFlagGroupNode.Right);
+                    current = found;
+                }
+                else
+                {
+                    next = (IntPtr)ReadUInt64(current + (int)EventFlagGroupNode.Left);
+                }
+
+                found = current;
+                current = next;
+                isLeaf = ReadUInt8(next + (int)EventFlagGroupNode.IsLeaf) != 0;
+            }
+
+            if (found == root || groupNum < ReadInt32(found + (int)EventFlagGroupNode.Group))
+            {//failure
+                return (IntPtr.Zero, 0);
+            }
+            int locMode = ReadInt32(found + (int)EventFlagGroupNode.LocationMode);
+            if (locMode == 2)
+            {//does this actually get used?
+                var ptr = (IntPtr)ReadUInt64(found + (int)EventFlagGroupNode.Location);
+                return (ptr, bitNumFull);
+            }
+            if (locMode == 1)
+            {
+                var flagHolder = (IntPtr)ReadUInt64(evtFlagMan + (int)CSFD4VirtualMemoryFlag.FlagHolder);
+                int loc = ReadInt32(found + (int)EventFlagGroupNode.Location);
+                int locOffset = loc * entrySize;
+                var ptr = flagHolder + locOffset;
+                return (ptr, bitNumFull);
+            }
+            //unknown loc mode; failure
+            return (IntPtr.Zero, 0);
+        }
+
+        public bool getSetEventFlag(int flag, bool? on = null)
+        {
+            var loc = getEventFlagLocAndBit(flag);
+            if (loc.Item1 == IntPtr.Zero) { Console.WriteLine($"Could not find flag {flag}"); return false; }
+            var byteNum = loc.Item2 / 8;
+            int bitNum = 7 - loc.Item2 % 8; //???
+            var flagMask = 1 << bitNum;
+            var flagByte = ReadUInt8(loc.Item1 + byteNum);
+            var flagState = (flagByte & flagMask) == flagMask;
+            if (on.HasValue)
+            {
+                if (on.Value)
+                {
+                    flagByte |= (byte)flagMask;
+                }
+                else
+                {
+                    flagByte &= (byte)~flagMask;
+                }
+                WriteUInt8(loc.Item1 + byteNum, flagByte);
+            }
+            return flagState;
+        }
+
+        public void runFlagTests()
+        {
+            Console.WriteLine(getSetEventFlag(2200));
+            //var sw = new Stopwatch();
+            //sw.Start();
+            //for (int i = 0; i < 1000; i++)
+            //{
+            //    var val = getSetEventFlag(i);
+            //    //if (val) { System.Diagnostics.Debugger.Break(); }
+            //}
+            //sw.Stop();
+            //Console.WriteLine($"kiloflag time {sw.ElapsedMilliseconds} ms"); //~50ms on my machine
         }
     }
 
