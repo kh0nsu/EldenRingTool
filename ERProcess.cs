@@ -773,7 +773,13 @@ namespace EldenRingTool
 
             if ((itemID & 0xF0000000) == 0x40000000)
             {//Goods item
-                //TODO: look up item in GoodsEvents and set the corresponding event flag
+                var goodsID = itemID & 0xFFFFFFF;
+                var evt = GoodsEvents.getEvent(goodsID);
+                if (evt >= 0)
+                {
+                    Console.WriteLine($"Enabling flag {evt} for goods item {goodsID}");
+                    getSetEventFlag(evt, true);
+                }
             }
         }
 
@@ -1986,6 +1992,34 @@ namespace EldenRingTool
                 loadDB();
                 return ashes;
             }
+        }
+    }
+
+    public class GoodsEvents
+    {
+        static bool _loaded = false;
+        static List<(string, int, int)> data = new List<(string, int, int)>();
+        static void load()
+        {
+            var list = FileUtils.importGenericTextResource("GoodsEvents.tsv", '\t');
+            foreach (var row in list.Skip(1)) //skip headers
+            {
+                var name = row[2];
+                var evtId = row[0];
+                var itemId = row[1];
+                if (int.TryParse(evtId, out var evtIdInt) && int.TryParse(itemId, out var itemIdInt))
+                {
+                    data.Add((name, evtIdInt, itemIdInt));
+                }
+            }
+            _loaded = true;
+        }
+        public static int getEvent(uint goodsItemID)
+        {
+            if (!_loaded) { load(); }
+            var row = data.Where(x => x.Item3 == goodsItemID).FirstOrDefault();
+            if (row.Item1 == null) { return -1; }
+            return row.Item2;
         }
     }
 
