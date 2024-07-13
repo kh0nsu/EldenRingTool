@@ -770,6 +770,11 @@ namespace EldenRingTool
             WriteUInt32(erBase + itemSpawnData + 0x2C, 0); //unused?
             WriteUInt32(erBase + itemSpawnData + 0x30, ashOfWar);
             RunThread(erBase + itemSpawnStart);
+
+            if ((itemID & 0xF0000000) == 0x40000000)
+            {//Goods item
+                //TODO: look up item in GoodsEvents and set the corresponding event flag
+            }
         }
 
         void openMenuByAddr(int menuAddr)
@@ -1732,9 +1737,19 @@ namespace EldenRingTool
             return flagState;
         }
 
+        public bool isGameLoaded()
+        {//TODO. currently returns 'true' for loaded in, but also the main menu... should block teleports when not loaded.
+            var loc = getEventFlagLocAndBit(2200);
+            if (loc.Item1 == IntPtr.Zero) { return false; } //flags not loaded
+            if (getSetEventFlag(2200)) { return false; } //loading flag
+            return true;
+        }
+
         public void runFlagTests()
         {
-            Console.WriteLine(getSetEventFlag(2200));
+            //getSetEventFlag(65610, true);
+            //Console.WriteLine(getSetEventFlag(2200));
+            //Console.WriteLine(isGameLoaded());
             //var sw = new Stopwatch();
             //sw.Start();
             //for (int i = 0; i < 1000; i++)
