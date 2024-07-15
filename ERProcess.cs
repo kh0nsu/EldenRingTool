@@ -428,7 +428,7 @@ namespace EldenRingTool
         uint torrentIDOffset = 0x930; //also appears patch stable
 
         int scadOffset = 0; //should be 0xfc or close to it
-        bool exeSupportsDlc() { return scadOffset > 0 && scadOffset < 0x10000; } //if no plausible value is found then the exe is too old
+        public bool exeSupportsDlc() { return scadOffset > 0 && scadOffset < 0x10000; } //if no plausible value is found then the exe is too old
 
         int musicMuteLoc = 0;
 
@@ -1531,6 +1531,7 @@ namespace EldenRingTool
 
         public int teleportToGlobal((float, float, float, float, uint) targetCoords, float yOffset = 0, bool justConvPos = false, bool warpIfNeeded = false)
         {//this is imperfect, but at least it works within the main world pretty well.
+            if (!isGameLoaded()) { Console.WriteLine("Game not loaded, not teleporting"); return -1; }
             var currentMapCoords = getMapCoords();
             var worldIDCur = (currentMapCoords.Item5 & 0xFF000000) >> 24;
             var worldIDTarget = (targetCoords.Item5 & 0xFF000000) >> 24;
@@ -1551,6 +1552,7 @@ namespace EldenRingTool
                 for (int i = 0; i < 30; i++)
                 {
                     Thread.Sleep(500);
+                    if (!isGameLoaded()) { Console.Write("."); continue; }
                     currentMapCoords = getMapCoords();
                     worldIDCur = (currentMapCoords.Item5 & 0xFF000000) >> 24;
                     if (worldIDCur == worldIDTarget)
@@ -1559,6 +1561,7 @@ namespace EldenRingTool
                         teleportToGlobal(targetCoords, yOffset, warpIfNeeded: false);
                         return 1; //warped
                     }
+                    Console.Write(",");
                 }
                 Utils.debugWrite("Loading timed out"); //15 sec. TODO: better scheme than simple timeout?
                 return -1; //failed
@@ -1744,16 +1747,21 @@ namespace EldenRingTool
         }
 
         public bool isGameLoaded()
-        {//TODO. currently returns 'true' for loaded in, but also the main menu... should block teleports when not loaded.
+        {
             var loc = getEventFlagLocAndBit(2200);
             if (loc.Item1 == IntPtr.Zero) { return false; } //flags not loaded
             if (getSetEventFlag(2200)) { return false; } //loading flag
+
+            //we should check for a valid player instance but 'valid' can be difficult to define
+            var mapID = (getMapCoords().Item5 & 0xFF000000) >> 24;
+            if (mapID == 0 || mapID == 255) { return false; } //invalid map
+
             return true;
         }
 
+#if DEBUG
         public void runFlagTests()
         {
-            Console.WriteLine(isGameLoaded());
             var rand = new Random();
             var sw = new Stopwatch();
             sw.Start();
@@ -1766,6 +1774,7 @@ namespace EldenRingTool
             sw.Stop();
             Console.WriteLine($"kiloflag time {sw.ElapsedMilliseconds} ms"); //~50ms on my machine
         }
+#endif
     }
 
     public class TeleportHelper

@@ -549,6 +549,7 @@ namespace EldenRingTool
         void updateMovement()
         {
 #if DEBUG
+            if (!_process.isGameLoaded()) { Console.WriteLine("Game not loaded"); }
             //Utils.debugWrite(_process.getSetFreeCamCoords().ToString());
             {
                 var mapCoords = _process.getMapCoords();
@@ -1525,7 +1526,11 @@ namespace EldenRingTool
         private void flags(object sender, RoutedEventArgs e)
         {
             var selections = new List<object>();
-            selections.AddRange(FlagDB.data.Keys);
+            foreach (var k in FlagDB.data.Keys)
+            {
+                if (k.Contains("DLC") && !_process.exeSupportsDlc()) { continue; } //TODO: check for flags indicating that the player has the DLC
+                selections.Add(k);
+            }
             selections.Add("Specific flag");
             var sel = new Selection(selections, x =>
             {
