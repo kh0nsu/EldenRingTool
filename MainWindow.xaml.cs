@@ -1538,6 +1538,7 @@ namespace EldenRingTool
             var sel = new Selection(selections, x =>
             {
                 var str = x as string;
+                if (null == str) { return; }
                 if ("Specific flag" == str) { getSetFlag(); }
                 else if (FlagDB.data.TryGetValue(str, out var data))
                 {
