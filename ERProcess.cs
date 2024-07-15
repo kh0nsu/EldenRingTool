@@ -1750,7 +1750,7 @@ namespace EldenRingTool
         {
             var loc = getEventFlagLocAndBit(2200);
             if (loc.Item1 == IntPtr.Zero) { return false; } //flags not loaded
-            if (getSetEventFlag(2200)) { return false; } //loading flag
+            if (getSetEventFlag(2200)) { return false; } //loading flag? sometimes not set even when loaded in, though (stranded graveyard)
 
             //we should check for a valid player instance but 'valid' can be difficult to define
             var mapID = (getMapCoords().Item5 & 0xFF000000) >> 24;
