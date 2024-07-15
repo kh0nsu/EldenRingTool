@@ -2023,6 +2023,44 @@ namespace EldenRingTool
         }
     }
 
+    public class FlagDB
+    {
+        static bool _loaded = false;
+        static void load()
+        {
+            _data.Add("Base Maps", importIDNameTsv("BaseMaps.tsv"));
+            _data.Add("DLC Maps", importIDNameTsv("DLCMaps.tsv"));
+            _data.Add("Base Graces", importIDNameTsv("BaseGraces.tsv"));
+            _data.Add("DLC Graces", importIDNameTsv("DLCGraces.tsv"));
+            _data.Add("DLC Bosses", importIDNameTsv("DLCBosses.tsv"));
+            _loaded = true;
+        }
+        public static List<(string, int)> importIDNameTsv(string file)
+        {
+            var ret = new List<(string, int)>();
+            var list = FileUtils.importGenericTextResource(file, '\t');
+            foreach (var row in list.Skip(1)) //skip headers
+            {
+                var name = row[1];
+                var evtId = row[0];
+                if (int.TryParse(evtId, out var evtIdInt))
+                {
+                    ret.Add((name, evtIdInt));
+                }
+            }
+            return ret;
+        }
+        static Dictionary<string, List<(string, int)>> _data = new Dictionary<string, List<(string, int)>>();
+        public static Dictionary<string, List<(string, int)>> data
+        {
+            get
+            {
+                if (!_loaded) { load(); }
+                return _data;
+            }
+        }
+    }
+
     public class TeleportLocation
     {
         (float, float, float, float, uint) coords;

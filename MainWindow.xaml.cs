@@ -1522,10 +1522,42 @@ namespace EldenRingTool
             sel.Show();
         }
 
-        private void getSetFlag(object sender, RoutedEventArgs e)
+        private void flags(object sender, RoutedEventArgs e)
         {
-            //_process.runFlagTests();
-
+            var selections = new List<object>();
+            selections.AddRange(FlagDB.data.Keys);
+            selections.Add("Specific flag");
+            var sel = new Selection(selections, x =>
+            {
+                var str = x as string;
+                if ("Specific flag" == str) { getSetFlag(); }
+                else if (FlagDB.data.TryGetValue(str, out var data))
+                {
+                    if (str.Contains("Bosses"))
+                    {
+                        var sel2 = new Selection(data.Select(y => y.Item1).ToList<object>(), z =>
+                        {
+                            var bossID = data.Where(w => w.Item1 == z as string).FirstOrDefault();
+                            if (bossID.Item2 != 0) { _process.getSetEventFlag(bossID.Item2, false); }
+                        }, "Resurrect Boss");
+                        sel2.Owner = this;
+                        sel2.Show();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Setting all flags for: " + str);
+                        foreach (var row in data)
+                        {
+                            _process.getSetEventFlag(row.Item2, true);
+                        }
+                    }
+                }
+            });
+            sel.Owner = this;
+            sel.Show();
+        }
+        void getSetFlag()
+        {
             var flagNum = Microsoft.VisualBasic.Interaction.InputBox("Enter flag number", "Flag", "");
             if (!int.TryParse(flagNum, out var flagNumInt)) { return; }
             var val = _process.getSetEventFlag(flagNumInt);
