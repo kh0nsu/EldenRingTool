@@ -393,7 +393,7 @@ namespace EldenRingTool
 
         int trophyImpOffset = 0x4453838; //CS::CSTrophyImp
 
-        //int toPGDataOff = 0x3C29108; //"GameDataMan"
+        int gameDataMan = 0;
 
         int csFlipperOff = 0x4453E98; //lots of interesting stuff here. frame times, fps, etc.
         int gameSpeedOffset = 0x2D4;
@@ -495,7 +495,7 @@ namespace EldenRingTool
             frameTimeTargetOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "8973 ?? C743 ?? ??88883C EB ?? 8973 ??", "frame time target (1/60.0f)", justOffset: 6, startIndex: 13000000);
 
             noDeathOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4883EC20F681????000001488bd97408", "no-death offset in CSChrDataModule", 4 + 2, startIndex: 4200000);
-            //scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 48 85 C0 74 05 48 8B 40 58 C3 C3", "GameDataMan", 3, 7, startIndex: 2300000);
+            gameDataMan = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 48 85 C0 74 05 48 8B 40 58 C3 C3", "GameDataMan", 3, 7, startIndex: 2000000);
 
             trophyImpOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48833D ???????? 00 75 31 4C 8B05 ???????? 4C 8945 10 BA 08000000 8D4A 18", "CS::CSTrophyImp", 3, 8, startIndex: 13800000);
 
@@ -642,7 +642,7 @@ namespace EldenRingTool
         //we have another way to get this, but can use this as a fallback.
         /*IntPtr getPlayerGameDataPtr()
         {
-            var ptr = ReadUInt64(erBase + toPGDataOff);
+            var ptr = ReadUInt64(erBase + gameDataMan);
             var ptr2 = ReadUInt64((IntPtr)ptr + 8); //CS::PlayerGameData
             return (IntPtr)ptr2;
         }*/
@@ -1460,6 +1460,14 @@ namespace EldenRingTool
                 }
             }
             return ret;
+        }
+
+        public int getSetClearCount(int? newVal = null)
+        {
+            var ptr = (IntPtr)ReadUInt64(erBase + gameDataMan);
+            int oldVal = ReadInt32(ptr + 0x120); //doesn't change between patches
+            if (newVal.HasValue) { WriteInt32(ptr + 0x120, newVal.Value); }
+            return oldVal;
         }
 
         public (float, float, float) getSetPlayerLocalCoords((float,float,float)? pos = null)

@@ -1574,5 +1574,13 @@ namespace EldenRingTool
             if (!bool.TryParse(flagVal, out var flagValBool)) { return; }
             _process.getSetEventFlag(flagNumInt, flagValBool);
         }
+
+        private void setClearCount(object sender, RoutedEventArgs e)
+        {
+            var cc = _process.getSetClearCount();
+            var ccNewStr = Microsoft.VisualBasic.Interaction.InputBox("Enter NG+ level (ClearCount): ", "NG+", cc.ToString());
+            if (!int.TryParse(ccNewStr, out var ccNew)) { return; }
+            _process.getSetClearCount(ccNew);
+        }
     }
 }
