@@ -2041,6 +2041,7 @@ namespace EldenRingTool
             _data.Add("DLC Maps", importIDNameTsv("DLCMaps.tsv"));
             _data.Add("Base Graces", importIDNameTsv("BaseGraces.tsv"));
             _data.Add("DLC Graces", importIDNameTsv("DLCGraces.tsv"));
+            _data.Add("Base Bosses", importIDNameTsv("BaseBosses.tsv"));
             _data.Add("DLC Bosses", importIDNameTsv("DLCBosses.tsv"));
             _loaded = true;
         }
@@ -2050,6 +2051,7 @@ namespace EldenRingTool
             var list = FileUtils.importGenericTextResource(file, '\t');
             foreach (var row in list.Skip(1)) //skip headers
             {
+                if (row.Length < 2) { continue; }
                 var name = row[1];
                 var evtId = row[0];
                 if (int.TryParse(evtId, out var evtIdInt))

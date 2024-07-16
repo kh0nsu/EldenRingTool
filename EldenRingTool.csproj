@@ -124,6 +124,7 @@
     <EmbeddedResource Include="DLCBosses.tsv" />
     <EmbeddedResource Include="DLCGraces.tsv" />
     <EmbeddedResource Include="DLCMaps.tsv" />
+    <EmbeddedResource Include="BaseBosses.tsv" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
