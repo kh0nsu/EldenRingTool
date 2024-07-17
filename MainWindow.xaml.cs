@@ -1534,12 +1534,16 @@ namespace EldenRingTool
                 if (k.Contains("DLC") && !_process.exeSupportsDlc()) { continue; } //TODO: check for flags indicating that the player has the DLC
                 selections.Add(k);
             }
-            selections.Add("Specific flag");
+            const string specificFlag = "Specific flag";
+            const string dlcng = "DLC-Cleared NG++";
+            selections.Add(specificFlag);
+            selections.Add(dlcng);
             var sel = new Selection(selections, x =>
             {
                 var str = x as string;
                 if (null == str) { return; }
-                if ("Specific flag" == str) { getSetFlag(); }
+                if (specificFlag == str) { getSetFlag(); }
+                else if (dlcng == str) { getSetFlag(70); }
                 else if (FlagDB.data.TryGetValue(str, out var data))
                 {
                     if (str.Contains("Bosses"))
@@ -1565,9 +1569,9 @@ namespace EldenRingTool
             sel.Owner = this;
             sel.Show();
         }
-        void getSetFlag()
+        void getSetFlag(int? preSetFlag = null)
         {
-            var flagNum = Microsoft.VisualBasic.Interaction.InputBox("Enter flag number", "Flag", "");
+            var flagNum = Microsoft.VisualBasic.Interaction.InputBox("Enter flag number", "Flag", preSetFlag?.ToString() ?? "");
             if (!int.TryParse(flagNum, out var flagNumInt)) { return; }
             var val = _process.getSetEventFlag(flagNumInt);
             var flagVal = Microsoft.VisualBasic.Interaction.InputBox("Enter value", "Flag " + flagNumInt, val.ToString());
