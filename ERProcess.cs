@@ -1571,6 +1571,13 @@ namespace EldenRingTool
                     }
                     Console.Write(",");
                 }
+                //it is unclear why but warping to certain map IDs just does not work
+                if (currentMapCoords.Item5 == 0xFFFFFFFFU)
+                {
+                    Utils.debugWrite("Bad map after warp, warping to roundtable");
+                    doWarp(185204736);
+                    return -1;
+                }
                 Utils.debugWrite("Loading timed out"); //15 sec. TODO: better scheme than simple timeout?
                 return -1; //failed
             }
@@ -1771,9 +1778,9 @@ namespace EldenRingTool
             if (loc.Item1 == IntPtr.Zero) { return false; } //flags not loaded
             if (getSetEventFlag(2200)) { return false; } //loading flag? sometimes not set even when loaded in, though (stranded graveyard)
 
-            //we should check for a valid player instance but 'valid' can be difficult to define
-            var mapID = (getMapCoords().Item5 & 0xFF000000) >> 24;
-            if (mapID == 0 || mapID == 255) { return false; } //invalid map
+            var ptr = (IntPtr)getCharPtrGameData(); //is there a nice way to validate a pointer?
+            var level = ReadInt32(ptr + levelOffset); //check level
+            if (level < 1 || level > 713) { return false; }
 
             return true;
         }
