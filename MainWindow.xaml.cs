@@ -62,7 +62,7 @@ namespace EldenRingTool
             CHAR_MESH, HIDE_MODELS,
             HITBOX_A, HITBOX_B,
             NO_DEATH, ALL_NO_DEATH,
-            ONE_HP, MAX_HP, DIE, RUNE_ARC,
+            ONE_HP, MAX_HP, DIE, RUNE_ARC, SET_HP_LAST,
             DISABLE_AI, REPEAT_ENEMY_ACTIONS,
             INF_STAM, INF_FP, INF_CONSUM, ONE_SHOT,
             NO_GRAVITY, NO_MAP_COL,
@@ -446,6 +446,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.ALL_NO_DEATH: chkAllNoDeath.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.ONE_HP: chkOneHP.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.MAX_HP: chkMaxHP.IsChecked ^= true; break;
+                case HOTKEY_ACTIONS.SET_HP_LAST: if (lastSetHP.HasValue) { _process.getSetPlayerHP(lastSetHP.Value); } break;
                 case HOTKEY_ACTIONS.DIE: instantDeath(null, null); break;
                 case HOTKEY_ACTIONS.RUNE_ARC: chkRuneArc.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.DISABLE_AI: chkDisableAI.IsChecked ^= true; break;
@@ -1488,6 +1489,8 @@ namespace EldenRingTool
             _process.offAndUnFreeze(ERProcess.DebugOpts.ALL_CHR_NO_DEATH);
         }
 
+        int? lastSetHP = null;
+
         private void btnSetPlayerHP_Click(object sender, RoutedEventArgs e)
         {
             var existing = _process.getSetPlayerHP();
@@ -1496,6 +1499,7 @@ namespace EldenRingTool
             if (int.TryParse(newVal, out var newValInt))
             {
                 _process.getSetPlayerHP(newValInt);
+                lastSetHP = newValInt;
             }
         }
 
@@ -1535,7 +1539,7 @@ namespace EldenRingTool
                 selections.Add(k);
             }
             const string specificFlag = "Specific flag";
-            const string dlcng = "DLC-Cleared NG++";
+            const string dlcng = "DLC-Cleared NG++";//TODO: move this into an 'extra flags' list, user editable?
             selections.Add(specificFlag);
             selections.Add(dlcng);
             var sel = new Selection(selections, x =>
