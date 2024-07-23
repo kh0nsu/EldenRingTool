@@ -1622,25 +1622,35 @@ namespace EldenRingTool
             return (x, y, z);
         }
 
-        public void addRunes(int amount = 1000000)
-        {//also update 'soul memory', otherwise servers could easily check this and see that rune count is artificial. still no guarantees.
+        const int MAX_RUNES = 999999999;
+        const long MAX_RUNE_MEMORY = 0xffffffff;
+
+        public int addRunes(int amount = 1000000)
+        {//this should now be functionally equivalent to the AddSouls function in game
             var ptr = (IntPtr)getCharPtrGameData() + 0x6c; //this location is close to player name (9c) and multiplayer group passwords a bit later.
-            var souls = ReadInt32(ptr);
-            var soulMemory = ReadInt32(ptr + 4);
+            var ptrReachedMaxRuneMemory = (IntPtr)getCharPtrGameData() + 0x109;
+            var oldRunes = ReadInt32(ptr);
+            var oldRuneMemory = ReadUInt32(ptr + 4);
 
-            var newSouls = souls + amount;
-            if (newSouls < 0) { newSouls = 0; }
-            if (newSouls > 999999999) { newSouls = 999999999; }//rune cap
+            var newRunes = oldRunes + amount;
+            if (newRunes < 0) { newRunes = 0; }
+            else if (newRunes > MAX_RUNES) { newRunes = MAX_RUNES; }
+            WriteInt32(ptr, newRunes); //update it without checking that it increased at all, because the game does so
 
-            var increase = newSouls - souls;
-            var newSoulMemory = soulMemory;
-            if (increase > 0)
-            {
-                newSoulMemory += increase;
-            }
-            //TODO: work out how to handle max soul memory. there is apparently a 'reachedMaxSoulMemory' at +0x109. or call an existing AddSouls function
-            WriteInt32(ptr, newSouls);
-            WriteInt32(ptr + 4, newSoulMemory);
+            var increase = newRunes - oldRunes;
+            if (0 == increase) { return increase; } //if there's no increase, then we don't update rune memory
+
+            long newRuneMemory = oldRuneMemory;
+            newRuneMemory += increase;
+            if (newRuneMemory > MAX_RUNE_MEMORY) { newRuneMemory = MAX_RUNE_MEMORY; } //the game stores this as a 64-bit int, but caps it at the max for a 32 bit uint
+            else if (newRuneMemory < 0) { newRuneMemory = newRunes; } //this check doesn't really make sense, but the game does it...
+            bool reachedMaxRuneMemory = MAX_RUNE_MEMORY == newRuneMemory;
+
+            WriteUInt32(ptr + 4, (uint)newRuneMemory);
+            WriteUInt32(ptr + 8, 0);
+            WriteUInt8(ptrReachedMaxRuneMemory, reachedMaxRuneMemory ? (byte)1 : (byte)0);
+
+            return increase;
         }
 
         public bool isRiding()
