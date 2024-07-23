@@ -592,7 +592,10 @@ namespace EldenRingTool
                 mapPos.Text = $"Map: [{mapCoords.Item1:F2} {mapCoords.Item2:F2} {mapCoords.Item3:F2}] rotation: [{mapRotDeg:F1}°]";
                 mapID.Text = $"Map ID: [{mapIDstr}]";
                 var globalCoords = TeleportHelper.getWorldMapCoords(mapCoords);
-                globalPos.Text = $"Global: [{globalCoords.Item1:F2} {globalCoords.Item2:F2} {globalCoords.Item3:F2}]";
+                string dimension = "?";
+                if (TeleportHelper.mapAreaIsMainWorld(globalCoords.Item4 << 24)) { dimension = "MAIN"; }
+                else if (TeleportHelper.mapAreaIsDLC(globalCoords.Item4 << 24)) { dimension = "DLC"; }
+                globalPos.Text = $"Global: [{dimension} {globalCoords.Item1:F2} {globalCoords.Item2:F2} {globalCoords.Item3:F2}]";
             }
 
             //track moving direction for the purpose of 'yeeting' 'forward'

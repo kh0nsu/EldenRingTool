@@ -1807,8 +1807,8 @@ namespace EldenRingTool
             return $"{P3} {P2} {P1} {P0}";
         }
 
-        const int MAIN_WORLD_ID = 60;
-        const int DLC_WORLD_ID = 61;
+        public const int MAIN_WORLD_ID = 60;
+        public const int DLC_WORLD_ID = 61;
         const float TILE_SIZE = 256;
 
         public static bool mapAreaIsMainWorld(uint mapID)
@@ -1822,14 +1822,9 @@ namespace EldenRingTool
             return P3 == DLC_WORLD_ID;
         }
 
-        //TODO: we need a convention for DLC coords
-        //either add a dimension (fallback to 0 for base map) or add a huge offset like +1 million. an offset will however reduce the effective resolution
-        //TODO: check if TILE_SIZE is still valid
-        //TODO: update functions below
-
         public static (float, float) getMapIDWorldMapCoords(uint mapID)
         {//see http://soulsmodding.wikidot.com/reference:elden-ring-map-list
-            if (!mapAreaIsMainWorld(mapID)) { return (float.NaN, float.NaN); } //not the world map - can't handle.
+            if (!mapAreaIsMainWorld(mapID) && !mapAreaIsDLC(mapID)) { return (float.NaN, float.NaN); }
             uint P3 = (mapID & 0xFF000000U) >> 24;
             uint P2 = (mapID & 0x00FF0000U) >> 16;
             uint P1 = (mapID & 0x0000FF00U) >> 8;
@@ -1838,25 +1833,25 @@ namespace EldenRingTool
             float Z = P1 * TILE_SIZE;
             return (X, Z);
         }
-        public static (float, float, float) getWorldMapCoords((float, float, float, float, uint) mapCoords, bool justConvPos = false)
-        {
-            if (mapAreaIsMainWorld(mapCoords.Item5))
+        public static (float, float, float, uint) getWorldMapCoords((float, float, float, float, uint) mapCoords, bool justConvPos = false)
+        {//disambiguate by always returning the 'area number'/'world id'
+            if (mapAreaIsMainWorld(mapCoords.Item5) || mapAreaIsDLC(mapCoords.Item5))
             {
                 var mapOff = getMapIDWorldMapCoords(mapCoords.Item5);
-                return (mapCoords.Item1 + mapOff.Item1, mapCoords.Item2, mapCoords.Item3 + mapOff.Item2);
+                return (mapCoords.Item1 + mapOff.Item1, mapCoords.Item2, mapCoords.Item3 + mapOff.Item2, (mapCoords.Item5 & 0xFF000000U) >> 24);
             }
             else
-            {//TODO: search for a conversion back to the relevant top-level world
+            {
                 var mapID = mapCoords.Item5;
                 uint P3 = (mapID & 0xFF000000U) >> 24;
                 uint P2 = (mapID & 0x00FF0000U) >> 16;
                 uint P1 = (mapID & 0x0000FF00U) >> 8;
-                //try and find a direct conversion back to the main world
+                //try and find a direct conversion back to either main world
                 //can't rely on the grid system for dungeons so look for an exact match. there should be one for anywhere the world map works.
                 foreach (var e in MapConvDB.MapConvEntries)
                 {
                     if (e.intVals["srcAreaNo"] == P3 && e.intVals["srcGridXNo"] == P2 && e.intVals["srcGridZNo"] == P1
-                        && e.intVals["dstAreaNo"] == MAIN_WORLD_ID)
+                        && (e.intVals["dstAreaNo"] == MAIN_WORLD_ID || e.intVals["dstAreaNo"] == DLC_WORLD_ID))
                     {
                         var localXOffset = mapCoords.Item1 - e.floatVals["srcPosX"];
                         var localYOffset = mapCoords.Item2 - e.floatVals["srcPosY"];
@@ -1870,11 +1865,11 @@ namespace EldenRingTool
                         var targetYGlobal = targetY;
                         var targetZGlobal = targetZ + targetGridZ * TILE_SIZE;
 
-                        return (targetXGlobal, targetYGlobal, targetZGlobal);
+                        return (targetXGlobal, targetYGlobal, targetZGlobal, (uint)e.intVals["dstAreaNo"]);
                     }
                 }
                 Utils.debugWrite("Cannot get coords for: " + mapCoords.ToString());
-                return (float.NaN, float.NaN, float.NaN);
+                return (float.NaN, float.NaN, float.NaN, 0);
             }
         }
         public static string mapCoordsToString((float, float, float, float, uint) coords)
