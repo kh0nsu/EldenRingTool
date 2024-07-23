@@ -144,6 +144,11 @@ namespace EldenRingTool
             return Utils.getFnameInAppdata("saved_positions.txt", "ERTool");
         }
 
+        static string extraFlagsFile()
+        {
+            return Utils.getFnameInAppdata("extra_flags.txt", "ERTool");
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -1539,15 +1544,15 @@ namespace EldenRingTool
                 selections.Add(k);
             }
             const string specificFlag = "Specific flag";
-            const string dlcng = "DLC-Cleared NG++";//TODO: move this into an 'extra flags' list, user editable?
+            const string extraFlagsStr = "Extra Flags";
             selections.Add(specificFlag);
-            selections.Add(dlcng);
+            selections.Add(extraFlagsStr);
             var sel = new Selection(selections, x =>
             {
                 var str = x as string;
                 if (null == str) { return; }
                 if (specificFlag == str) { getSetFlag(); }
-                else if (dlcng == str) { getSetFlag(70); }
+                else if (extraFlagsStr == str) { extraFlags(); }
                 else if (FlagDB.data.TryGetValue(str, out var data))
                 {
                     if (str.Contains("Bosses"))
@@ -1581,6 +1586,36 @@ namespace EldenRingTool
             var flagVal = Microsoft.VisualBasic.Interaction.InputBox("Enter value", "Flag " + flagNumInt, val.ToString());
             if (!bool.TryParse(flagVal, out var flagValBool)) { return; }
             _process.getSetEventFlag(flagNumInt, flagValBool);
+        }
+
+        void extraFlags()
+        {
+            if (!File.Exists(extraFlagsFile()))
+            {
+                File.WriteAllText(extraFlagsFile(), "ID,Name" + Environment.NewLine + "70,DLC-Cleared NG+ Scaling");
+            }
+            var flagLines = File.ReadAllLines(extraFlagsFile());
+            var flags = new List<ExtraFlag>();
+            for (int i = 1; i < flagLines.Length; i++)
+            {
+                var flag = ExtraFlag.parse(flagLines[i]);
+                if (flag != null && flag.id != -1)
+                {
+                    flag.state = _process.getSetEventFlag(flag.id);
+                }
+                flags.Add(flag);
+            }
+            var sel = new Selection(flags.ToList<object>(), x =>
+            {
+                var flag = x as ExtraFlag;
+                if (null == flag) { return; }
+                var val = _process.getSetEventFlag(flag.id);
+                var flagVal = Microsoft.VisualBasic.Interaction.InputBox("Enter value", flag.name, val.ToString());
+                if (!bool.TryParse(flagVal, out var flagValBool)) { return; }
+                _process.getSetEventFlag(flag.id, flagValBool);
+            }, "Select Flag");
+            sel.Owner = this;
+            sel.Show();
         }
 
         private void setClearCount(object sender, RoutedEventArgs e)

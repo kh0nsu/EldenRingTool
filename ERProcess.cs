@@ -1638,6 +1638,7 @@ namespace EldenRingTool
             {
                 newSoulMemory += increase;
             }
+            //TODO: work out how to handle max soul memory. there is apparently a 'reachedMaxSoulMemory' at +0x109. or call an existing AddSouls function
             WriteInt32(ptr, newSouls);
             WriteInt32(ptr + 4, newSoulMemory);
         }
@@ -2077,6 +2078,29 @@ namespace EldenRingTool
                 if (!_loaded) { load(); }
                 return _data;
             }
+        }
+    }
+
+    public class ExtraFlag
+    {
+        public int id { get; set; } = -1;
+        public string name { get; set; } = "";
+        public bool state { get; set; } = false;
+        public override string ToString()
+        {
+            return $"{name} ({id}): {state}";
+        }
+        public static ExtraFlag parse(string str)
+        {
+            if (string.IsNullOrEmpty(str)) { return null; }
+            var spl = str.Split(',');
+            if (spl.Length < 2) { return null; }
+            var ret = new ExtraFlag();
+            if (!int.TryParse(spl[0], out var id)) { return null; }
+            ret.id = id;
+            ret.name = spl[1];
+            //state is not stored
+            return ret;
         }
     }
 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EldenRingTool"
         mc:Ignorable="d"
-        Title="Selection" MinHeight="500" MinWidth="300" SizeToContent="Width" WindowStartupLocation="CenterOwner">
+        Title="Selection" MinHeight="500" MinWidth="300" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <DockPanel>
         <Button DockPanel.Dock="Bottom" Click="okClick">OK</Button>
         <ListBox x:Name="listBox" MouseDoubleClick="okClick"/>
