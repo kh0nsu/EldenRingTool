@@ -572,9 +572,9 @@ namespace EldenRingTool
             0x41, 0xB9, 0xDD, 0x00, 0x00, 0x00,       // mov r9d,000000DD
             0x48, 0x8D, 0x05, 0xDB, 0xFF, 0xFF, 0xFF, // lea rax,[eldenring.exe+zeroCaveOffset] (relative addr)
             0x48, 0x89, 0x44, 0x24, 0x20,             // mov [rsp+20],rax
-            0xE8, 0, 0, 0, 0,                         //call to pack coords (to be filled in)
+            0xE8, 0, 0, 0, 0,                         //call to pack coords+warp (to be filled in)
             0xB9, 0x00, 0x00, 0x00, 0x00,             // mov ecx,00000000
-            0xE8, 0, 0, 0, 0,                         //call to actually warp? (to be filled in)
+            0xE8, 0, 0, 0, 0,                         //call set warp coords (with 0 to clear) (to be filled in)
             0x48, 0x83, 0xC4, 0x48,                   // add rsp,48
             0xC3,                                     // ret 
         };
@@ -1557,6 +1557,7 @@ namespace EldenRingTool
             {//TODO: more extensive conditions for 'warp needed', may help in areas like siofra.
                 Utils.debugWrite("World ID differs, will warp first");
                 doWarp(targetCoords.Item5);
+                Thread.Sleep(1000);
                 for (int i = 0; i < 30; i++)
                 {
                     Thread.Sleep(500);
@@ -1576,6 +1577,13 @@ namespace EldenRingTool
                 {
                     Utils.debugWrite("Bad map after warp, warping to roundtable");
                     doWarp(185204736);
+                    Thread.Sleep(1000);
+                    for (int i = 0; i < 30; i++)
+                    {
+                        Thread.Sleep(500);
+                        if (!isGameLoaded()) { Console.Write("."); continue; }
+                        break;
+                    }
                     return -1;
                 }
                 Utils.debugWrite("Loading timed out"); //15 sec. TODO: better scheme than simple timeout?
