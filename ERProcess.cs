@@ -434,6 +434,8 @@ namespace EldenRingTool
 
         int csEventFlagMan = 0;
 
+        int triggerNGPlusOffset = 0; //in GameMan
+
         //scanning for above addresses
         void aobScan()
         {//see https://github.com/kh0nsu/FromAobScan
@@ -534,6 +536,8 @@ namespace EldenRingTool
             scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4c 8b dc 53 48 81 ec 90 00 00 00 49 c7 43 88 fe ff ff ff 48 8b 05 ?? ?? ?? ?? 48 33 c4 48 89 84 24 80 00 00 00 48 8b d9 49 c7 43 e0 00 00 00 00 49 8d 43 a8 49 89 43 90 49 8d 43 a8 49 89 43 98 48 8d 05 ?? ?? ?? ?? 49 89 43 a8 48 8d 05 ?? ?? ?? ?? 49 89 43 a8 48 8d 05 ?? ?? ?? ?? 49 89 43 b0", "three more menus", startIndex: 7500000, singleMatch: false,
             callback: x => menuOffsets.Add(x));
             csEventFlagMan = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 833D ???????? 00 0F84 ????0000 44 8BE6 85 C0 0F 84 ????0000", "GLOBAL_CSEventFlagMan", 1 + 2, 1 + 2 + 4 + 1, startIndex: 2000000);
+
+            triggerNGPlusOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8b 05 ?? ?? ?? ?? 0f b6 80 ?? ?? 00 00 c3 ?? 48 8b 05 ?? ?? ?? ?? 8b 90", "Trigger NG+ offset in GameMan", readoffset32: 3 + 4 + 3, startIndex: 6000000);
 
             var cave = "";
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
@@ -1468,6 +1472,12 @@ namespace EldenRingTool
             int oldVal = ReadInt32(ptr + 0x120); //doesn't change between patches
             if (newVal.HasValue) { WriteInt32(ptr + 0x120, newVal.Value); }
             return oldVal;
+        }
+
+        public void triggerNGPlus()
+        {
+            var ptr = (IntPtr)ReadUInt64(erBase + quitoutBase);
+            WriteUInt8(ptr + triggerNGPlusOffset, 1);
         }
 
         public (float, float, float) getSetPlayerLocalCoords((float,float,float)? pos = null)

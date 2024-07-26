@@ -1624,9 +1624,24 @@ namespace EldenRingTool
         private void setClearCount(object sender, RoutedEventArgs e)
         {
             var cc = _process.getSetClearCount();
-            var ccNewStr = Microsoft.VisualBasic.Interaction.InputBox("Enter NG+ level (ClearCount): ", "NG+", cc.ToString());
-            if (!int.TryParse(ccNewStr, out var ccNew)) { return; }
-            _process.getSetClearCount(ccNew);
+
+            string trigger = "Trigger NG+";
+            string setCC = $"Set NG+ level (currently {cc})";
+
+            var sel = new Selection(new List<object>() { trigger, setCC }, x =>
+            {
+                if (trigger.Equals(x))
+                {
+                    _process.triggerNGPlus();
+                    return;
+                }
+                cc = _process.getSetClearCount();
+                var ccNewStr = Microsoft.VisualBasic.Interaction.InputBox("Enter NG+ level (ClearCount): ", "NG+", cc.ToString());
+                if (!int.TryParse(ccNewStr, out var ccNew)) { return; }
+                _process.getSetClearCount(ccNew);
+            });
+            sel.Owner = this;
+            sel.Show();
         }
     }
 }
