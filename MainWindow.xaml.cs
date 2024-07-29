@@ -62,7 +62,7 @@ namespace EldenRingTool
             CHAR_MESH, HIDE_MODELS,
             HITBOX_A, HITBOX_B,
             NO_DEATH, ALL_NO_DEATH,
-            ONE_HP, MAX_HP, DIE, RUNE_ARC,
+            ONE_HP, MAX_HP, DIE, RUNE_ARC, SET_HP_LAST,
             DISABLE_AI, REPEAT_ENEMY_ACTIONS,
             INF_STAM, INF_FP, INF_CONSUM, ONE_SHOT,
             NO_GRAVITY, NO_MAP_COL,
@@ -76,6 +76,7 @@ namespace EldenRingTool
             GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
             FPS_30, FPS_60, FPS_120, FPS_144, FPS_240, FPS_1000,
             TOGGLE_STATS_FULL, TOGGLE_RESISTS, TOGGLE_COORDS,
+            GREAT_RUNE, PHYSICK, ASHES, SPELLS,
         }
 
         ERProcess _process = null;
@@ -141,6 +142,11 @@ namespace EldenRingTool
         static string posDbFile()
         {
             return Utils.getFnameInAppdata("saved_positions.txt", "ERTool");
+        }
+
+        static string extraFlagsFile()
+        {
+            return Utils.getFnameInAppdata("extra_flags.txt", "ERTool");
         }
 
         public MainWindow()
@@ -216,8 +222,8 @@ namespace EldenRingTool
                 var windowInfo = File.ReadAllText(windowStateFile());
                 if (string.IsNullOrEmpty(windowInfo)) { return; }
                 var spl = windowInfo.Split(' ');
-                int left = int.Parse(spl[0]);
-                int top = int.Parse(spl[1]);
+                var left = double.Parse(spl[0]);
+                var top = double.Parse(spl[1]);
                 bool compact = bool.Parse(spl[2]);
                 string vis = spl[3];
                 if ((left + Width) > System.Windows.SystemParameters.VirtualScreenWidth || (top + Height) > System.Windows.SystemParameters.VirtualScreenHeight)
@@ -349,12 +355,10 @@ namespace EldenRingTool
             foreach (var kvp in keyMap) { sb.Append(" " + kvp.Key); }
             sb.AppendLine();
 
-            sb.AppendLine(Modifiers.CTRL.ToString() + " " + Key.Z.ToString() + " " + HOTKEY_ACTIONS.QUITOUT.ToString());
-            sb.AppendLine(Modifiers.CTRL.ToString() + " " + Key.C.ToString() + " " + HOTKEY_ACTIONS.TELEPORT_SAVE.ToString());
-            sb.AppendLine(Modifiers.CTRL.ToString() + " " + Key.V.ToString() + " " + HOTKEY_ACTIONS.TELEPORT_LOAD.ToString());
-            sb.AppendLine(Modifiers.CTRL.ToString() + " " + Key.F.ToString() + " " + HOTKEY_ACTIONS.YEET_FORWARD.ToString());
-            sb.AppendLine(Modifiers.CTRL.ToString() + " " + Key.R.ToString() + " " + HOTKEY_ACTIONS.YEET_UP.ToString());
-            sb.AppendLine(Modifiers.CTRL.ToString() + " " + Key.K.ToString() + " " + HOTKEY_ACTIONS.KILL_TARGET.ToString());
+            sb.AppendLine($"{Modifiers.CTRL} {Modifiers.SHIFT} {Key.Z} {HOTKEY_ACTIONS.QUITOUT}");
+            sb.AppendLine($"{Modifiers.CTRL} {Modifiers.SHIFT} {Key.C} {HOTKEY_ACTIONS.TELEPORT_SAVE}");
+            sb.AppendLine($"{Modifiers.CTRL} {Modifiers.SHIFT} {Key.V} {HOTKEY_ACTIONS.TELEPORT_LOAD}");
+            sb.AppendLine($"{Modifiers.CTRL} {Modifiers.SHIFT} {Key.K} {HOTKEY_ACTIONS.KILL_TARGET}");
 
             if (writeOut) { File.WriteAllText(hotkeyFile(), sb.ToString()); }
             return sb.ToString();
@@ -447,6 +451,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.ALL_NO_DEATH: chkAllNoDeath.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.ONE_HP: chkOneHP.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.MAX_HP: chkMaxHP.IsChecked ^= true; break;
+                case HOTKEY_ACTIONS.SET_HP_LAST: if (lastSetHP.HasValue) { _process.getSetPlayerHP(lastSetHP.Value); } break;
                 case HOTKEY_ACTIONS.DIE: instantDeath(null, null); break;
                 case HOTKEY_ACTIONS.RUNE_ARC: chkRuneArc.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.DISABLE_AI: chkDisableAI.IsChecked ^= true; break;
@@ -491,6 +496,10 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.TOGGLE_STATS_FULL: toggleStatsFull(null, null); break;
                 case HOTKEY_ACTIONS.TOGGLE_RESISTS: toggleResists(null, null); break;
                 case HOTKEY_ACTIONS.TOGGLE_COORDS: toggleCoords(null, null); break;
+                case HOTKEY_ACTIONS.GREAT_RUNE: _process.openMenuByName(_process.MENUS[1]); break;
+                case HOTKEY_ACTIONS.PHYSICK: _process.openMenuByName(_process.MENUS[2]); break;
+                case HOTKEY_ACTIONS.ASHES: _process.openMenuByName(_process.MENUS[3]); break;
+                case HOTKEY_ACTIONS.SPELLS: _process.openMenuByName(_process.MENUS[5]); break;
                 default: Utils.debugWrite("Action not handled: " + act.ToString()); break;
             }
         }
@@ -549,6 +558,7 @@ namespace EldenRingTool
         void updateMovement()
         {
 #if DEBUG
+            if (!_process.isGameLoaded()) { Console.WriteLine("Game not loaded"); }
             //Utils.debugWrite(_process.getSetFreeCamCoords().ToString());
             {
                 var mapCoords = _process.getMapCoords();
@@ -582,7 +592,10 @@ namespace EldenRingTool
                 mapPos.Text = $"Map: [{mapCoords.Item1:F2} {mapCoords.Item2:F2} {mapCoords.Item3:F2}] rotation: [{mapRotDeg:F1}°]";
                 mapID.Text = $"Map ID: [{mapIDstr}]";
                 var globalCoords = TeleportHelper.getWorldMapCoords(mapCoords);
-                globalPos.Text = $"Global: [{globalCoords.Item1:F2} {globalCoords.Item2:F2} {globalCoords.Item3:F2}]";
+                string dimension = "?";
+                if (TeleportHelper.mapAreaIsMainWorld(globalCoords.Item4 << 24)) { dimension = "MAIN"; }
+                else if (TeleportHelper.mapAreaIsDLC(globalCoords.Item4 << 24)) { dimension = "DLC"; }
+                globalPos.Text = $"Global: [{dimension} {globalCoords.Item1:F2} {globalCoords.Item2:F2} {globalCoords.Item3:F2}]";
             }
 
             //track moving direction for the purpose of 'yeeting' 'forward'
@@ -844,12 +857,17 @@ namespace EldenRingTool
             restorePosButton.IsEnabled = true;
         }
 
+        bool inWarp = false;
+
         void doGlobalTP((float, float, float, float, uint) pos)
         {//TODO: move this into erprocess
+            if (inWarp) { return; } //block trying to warp multiple times at once as this can break the game
+            inWarp = true;
             var mapCoordsNow = _process.getMapCoords();
             if (pos.Item5 == mapCoordsNow.Item5)
             {//same map region. don't attempt warp.
                 _process.teleportToGlobal(pos);
+                inWarp = false;
                 return;
             }
 
@@ -878,6 +896,7 @@ namespace EldenRingTool
                 {
                     chkPlayerNoGrav.IsChecked = noGravState;
                     chkPlayerNoDeath.IsChecked = noDeathState;
+                    inWarp = false;
                 });
             });
             t.Start();
@@ -1258,7 +1277,7 @@ namespace EldenRingTool
                 locations.Add(new TeleportLocation(dbLocations[i]));   
             }
 
-            var sel = new Selection(locations.ToList<object>(), (x) => { doGlobalTP((x as TeleportLocation).getCoords()); }, "Choose a location: ");
+            var sel = new Selection(locations.ToList<object>(), (x) => { if (x != null) { doGlobalTP((x as TeleportLocation).getCoords()); } }, "Choose a location: ");
             sel.Owner = this;
             sel.Show();
         }
@@ -1478,6 +1497,8 @@ namespace EldenRingTool
             _process.offAndUnFreeze(ERProcess.DebugOpts.ALL_CHR_NO_DEATH);
         }
 
+        int? lastSetHP = null;
+
         private void btnSetPlayerHP_Click(object sender, RoutedEventArgs e)
         {
             var existing = _process.getSetPlayerHP();
@@ -1486,6 +1507,7 @@ namespace EldenRingTool
             if (int.TryParse(newVal, out var newValInt))
             {
                 _process.getSetPlayerHP(newValInt);
+                lastSetHP = newValInt;
             }
         }
 
@@ -1507,6 +1529,119 @@ namespace EldenRingTool
         private void unmuteMusic(object sender, RoutedEventArgs e)
         {
             _process.doMusicMutePatch(false);
+        }
+
+        private void openMenu(object sender, RoutedEventArgs e)
+        {
+            var sel = new Selection(_process.MENUS.ToList<object>(), x => _process.openMenuByName(x as string));
+            sel.Owner = this;
+            sel.Show();
+        }
+
+        private void flags(object sender, RoutedEventArgs e)
+        {
+            var selections = new List<object>();
+            foreach (var k in FlagDB.data.Keys)
+            {
+                if (k.Contains("DLC") && !_process.exeSupportsDlc()) { continue; } //TODO: check for flags indicating that the player has the DLC
+                selections.Add(k);
+            }
+            const string specificFlag = "Specific flag";
+            const string extraFlagsStr = "Extra Flags";
+            selections.Add(specificFlag);
+            selections.Add(extraFlagsStr);
+            var sel = new Selection(selections, x =>
+            {
+                var str = x as string;
+                if (null == str) { return; }
+                if (specificFlag == str) { getSetFlag(); }
+                else if (extraFlagsStr == str) { extraFlags(); }
+                else if (FlagDB.data.TryGetValue(str, out var data))
+                {
+                    if (str.Contains("Bosses"))
+                    {
+                        var sel2 = new Selection(data.Select(y => y.Item1).ToList<object>(), z =>
+                        {
+                            var bossID = data.Where(w => w.Item1 == z as string).FirstOrDefault();
+                            if (bossID.Item2 != 0) { _process.getSetEventFlag(bossID.Item2, false); }
+                        }, "Resurrect Boss");
+                        sel2.Owner = this;
+                        sel2.Show();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Setting all flags for: " + str);
+                        foreach (var row in data)
+                        {
+                            _process.getSetEventFlag(row.Item2, true);
+                        }
+                    }
+                }
+            });
+            sel.Owner = this;
+            sel.Show();
+        }
+        void getSetFlag(int? preSetFlag = null)
+        {
+            var flagNum = Microsoft.VisualBasic.Interaction.InputBox("Enter flag number", "Flag", preSetFlag?.ToString() ?? "");
+            if (!int.TryParse(flagNum, out var flagNumInt)) { return; }
+            var val = _process.getSetEventFlag(flagNumInt);
+            var flagVal = Microsoft.VisualBasic.Interaction.InputBox("Enter value", "Flag " + flagNumInt, val.ToString());
+            if (!bool.TryParse(flagVal, out var flagValBool)) { return; }
+            _process.getSetEventFlag(flagNumInt, flagValBool);
+        }
+
+        void extraFlags()
+        {
+            if (!File.Exists(extraFlagsFile()))
+            {
+                File.WriteAllText(extraFlagsFile(), "ID,Name" + Environment.NewLine + "70,DLC-Cleared NG+ Scaling");
+            }
+            var flagLines = File.ReadAllLines(extraFlagsFile());
+            var flags = new List<ExtraFlag>();
+            for (int i = 1; i < flagLines.Length; i++)
+            {
+                var flag = ExtraFlag.parse(flagLines[i]);
+                if (flag != null && flag.id != -1)
+                {
+                    flag.state = _process.getSetEventFlag(flag.id);
+                }
+                flags.Add(flag);
+            }
+            var sel = new Selection(flags.ToList<object>(), x =>
+            {
+                var flag = x as ExtraFlag;
+                if (null == flag) { return; }
+                var val = _process.getSetEventFlag(flag.id);
+                var flagVal = Microsoft.VisualBasic.Interaction.InputBox("Enter value", flag.name, val.ToString());
+                if (!bool.TryParse(flagVal, out var flagValBool)) { return; }
+                _process.getSetEventFlag(flag.id, flagValBool);
+            }, "Select Flag");
+            sel.Owner = this;
+            sel.Show();
+        }
+
+        private void setClearCount(object sender, RoutedEventArgs e)
+        {
+            var cc = _process.getSetClearCount();
+
+            string trigger = "Trigger NG+";
+            string setCC = $"Set NG+ level (currently {cc})";
+
+            var sel = new Selection(new List<object>() { trigger, setCC }, x =>
+            {
+                if (trigger.Equals(x))
+                {
+                    _process.triggerNGPlus();
+                    return;
+                }
+                cc = _process.getSetClearCount();
+                var ccNewStr = Microsoft.VisualBasic.Interaction.InputBox("Enter NG+ level (ClearCount): ", "NG+", cc.ToString());
+                if (!int.TryParse(ccNewStr, out var ccNew)) { return; }
+                _process.getSetClearCount(ccNew);
+            });
+            sel.Owner = this;
+            sel.Show();
         }
 
         private void dockPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

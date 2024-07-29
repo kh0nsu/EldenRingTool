@@ -46,9 +46,9 @@ namespace EldenRingTool
         [DllImport("kernel32.dll")]
         private static extern bool CloseHandle(IntPtr hObject);
 
-        public uint RunThread(IntPtr address, uint timeout = 0xFFFFFFFF)
+        public uint RunThread(IntPtr address, uint timeout = 0xFFFFFFFF, IntPtr? param = null)
         {
-            var thread = CreateRemoteThread(_targetProcessHandle, IntPtr.Zero, 0, address, IntPtr.Zero, 0, IntPtr.Zero);
+            var thread = CreateRemoteThread(_targetProcessHandle, IntPtr.Zero, 0, address, param ?? IntPtr.Zero, 0, IntPtr.Zero);
             var ret = WaitForSingleObject(thread, timeout);
             CloseHandle(thread); //return value unimportant
             return ret;
@@ -349,6 +349,8 @@ namespace EldenRingTool
 
         int codeCaveCodeLoc { get { return codeCavePtrLoc + 0x10; } }
 
+        List<int> menuOffsets = new List<int>();
+
         int noGoodsConsume = 0x3C312B3;
         int noAiUpdate = 0x3C312BF;
 
@@ -391,7 +393,7 @@ namespace EldenRingTool
 
         int trophyImpOffset = 0x4453838; //CS::CSTrophyImp
 
-        //int toPGDataOff = 0x3C29108; //"GameDataMan"
+        int gameDataMan = 0;
 
         int csFlipperOff = 0x4453E98; //lots of interesting stuff here. frame times, fps, etc.
         int gameSpeedOffset = 0x2D4;
@@ -426,9 +428,13 @@ namespace EldenRingTool
         uint torrentIDOffset = 0x930; //also appears patch stable
 
         int scadOffset = 0; //should be 0xfc or close to it
-        bool exeSupportsDlc() { return scadOffset > 0 && scadOffset < 0x10000; } //if no plausible value is found then the exe is too old
+        public bool exeSupportsDlc() { return scadOffset > 0 && scadOffset < 0x10000; } //if no plausible value is found then the exe is too old
 
         int musicMuteLoc = 0;
+
+        int csEventFlagMan = 0;
+
+        int triggerNGPlusOffset = 0; //in GameMan
 
         //scanning for above addresses
         void aobScan()
@@ -491,7 +497,7 @@ namespace EldenRingTool
             frameTimeTargetOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "8973 ?? C743 ?? ??88883C EB ?? 8973 ??", "frame time target (1/60.0f)", justOffset: 6, startIndex: 13000000);
 
             noDeathOffset = (uint)scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4883EC20F681????000001488bd97408", "no-death offset in CSChrDataModule", 4 + 2, startIndex: 4200000);
-            //scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 48 85 C0 74 05 48 8B 40 58 C3 C3", "GameDataMan", 3, 7, startIndex: 2300000);
+            gameDataMan = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8B 05 ?? ?? ?? ?? 48 85 C0 74 05 48 8B 40 58 C3 C3", "GameDataMan", 3, 7, startIndex: 2000000);
 
             trophyImpOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48833D ???????? 00 75 31 4C 8B05 ???????? 4C 8945 10 BA 08000000 8D4A 18", "CS::CSTrophyImp", 3, 8, startIndex: 13800000);
 
@@ -524,6 +530,14 @@ namespace EldenRingTool
             scadOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "80 b9 ?? ?? 00 00 00 74 08 0f b6 81 ?? ?? 00 00 c3 0f b6 81 ?? ?? 00 00 c3", "CS::PlayerGameData::GetScadutreeBlessing (scadu offset in pgdata)", readoffset32: 20, startIndex: 2000000);
 
             musicMuteLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "0f b6 48 04 0f 29 74 24 70 0f 57 f6 0f 29 7c 24 60", "Music volume read (patch 31C99090 to mute)", startIndex: 13000000);
+
+            scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4c 8b dc 53 56 57 48 81 ec 90 00 00 00 49 c7 43 88 fe ff ff ff 48 8b d9", "bonfire menu (6 matches)", startIndex: 7500000, singleMatch: false,
+                callback: x => menuOffsets.Add(x));
+            scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "4c 8b dc 53 48 81 ec 90 00 00 00 49 c7 43 88 fe ff ff ff 48 8b 05 ?? ?? ?? ?? 48 33 c4 48 89 84 24 80 00 00 00 48 8b d9 49 c7 43 e0 00 00 00 00 49 8d 43 a8 49 89 43 90 49 8d 43 a8 49 89 43 98 48 8d 05 ?? ?? ?? ?? 49 89 43 a8 48 8d 05 ?? ?? ?? ?? 49 89 43 a8 48 8d 05 ?? ?? ?? ?? 49 89 43 b0", "three more menus", startIndex: 7500000, singleMatch: false,
+            callback: x => menuOffsets.Add(x));
+            csEventFlagMan = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 833D ???????? 00 0F84 ????0000 44 8BE6 85 C0 0F 84 ????0000", "GLOBAL_CSEventFlagMan", 1 + 2, 1 + 2 + 4 + 1, startIndex: 2000000);
+
+            triggerNGPlusOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8b 05 ?? ?? ?? ?? 0f b6 80 ?? ?? 00 00 c3 ?? 48 8b 05 ?? ?? ?? ?? 8b 90", "Trigger NG+ offset in GameMan", readoffset32: 3 + 4 + 3, startIndex: 6000000);
 
             var cave = "";
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
@@ -562,9 +576,9 @@ namespace EldenRingTool
             0x41, 0xB9, 0xDD, 0x00, 0x00, 0x00,       // mov r9d,000000DD
             0x48, 0x8D, 0x05, 0xDB, 0xFF, 0xFF, 0xFF, // lea rax,[eldenring.exe+zeroCaveOffset] (relative addr)
             0x48, 0x89, 0x44, 0x24, 0x20,             // mov [rsp+20],rax
-            0xE8, 0, 0, 0, 0,                         //call to pack coords (to be filled in)
+            0xE8, 0, 0, 0, 0,                         //call to pack coords+warp (to be filled in)
             0xB9, 0x00, 0x00, 0x00, 0x00,             // mov ecx,00000000
-            0xE8, 0, 0, 0, 0,                         //call to actually warp? (to be filled in)
+            0xE8, 0, 0, 0, 0,                         //call set warp coords (with 0 to clear) (to be filled in)
             0x48, 0x83, 0xC4, 0x48,                   // add rsp,48
             0xC3,                                     // ret 
         };
@@ -632,7 +646,7 @@ namespace EldenRingTool
         //we have another way to get this, but can use this as a fallback.
         /*IntPtr getPlayerGameDataPtr()
         {
-            var ptr = ReadUInt64(erBase + toPGDataOff);
+            var ptr = ReadUInt64(erBase + gameDataMan);
             var ptr2 = ReadUInt64((IntPtr)ptr + 8); //CS::PlayerGameData
             return (IntPtr)ptr2;
         }*/
@@ -760,6 +774,32 @@ namespace EldenRingTool
             WriteUInt32(erBase + itemSpawnData + 0x2C, 0); //unused?
             WriteUInt32(erBase + itemSpawnData + 0x30, ashOfWar);
             RunThread(erBase + itemSpawnStart);
+
+            if ((itemID & 0xF0000000) == 0x40000000)
+            {//Goods item
+                var goodsID = itemID & 0xFFFFFFF;
+                var evt = GoodsEvents.getEvent(goodsID);
+                if (evt >= 0)
+                {
+                    Console.WriteLine($"Enabling flag {evt} for goods item {goodsID}");
+                    getSetEventFlag(evt, true);
+                }
+            }
+        }
+
+        void openMenuByAddr(int menuAddr)
+        {//give menu calls scratch space to write result pointer/code
+            RunThread(erBase + menuAddr, param: erBase + zeroCaveOffset);
+        }
+
+        public readonly string[] MENUS = { "Credits", "Great Rune", "Mix Physick", "Ashes of War", "Send player home", "Memorise Spell", "Level Up", "Sort Chest", "Rebirth" };
+
+        public void openMenuByName(string name)
+        {
+            for (int i = 0; i < MENUS.Length; i++)
+            {
+                if (MENUS[i] == name && i < menuOffsets.Count) { openMenuByAddr(menuOffsets[i]); break; }
+            }
         }
 
         public void setEnemyRepeatActionPatch(bool on)
@@ -1426,6 +1466,20 @@ namespace EldenRingTool
             return ret;
         }
 
+        public int getSetClearCount(int? newVal = null)
+        {
+            var ptr = (IntPtr)ReadUInt64(erBase + gameDataMan);
+            int oldVal = ReadInt32(ptr + 0x120); //doesn't change between patches
+            if (newVal.HasValue) { WriteInt32(ptr + 0x120, newVal.Value); }
+            return oldVal;
+        }
+
+        public void triggerNGPlus()
+        {
+            var ptr = (IntPtr)ReadUInt64(erBase + quitoutBase);
+            WriteUInt8(ptr + triggerNGPlusOffset, 1);
+        }
+
         public (float, float, float) getSetPlayerLocalCoords((float,float,float)? pos = null)
         {
             var ptr4 = getCharPtrModules();
@@ -1495,6 +1549,7 @@ namespace EldenRingTool
 
         public int teleportToGlobal((float, float, float, float, uint) targetCoords, float yOffset = 0, bool justConvPos = false, bool warpIfNeeded = false)
         {//this is imperfect, but at least it works within the main world pretty well.
+            if (!isGameLoaded()) { Console.WriteLine("Game not loaded, not teleporting"); return -1; }
             var currentMapCoords = getMapCoords();
             var worldIDCur = (currentMapCoords.Item5 & 0xFF000000) >> 24;
             var worldIDTarget = (targetCoords.Item5 & 0xFF000000) >> 24;
@@ -1512,9 +1567,11 @@ namespace EldenRingTool
             {//TODO: more extensive conditions for 'warp needed', may help in areas like siofra.
                 Utils.debugWrite("World ID differs, will warp first");
                 doWarp(targetCoords.Item5);
+                Thread.Sleep(1000);
                 for (int i = 0; i < 30; i++)
                 {
                     Thread.Sleep(500);
+                    if (!isGameLoaded()) { Console.Write("."); continue; }
                     currentMapCoords = getMapCoords();
                     worldIDCur = (currentMapCoords.Item5 & 0xFF000000) >> 24;
                     if (worldIDCur == worldIDTarget)
@@ -1523,6 +1580,21 @@ namespace EldenRingTool
                         teleportToGlobal(targetCoords, yOffset, warpIfNeeded: false);
                         return 1; //warped
                     }
+                    Console.Write(",");
+                }
+                //it is unclear why but warping to certain map IDs just does not work
+                if (currentMapCoords.Item5 == 0xFFFFFFFFU)
+                {
+                    Utils.debugWrite("Bad map after warp, warping to roundtable");
+                    doWarp(185204736);
+                    Thread.Sleep(1000);
+                    for (int i = 0; i < 30; i++)
+                    {
+                        Thread.Sleep(500);
+                        if (!isGameLoaded()) { Console.Write("."); continue; }
+                        break;
+                    }
+                    return -1;
                 }
                 Utils.debugWrite("Loading timed out"); //15 sec. TODO: better scheme than simple timeout?
                 return -1; //failed
@@ -1575,24 +1647,35 @@ namespace EldenRingTool
             return (x, y, z);
         }
 
-        public void addRunes(int amount = 1000000)
-        {//also update 'soul memory', otherwise servers could easily check this and see that rune count is artificial. still no guarantees.
+        const int MAX_RUNES = 999999999;
+        const long MAX_RUNE_MEMORY = 0xffffffff;
+
+        public int addRunes(int amount = 1000000)
+        {//this should now be functionally equivalent to the AddSouls function in game
             var ptr = (IntPtr)getCharPtrGameData() + 0x6c; //this location is close to player name (9c) and multiplayer group passwords a bit later.
-            var souls = ReadInt32(ptr);
-            var soulMemory = ReadInt32(ptr + 4);
+            var ptrReachedMaxRuneMemory = (IntPtr)getCharPtrGameData() + 0x109;
+            var oldRunes = ReadInt32(ptr);
+            var oldRuneMemory = ReadUInt32(ptr + 4);
 
-            var newSouls = souls + amount;
-            if (newSouls < 0) { newSouls = 0; }
-            if (newSouls > 999999999) { newSouls = 999999999; }//rune cap
+            var newRunes = oldRunes + amount;
+            if (newRunes < 0) { newRunes = 0; }
+            else if (newRunes > MAX_RUNES) { newRunes = MAX_RUNES; }
+            WriteInt32(ptr, newRunes); //update it without checking that it increased at all, because the game does so
 
-            var increase = newSouls - souls;
-            var newSoulMemory = soulMemory;
-            if (increase > 0)
-            {
-                newSoulMemory += increase;
-            }
-            WriteInt32(ptr, newSouls);
-            WriteInt32(ptr + 4, newSoulMemory);
+            var increase = newRunes - oldRunes;
+            if (0 == increase) { return increase; } //if there's no increase, then we don't update rune memory
+
+            long newRuneMemory = oldRuneMemory;
+            newRuneMemory += increase;
+            if (newRuneMemory > MAX_RUNE_MEMORY) { newRuneMemory = MAX_RUNE_MEMORY; } //the game stores this as a 64-bit int, but caps it at the max for a 32 bit uint
+            else if (newRuneMemory < 0) { newRuneMemory = newRunes; } //this check doesn't really make sense, but the game does it...
+            bool reachedMaxRuneMemory = MAX_RUNE_MEMORY == newRuneMemory;
+
+            WriteUInt32(ptr + 4, (uint)newRuneMemory);
+            WriteUInt32(ptr + 8, 0);
+            WriteUInt8(ptrReachedMaxRuneMemory, reachedMaxRuneMemory ? (byte)1 : (byte)0);
+
+            return increase;
         }
 
         public bool isRiding()
@@ -1602,6 +1685,140 @@ namespace EldenRingTool
             var rideStatus = ReadUInt32((IntPtr)ptr2);
             return (rideStatus >> 24) == 0x01;
         }
+
+        //thanks nord!
+        enum CSFD4VirtualMemoryFlag
+        {
+            EventFlagDivisor = 0x1C,
+            FlagHolderEntrySize = 0x20,
+            FlagHolderEntryCount = 0x24,
+            FlagHolder = 0x28,
+            FlagGroupAllocator = 0x30,
+            FlagGroupRootNode = 0x38,
+            FlagGroupEntryCount = 0x40
+        }
+        enum EventFlagGroupNode
+        {
+            Left = 0x0,
+            Parent = 0x8,
+            Right = 0x10,
+            IsLeaf = 0x19,
+            Group = 0x20,
+            LocationMode = 0x28,
+            Location = 0x30,
+        }
+        public (IntPtr,int) getEventFlagLocAndBit(int flag)
+        {
+            var evtFlagMan = (IntPtr)ReadUInt64(erBase + csEventFlagMan);
+            int divisor = ReadInt32(evtFlagMan + (int)CSFD4VirtualMemoryFlag.EventFlagDivisor); //in practice this should never change. could just hardcode to 1000
+            int entrySize = ReadInt32(evtFlagMan + (int)CSFD4VirtualMemoryFlag.FlagHolderEntrySize); //usually 125?
+            if (divisor == 0 || entrySize == 0) { return (IntPtr.Zero, 0); } //game hasn't loaded yet
+            int groupNum = flag / divisor;
+            int bitNumFull = flag % divisor;
+
+            var root = (IntPtr)ReadUInt64(evtFlagMan + (int)CSFD4VirtualMemoryFlag.FlagGroupRootNode);
+            var parent = (IntPtr)ReadUInt64(root + (int)EventFlagGroupNode.Parent);
+            var current = parent;
+            bool isLeaf = ReadUInt8(current + (int)EventFlagGroupNode.IsLeaf) != 0;
+
+            var found = root;
+
+            int walkCount = 0;
+            while (!isLeaf)
+            {
+                if (++walkCount > 1000) { return (IntPtr.Zero, 0); } //something is wrong
+                int currentGroup = ReadInt32(current + (int)EventFlagGroupNode.Group);
+                var next = IntPtr.Zero;
+                if (currentGroup < groupNum)
+                {
+                    next = (IntPtr)ReadUInt64(current + (int)EventFlagGroupNode.Right);
+                    current = found;
+                }
+                else
+                {
+                    next = (IntPtr)ReadUInt64(current + (int)EventFlagGroupNode.Left);
+                }
+
+                found = current;
+                current = next;
+                isLeaf = ReadUInt8(next + (int)EventFlagGroupNode.IsLeaf) != 0;
+            }
+
+            if (found == root || groupNum < ReadInt32(found + (int)EventFlagGroupNode.Group))
+            {//failure
+                return (IntPtr.Zero, 0);
+            }
+            int locMode = ReadInt32(found + (int)EventFlagGroupNode.LocationMode);
+            if (locMode == 2)
+            {//does this actually get used?
+                var ptr = (IntPtr)ReadUInt64(found + (int)EventFlagGroupNode.Location);
+                return (ptr, bitNumFull);
+            }
+            if (locMode == 1)
+            {
+                var flagHolder = (IntPtr)ReadUInt64(evtFlagMan + (int)CSFD4VirtualMemoryFlag.FlagHolder);
+                int loc = ReadInt32(found + (int)EventFlagGroupNode.Location);
+                int locOffset = loc * entrySize;
+                var ptr = flagHolder + locOffset;
+                return (ptr, bitNumFull);
+            }
+            //unknown loc mode; failure
+            return (IntPtr.Zero, 0);
+        }
+
+        public bool getSetEventFlag(int flag, bool? on = null)
+        {
+            var loc = getEventFlagLocAndBit(flag);
+            if (loc.Item1 == IntPtr.Zero) { Console.WriteLine($"Could not find flag {flag}"); return false; }
+            var byteNum = loc.Item2 / 8;
+            int bitNum = 7 - loc.Item2 % 8; //???
+            var flagMask = 1 << bitNum;
+            var flagByte = ReadUInt8(loc.Item1 + byteNum);
+            var flagState = (flagByte & flagMask) == flagMask;
+            if (on.HasValue)
+            {
+                if (on.Value)
+                {
+                    flagByte |= (byte)flagMask;
+                }
+                else
+                {
+                    flagByte &= (byte)~flagMask;
+                }
+                WriteUInt8(loc.Item1 + byteNum, flagByte);
+            }
+            return flagState;
+        }
+
+        public bool isGameLoaded()
+        {
+            var loc = getEventFlagLocAndBit(2200);
+            if (loc.Item1 == IntPtr.Zero) { return false; } //flags not loaded
+            if (getSetEventFlag(2200)) { return false; } //loading flag? sometimes not set even when loaded in, though (stranded graveyard)
+
+            var ptr = (IntPtr)getCharPtrGameData(); //is there a nice way to validate a pointer?
+            var level = ReadInt32(ptr + levelOffset); //check level
+            if (level < 1 || level > 713) { return false; }
+
+            return true;
+        }
+
+#if DEBUG
+        public void runFlagTests()
+        {
+            var rand = new Random();
+            var sw = new Stopwatch();
+            sw.Start();
+            for (int i = 0; i < 1000; i++)
+            {
+                var val = getSetEventFlag(i);
+                //var val = getSetEventFlag(rand.Next(1000000));
+                //if (val) { System.Diagnostics.Debugger.Break(); }
+            }
+            sw.Stop();
+            Console.WriteLine($"kiloflag time {sw.ElapsedMilliseconds} ms"); //~50ms on my machine
+        }
+#endif
     }
 
     public class TeleportHelper
@@ -1615,8 +1832,8 @@ namespace EldenRingTool
             return $"{P3} {P2} {P1} {P0}";
         }
 
-        const int MAIN_WORLD_ID = 60;
-        const int DLC_WORLD_ID = 61;
+        public const int MAIN_WORLD_ID = 60;
+        public const int DLC_WORLD_ID = 61;
         const float TILE_SIZE = 256;
 
         public static bool mapAreaIsMainWorld(uint mapID)
@@ -1630,14 +1847,9 @@ namespace EldenRingTool
             return P3 == DLC_WORLD_ID;
         }
 
-        //TODO: we need a convention for DLC coords
-        //either add a dimension (fallback to 0 for base map) or add a huge offset like +1 million. an offset will however reduce the effective resolution
-        //TODO: check if TILE_SIZE is still valid
-        //TODO: update functions below
-
         public static (float, float) getMapIDWorldMapCoords(uint mapID)
         {//see http://soulsmodding.wikidot.com/reference:elden-ring-map-list
-            if (!mapAreaIsMainWorld(mapID)) { return (float.NaN, float.NaN); } //not the world map - can't handle.
+            if (!mapAreaIsMainWorld(mapID) && !mapAreaIsDLC(mapID)) { return (float.NaN, float.NaN); }
             uint P3 = (mapID & 0xFF000000U) >> 24;
             uint P2 = (mapID & 0x00FF0000U) >> 16;
             uint P1 = (mapID & 0x0000FF00U) >> 8;
@@ -1646,25 +1858,25 @@ namespace EldenRingTool
             float Z = P1 * TILE_SIZE;
             return (X, Z);
         }
-        public static (float, float, float) getWorldMapCoords((float, float, float, float, uint) mapCoords, bool justConvPos = false)
-        {
-            if (mapAreaIsMainWorld(mapCoords.Item5))
+        public static (float, float, float, uint) getWorldMapCoords((float, float, float, float, uint) mapCoords, bool justConvPos = false)
+        {//disambiguate by always returning the 'area number'/'world id'
+            if (mapAreaIsMainWorld(mapCoords.Item5) || mapAreaIsDLC(mapCoords.Item5))
             {
                 var mapOff = getMapIDWorldMapCoords(mapCoords.Item5);
-                return (mapCoords.Item1 + mapOff.Item1, mapCoords.Item2, mapCoords.Item3 + mapOff.Item2);
+                return (mapCoords.Item1 + mapOff.Item1, mapCoords.Item2, mapCoords.Item3 + mapOff.Item2, (mapCoords.Item5 & 0xFF000000U) >> 24);
             }
             else
-            {//TODO: search for a conversion back to the relevant top-level world
+            {
                 var mapID = mapCoords.Item5;
                 uint P3 = (mapID & 0xFF000000U) >> 24;
                 uint P2 = (mapID & 0x00FF0000U) >> 16;
                 uint P1 = (mapID & 0x0000FF00U) >> 8;
-                //try and find a direct conversion back to the main world
+                //try and find a direct conversion back to either main world
                 //can't rely on the grid system for dungeons so look for an exact match. there should be one for anywhere the world map works.
                 foreach (var e in MapConvDB.MapConvEntries)
                 {
                     if (e.intVals["srcAreaNo"] == P3 && e.intVals["srcGridXNo"] == P2 && e.intVals["srcGridZNo"] == P1
-                        && e.intVals["dstAreaNo"] == MAIN_WORLD_ID)
+                        && (e.intVals["dstAreaNo"] == MAIN_WORLD_ID || e.intVals["dstAreaNo"] == DLC_WORLD_ID))
                     {
                         var localXOffset = mapCoords.Item1 - e.floatVals["srcPosX"];
                         var localYOffset = mapCoords.Item2 - e.floatVals["srcPosY"];
@@ -1678,11 +1890,11 @@ namespace EldenRingTool
                         var targetYGlobal = targetY;
                         var targetZGlobal = targetZ + targetGridZ * TILE_SIZE;
 
-                        return (targetXGlobal, targetYGlobal, targetZGlobal);
+                        return (targetXGlobal, targetYGlobal, targetZGlobal, (uint)e.intVals["dstAreaNo"]);
                     }
                 }
                 Utils.debugWrite("Cannot get coords for: " + mapCoords.ToString());
-                return (float.NaN, float.NaN, float.NaN);
+                return (float.NaN, float.NaN, float.NaN, 0);
             }
         }
         public static string mapCoordsToString((float, float, float, float, uint) coords)
@@ -1828,6 +2040,97 @@ namespace EldenRingTool
                 loadDB();
                 return ashes;
             }
+        }
+    }
+
+    public class GoodsEvents
+    {
+        static bool _loaded = false;
+        static List<(string, int, int)> data = new List<(string, int, int)>();
+        static void load()
+        {
+            var list = FileUtils.importGenericTextResource("GoodsEvents.tsv", '\t');
+            foreach (var row in list.Skip(1)) //skip headers
+            {
+                var name = row[2];
+                var evtId = row[0];
+                var itemId = row[1];
+                if (int.TryParse(evtId, out var evtIdInt) && int.TryParse(itemId, out var itemIdInt))
+                {
+                    data.Add((name, evtIdInt, itemIdInt));
+                }
+            }
+            _loaded = true;
+        }
+        public static int getEvent(uint goodsItemID)
+        {
+            if (!_loaded) { load(); }
+            var row = data.Where(x => x.Item3 == goodsItemID).FirstOrDefault();
+            if (row.Item1 == null) { return -1; }
+            return row.Item2;
+        }
+    }
+
+    public class FlagDB
+    {
+        static bool _loaded = false;
+        static void load()
+        {
+            _data.Add("Base Maps", importIDNameTsv("BaseMaps.tsv"));
+            _data.Add("DLC Maps", importIDNameTsv("DLCMaps.tsv"));
+            _data.Add("Base Graces", importIDNameTsv("BaseGraces.tsv"));
+            _data.Add("DLC Graces", importIDNameTsv("DLCGraces.tsv"));
+            _data.Add("Base Bosses", importIDNameTsv("BaseBosses.tsv"));
+            _data.Add("DLC Bosses", importIDNameTsv("DLCBosses.tsv"));
+            _loaded = true;
+        }
+        public static List<(string, int)> importIDNameTsv(string file)
+        {
+            var ret = new List<(string, int)>();
+            var list = FileUtils.importGenericTextResource(file, '\t');
+            foreach (var row in list.Skip(1)) //skip headers
+            {
+                if (row.Length < 2) { continue; }
+                var name = row[1];
+                var evtId = row[0];
+                if (int.TryParse(evtId, out var evtIdInt))
+                {
+                    ret.Add((name, evtIdInt));
+                }
+            }
+            return ret;
+        }
+        static Dictionary<string, List<(string, int)>> _data = new Dictionary<string, List<(string, int)>>();
+        public static Dictionary<string, List<(string, int)>> data
+        {
+            get
+            {
+                if (!_loaded) { load(); }
+                return _data;
+            }
+        }
+    }
+
+    public class ExtraFlag
+    {
+        public int id { get; set; } = -1;
+        public string name { get; set; } = "";
+        public bool state { get; set; } = false;
+        public override string ToString()
+        {
+            return $"{name} ({id}): {state}";
+        }
+        public static ExtraFlag parse(string str)
+        {
+            if (string.IsNullOrEmpty(str)) { return null; }
+            var spl = str.Split(',');
+            if (spl.Length < 2) { return null; }
+            var ret = new ExtraFlag();
+            if (!int.TryParse(spl[0], out var id)) { return null; }
+            ret.id = id;
+            ret.name = spl[1];
+            //state is not stored
+            return ret;
         }
     }
 

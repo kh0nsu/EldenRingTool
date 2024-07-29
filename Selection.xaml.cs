@@ -16,6 +16,19 @@ namespace EldenRingTool
             InitializeComponent();
             if (!string.IsNullOrWhiteSpace(name)) { Title = name; }
             listBox.ItemsSource = items;
+
+            SetMaxHeight();//try and prevent OK button clipping off screeen
+            DpiChanged += OnDpiChanged;
+        }
+
+        private void OnDpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            SetMaxHeight();
+        }
+
+        private void SetMaxHeight()
+        {
+            MaxHeight = SystemParameters.PrimaryScreenHeight * 0.9;
         }
 
         private void okClick(object sender, RoutedEventArgs e)

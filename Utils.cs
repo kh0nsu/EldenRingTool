@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -326,7 +327,7 @@ namespace MiscUtils
 
         public bool outputConsole = true;
 
-        public int findAddr(byte[] buf, int blockVirtualAddr, string find, string desc, int readoffset32 = -1000, int nextInstOffset = -1000, int justOffset = -1000, int startIndex = 0, bool singleMatch = true)
+        public int findAddr(byte[] buf, int blockVirtualAddr, string find, string desc, int readoffset32 = -1000, int nextInstOffset = -1000, int justOffset = -1000, int startIndex = 0, bool singleMatch = true, Action<int> callback = null)
         {//TODO: for single match and non-zero start index, try zero start index if no match is found?
             int count = 0;
 
@@ -370,6 +371,7 @@ namespace MiscUtils
                     if (outputConsole) { Console.WriteLine(output); }
                     index += fb.Length; //keep searching in case there's multiple.
                 }
+                if (index != -1 && callback != null) { callback(result); }
             }
             while (index != -1 && !singleMatch);
             if (0 == count) { Console.WriteLine("Nothing found for " + desc); }
@@ -380,6 +382,35 @@ namespace MiscUtils
         {
             sectionOne = null;
             sectionTwo = null;
+        }
+    }
+
+    public class FileUtils
+    {
+        public static List<string[]> importGenericTextResource(string name, char separator = '\t')
+        {
+            var ret = new List<string[]>();
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith(name));
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string line = "";
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        var spl = line.Split(separator);
+                        if (spl.Length < 1) { continue; }
+                        ret.Add(spl);
+                    }
+                }
+                return ret;
+            }
+            catch
+            {
+                return ret;
+            }
         }
     }
 }

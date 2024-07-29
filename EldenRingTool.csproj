@@ -118,6 +118,13 @@
     <EmbeddedResource Include="ashes.csv" />
     <EmbeddedResource Include="infusions.csv" />
     <EmbeddedResource Include="items.csv" />
+    <EmbeddedResource Include="GoodsEvents.tsv" />
+    <EmbeddedResource Include="BaseGraces.tsv" />
+    <EmbeddedResource Include="BaseMaps.tsv" />
+    <EmbeddedResource Include="DLCBosses.tsv" />
+    <EmbeddedResource Include="DLCGraces.tsv" />
+    <EmbeddedResource Include="DLCMaps.tsv" />
+    <EmbeddedResource Include="BaseBosses.tsv" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
