@@ -11,7 +11,7 @@
         <StackPanel DockPanel.Dock="Top">
             <StackPanel x:Name="mainPanel">
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=PlayerPanel}">
-                    <TextBlock Text="Player" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Player ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="PlayerPanel">
@@ -38,7 +38,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TorrentPanel}">
-                    <TextBlock Text="Torrent" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Torrent ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="TorrentPanel">
@@ -52,7 +52,7 @@
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=EnemyPanel}">
-                    <TextBlock Text="Enemies" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Enemies ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="EnemyPanel">
@@ -63,7 +63,7 @@
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MovementPanel}">
-                    <TextBlock Text="Movement" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Movement ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="MovementPanel">
@@ -88,7 +88,7 @@
                     <TextBlock FontSize="10" Margin="0,2,0,0"><Run Text="Hold ctrl/shift/alt to go further"/></TextBlock>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TeleportPanel}">
-                    <TextBlock Text="Teleport" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Teleport ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="TeleportPanel">
@@ -106,7 +106,7 @@
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=HitboxPanel}">
-                    <TextBlock Text="Hitboxes" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Hitboxes ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="HitboxPanel">
@@ -116,7 +116,7 @@
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MeshPanel}">
-                    <TextBlock Text="Mesh Viewers" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Mesh Viewers ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="MeshPanel">
@@ -131,7 +131,7 @@
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=ViewsPanel}">
-                    <TextBlock Text="Views" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Views ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="ViewsPanel">
@@ -145,7 +145,7 @@
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MiscPanel}">
-                    <TextBlock Text="Misc" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="Misc ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="MiscPanel">
@@ -168,7 +168,7 @@
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=QoLPanel}">
-                    <TextBlock Text="QoL" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <TextBlock Text="QoL ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="QoLPanel">
