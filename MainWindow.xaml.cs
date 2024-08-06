@@ -76,6 +76,7 @@ namespace EldenRingTool
             GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
             FPS_30, FPS_60, FPS_120, FPS_144, FPS_240, FPS_1000,
             TOGGLE_STATS_FULL, TOGGLE_RESISTS, TOGGLE_COORDS,
+            ENABLE_TARGET_HOOK, STAY_ON_TOP,
             GREAT_RUNE, PHYSICK, ASHES, SPELLS,
         }
 
@@ -496,6 +497,8 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.TOGGLE_STATS_FULL: toggleStatsFull(null, null); break;
                 case HOTKEY_ACTIONS.TOGGLE_RESISTS: toggleResists(null, null); break;
                 case HOTKEY_ACTIONS.TOGGLE_COORDS: toggleCoords(null, null); break;
+                case HOTKEY_ACTIONS.ENABLE_TARGET_HOOK: installTargetHook(targetHookButton, null); break;
+                case HOTKEY_ACTIONS.STAY_ON_TOP: chkStayOnTop.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.GREAT_RUNE: _process.openMenuByName(_process.MENUS[1]); break;
                 case HOTKEY_ACTIONS.PHYSICK: _process.openMenuByName(_process.MENUS[2]); break;
                 case HOTKEY_ACTIONS.ASHES: _process.openMenuByName(_process.MENUS[3]); break;
