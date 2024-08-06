@@ -855,15 +855,31 @@ namespace EldenRingTool
             }
         }
 
-        void doFreeCamPatch()
-        {//no undo as no need to turn this off
-            /*if (!ReadBytes(erBase + freeCamPatchLoc, 2).SequenceEqual(freeCamPatchCode))
+        byte[] freeCamPatchAltOrig = null;
+
+        void doFreeCamPatch(bool on = true)
+        {
+            if (on)
             {
-                WriteBytes(erBase + freeCamPatchLoc, freeCamPatchCode);
-            }*/
-            if (ReadUInt8(erBase + freeCamPatchLocAlt) == 0xEB) //jmp
+                /*if (!ReadBytes(erBase + freeCamPatchLoc, 2).SequenceEqual(freeCamPatchCode))
+                {
+                    WriteBytes(erBase + freeCamPatchLoc, freeCamPatchCode);
+                }*/
+                if (ReadUInt8(erBase + freeCamPatchLocAlt) == 0xEB) //jmp
+                {
+                    freeCamPatchAltOrig = ReadBytes(erBase + freeCamPatchLocAlt, freeCamPatchCodeAlt.Length);
+                    WriteBytes(erBase + freeCamPatchLocAlt, freeCamPatchCodeAlt);
+                }
+            }
+            else
             {
-                WriteBytes(erBase + freeCamPatchLocAlt, freeCamPatchCodeAlt);
+                if (ReadBytes(erBase + freeCamPatchLocAlt, freeCamPatchCodeAlt.Length).SequenceEqual(freeCamPatchCodeAlt))
+                {
+                    if (freeCamPatchAltOrig != null)
+                    {
+                        WriteBytes(erBase + freeCamPatchLocAlt, freeCamPatchAltOrig);
+                    }
+                }
             }
         }
 
@@ -1270,6 +1286,11 @@ namespace EldenRingTool
         }
         public void disableOpt(DebugOpts opt)
         {
+            if (opt == DebugOpts.FREE_CAM)
+            {//special case - fix kb&m breaking on quit to main menu
+                doFreeCamPatch(false);
+            }
+
             var tuple = lookupOpt(opt);
             if (tuple.Item1 == IntPtr.Zero) { return; }
 
