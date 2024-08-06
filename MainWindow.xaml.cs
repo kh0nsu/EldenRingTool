@@ -1643,5 +1643,21 @@ namespace EldenRingTool
             sel.Owner = this;
             sel.Show();
         }
+
+        private void dockPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DockPanel dockPanel && dockPanel.Tag is StackPanel stackPanel)
+            {
+                stackPanel.Visibility = stackPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+
+                var textBox = dockPanel.Children.OfType<TextBlock>().FirstOrDefault();
+                if (textBox != null)
+                {
+                    textBox.Text = stackPanel.Visibility == Visibility.Visible ? 
+                                                            textBox.Text.Substring(0, textBox.Text.Length - 1) + "▼" : 
+                                                            textBox.Text.Substring(0, textBox.Text.Length - 1) + "▲";
+                }
+            }
+        }
     }
 }
