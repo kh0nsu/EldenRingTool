@@ -75,9 +75,26 @@ namespace EldenRingTool
             ADD_SOULS,
             GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
             FPS_30, FPS_60, FPS_120, FPS_144, FPS_240, FPS_1000,
+            FPS, //arbitrary fps
             TOGGLE_STATS_FULL, TOGGLE_RESISTS, TOGGLE_COORDS,
             ENABLE_TARGET_HOOK, STAY_ON_TOP,
             GREAT_RUNE, PHYSICK, ASHES, SPELLS,
+        }
+
+        public class HotkeyAction
+        {
+            public HOTKEY_ACTIONS actID { get; set; } = 0;
+            public bool needsParam()
+            {
+                return actID == HOTKEY_ACTIONS.FPS;
+            }
+            public string someParam { get; set; } = null;
+            public override string ToString()
+            {
+                var ret = actID.ToString();
+                if (someParam != null) { ret += " " + someParam.ToString(); }
+                return ret;
+            }
         }
 
         ERProcess _process = null;
@@ -94,7 +111,7 @@ namespace EldenRingTool
         Dictionary<string, HOTKEY_ACTIONS> actionMap = new Dictionary<string, HOTKEY_ACTIONS>();
         Dictionary<string, Key> keyMap = new Dictionary<string, Key>();
 
-        Dictionary<int, List<HOTKEY_ACTIONS>> registeredHotkeys = new Dictionary<int, List<HOTKEY_ACTIONS>>();
+        Dictionary<int, List<HotkeyAction>> registeredHotkeys = new Dictionary<int, List<HotkeyAction>>();
 
         (float, float, float) lastPos = (0, 0, 0);
         (float, float, float) diffNormalisedLpf = (0, 0, 0);
@@ -250,7 +267,6 @@ namespace EldenRingTool
         }
 
         //TODO: move hotkey stuff to utils?
-        //TODO: support parameters for hotkeys?
 
         void setUpMapsForHotkeys()
         {
@@ -282,28 +298,42 @@ namespace EldenRingTool
                     lines = File.ReadAllLines(hotkeyFile());
                 }
 
-                var hotkeyMap = new Dictionary<(Key, Modifiers), List<HOTKEY_ACTIONS>>();
+                var hotkeyMap = new Dictionary<(Key, Modifiers), List<HotkeyAction>>();
                 foreach (var line in lines)
                 {
                     if (line.StartsWith(";") || line.StartsWith("#") || line.StartsWith("//")) { continue; }
                     var modifiers = Modifiers.NO_MOD;
-                    HOTKEY_ACTIONS? action = null;
+                    HotkeyAction action = null;
                     Key? hotkey = null;
                     var spl = line.Split(' ');
-                    foreach (var s in spl)
+                    for (int j = 0; j < spl.Length; j++)
                     {
+                        var s = spl[j];
                         if (modMap.ContainsKey(s)) { modifiers |= modMap[s]; }
-                        if (actionMap.ContainsKey(s)) { action = actionMap[s]; }
                         if (keyMap.ContainsKey(s)) { hotkey = keyMap[s]; }
+                        if (actionMap.ContainsKey(s))
+                        {
+                            action = new HotkeyAction() { actID = actionMap[s] };
+                            if (action.needsParam())
+                            {//param is meant to be right after
+                                var paramInd = j + 1;
+                                if (spl.Length > paramInd)
+                                {
+                                    var paramStr = spl[paramInd];
+                                    action.someParam = paramStr;
+                                    continue; //no further processing
+                                }
+                            }
+                        }
                     }
-                    if (action.HasValue && hotkey.HasValue)
+                    if (action != null && hotkey.HasValue)
                     {
                         var key = (hotkey.Value, modifiers);
                         if (!hotkeyMap.ContainsKey(key))
                         {
-                            hotkeyMap.Add(key, new List<HOTKEY_ACTIONS>());
+                            hotkeyMap.Add(key, new List<HotkeyAction>());
                         }
-                        hotkeyMap[key].Add(action.Value);
+                        hotkeyMap[key].Add(action);
                     }
                 }
 
@@ -425,8 +455,9 @@ namespace EldenRingTool
             return IntPtr.Zero;
         }
 
-        void doAct(HOTKEY_ACTIONS act)
+        void doAct(HotkeyAction action)
         {
+            var act = action.actID;
             switch (act)
             {
                 case HOTKEY_ACTIONS.QUITOUT: doQuitout(null, null); break;
@@ -494,6 +525,21 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.FPS_144: _process.getSetFrameTimeTarget(1 / 144.0f); break;
                 case HOTKEY_ACTIONS.FPS_240: _process.getSetFrameTimeTarget(1 / 240.0f); break;
                 case HOTKEY_ACTIONS.FPS_1000: _process.getSetFrameTimeTarget(1 / 1000.0f); break;
+                case HOTKEY_ACTIONS.FPS:
+                    {
+                        var targetFps = 60.0f;
+                        if (!string.IsNullOrEmpty(action.someParam) && float.TryParse(action.someParam, out var targetFpsOut))
+                        {
+                            targetFps = targetFpsOut;
+                        }
+                        else
+                        {
+                            Utils.debugWrite("Error parsing fps");
+                        }
+                        var frameTime = 1 / targetFps;
+                        _process.getSetFrameTimeTarget(frameTime);
+                    }
+                    break;
                 case HOTKEY_ACTIONS.TOGGLE_STATS_FULL: toggleStatsFull(null, null); break;
                 case HOTKEY_ACTIONS.TOGGLE_RESISTS: toggleResists(null, null); break;
                 case HOTKEY_ACTIONS.TOGGLE_COORDS: toggleCoords(null, null); break;
