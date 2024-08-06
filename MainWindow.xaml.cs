@@ -634,8 +634,12 @@ namespace EldenRingTool
             var pos = _process.getSetLocalCoords();
             if (positionPanel.Visibility == Visibility.Visible)
             {
+                var isRiding = _process.isRiding() ? "R" : "";
+                var posPlayer = _process.getSetPlayerLocalCoords();
+                var posTorrent = _process.getSetTorrentLocalCoords();
                 var mapCoords = _process.getMapCoords();
-                localPos.Text = $"Local: [{pos.Item1:F2} {pos.Item2:F2} {pos.Item3:F2}]";
+                //localPos.Text = $"Local: [{pos.Item1:F2} {pos.Item2:F2} {pos.Item3:F2}]"; //switches between player and torrent
+                localPos.Text = $"P: [{posPlayer.Item1:F2} {posPlayer.Item2:F2} {posPlayer.Item3:F2}] T: [{posTorrent.Item1:F2} {posTorrent.Item2:F2} {posTorrent.Item3:F2}] {isRiding}";
                 var mapRotDeg = mapCoords.Item4 * 180 / Math.PI;
                 var mapIDstr = TeleportHelper.mapIDString(mapCoords.Item5);
                 mapPos.Text = $"Map: [{mapCoords.Item1:F2} {mapCoords.Item2:F2} {mapCoords.Item3:F2}] rotation: [{mapRotDeg:F1}°]";
