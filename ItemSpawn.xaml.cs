@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using MiscUtils;
+using System.Linq;
 using System.Windows;
 
 namespace EldenRingTool
@@ -91,7 +92,9 @@ namespace EldenRingTool
 
         private void showList(object sender, RoutedEventArgs e)
         {
-            var sel = new Selection(ItemDB.Items.Select(x => x.Item1).ToList<object>(), (x) => { txtItem.Text = x as string; }, "Choose an item");
+            var sel = new Selection(ItemDB.Items.Select(x => new StringWrap() { DisplayStr = $"{x.Item1} [{x.Item2:X8}]", o = x.Item1 }).ToList<object>(),
+                (x) => { txtItem.Text = (x as StringWrap).o as string; }, //could wrap the whole thing with item id, but we have unique names now anyway
+                "Choose an item");
             sel.Owner = this;
             sel.Show();
         }

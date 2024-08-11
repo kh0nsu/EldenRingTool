@@ -2031,29 +2031,36 @@ namespace EldenRingTool
         {
             if (_loaded) { return; }
 
-            ashes = importNameIDCSV("ashes.csv");
+            ashes = importNameIDCSV("ashes.csv"); //TODO: just init with Default and then take from item list
             infusions = importNameIDCSV("infusions.csv", System.Globalization.NumberStyles.Number);
             var itemsTemp = importNameIDCSV("items.csv");
-            itemsTemp.Sort((x, y) => { return x.Item1.CompareTo(y.Item1); }); //sort order can be a bit jank so just re sort it now
+            //sort order can be a bit jank so just re sort it now
+            itemsTemp.Sort((x, y) =>
+            {
+                if (x.Item1 == y.Item1) { return x.Item2.CompareTo(y.Item2); }
+                return x.Item1.CompareTo(y.Item1);
+            });
 
-            items.Clear();
-            var dupeNames = new Dictionary<string, int>();
+            var nameSet = new HashSet<string>();
+            var dupeSet = new HashSet<string>();
             foreach (var item in itemsTemp)
-            {//ideally all dupes should have 1,2,3 or something appended, this will at least fix up 2nd onwards
-                string name = item.Item1;
-                bool dupe = false;
-                if (dupeNames.ContainsKey(name))
-                {
-                    dupeNames[name]++;
-                    dupe = true;
-                }
-                else
-                {
-                    dupeNames.Add(name, 1);
-                }
+            {
+                if (nameSet.Contains(item.Item1)) { dupeSet.Add(item.Item1); } else { nameSet.Add(item.Item1); }
+            }
 
-                var newItem = (dupe ? name + " " + dupeNames[name] : name, item.Item2);
-                items.Add(newItem);
+            var dupeCount = new Dictionary<string, int>();
+            items.Clear();
+            foreach (var item in itemsTemp)
+            {
+                string name = item.Item1;
+                if (dupeSet.Contains(name))
+                {
+                    int count = 0;
+                    dupeCount.TryGetValue(name, out count);
+                    dupeCount[name] = ++count;
+                    name = $"{name} #{count}";
+                }
+                items.Add((name, item.Item2));
             }
 
             _loaded = true;

@@ -413,4 +413,11 @@ namespace MiscUtils
             }
         }
     }
+
+    public class StringWrap
+    {
+        public string DisplayStr { get; set; } = "";
+        public object o = null;
+        public override string ToString() { return DisplayStr; }
+    }
 }

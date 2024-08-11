@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EldenRingTool"
         mc:Ignorable="d"
-        Title="Item Spawn" Width="600" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterOwner">
+        Title="Item Spawn" Width="700" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterOwner">
     <StackPanel Orientation="Vertical">
         <Grid>
             <Grid.ColumnDefinitions>
