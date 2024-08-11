@@ -67,7 +67,7 @@ namespace EldenRingTool
                     }
                     return;
                 }
-                matchingItem = item.Item1;
+                matchingItem = $"{item.Item1} [{item.Item2:X8}]";
                 if (null == sender) { return; }
                 txtItem.Text = item.Item1;
                 uint level;

@@ -2033,8 +2033,28 @@ namespace EldenRingTool
 
             ashes = importNameIDCSV("ashes.csv");
             infusions = importNameIDCSV("infusions.csv", System.Globalization.NumberStyles.Number);
-            items = importNameIDCSV("items.csv");
-            items.Sort((x, y) => { return x.Item1.CompareTo(y.Item1); }); //sort order can be a bit jank so just re sort it now
+            var itemsTemp = importNameIDCSV("items.csv");
+            itemsTemp.Sort((x, y) => { return x.Item1.CompareTo(y.Item1); }); //sort order can be a bit jank so just re sort it now
+
+            items.Clear();
+            var dupeNames = new Dictionary<string, int>();
+            foreach (var item in itemsTemp)
+            {//ideally all dupes should have 1,2,3 or something appended, this will at least fix up 2nd onwards
+                string name = item.Item1;
+                bool dupe = false;
+                if (dupeNames.ContainsKey(name))
+                {
+                    dupeNames[name]++;
+                    dupe = true;
+                }
+                else
+                {
+                    dupeNames.Add(name, 1);
+                }
+
+                var newItem = (dupe ? name + " " + dupeNames[name] : name, item.Item2);
+                items.Add(newItem);
+            }
 
             _loaded = true;
         }

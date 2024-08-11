@@ -400,8 +400,8 @@ Beast Champion Armor,100AFCE4
 Beast Champion Gauntlets,100AFD48
 Beast Champion Greaves,100AFDAC
 Beast Champion Helm,100AFC80
-Beast Claw,04153A20
-Beast Claw,40001AA4
+Beast Claw Weapon,04153A20
+Beast Claw Incantation,40001AA4
 Beast Crest Heater Shield,01DD4B80
 Beast Eye,40002313
 Beast Horn,401EBF18
@@ -1355,8 +1355,8 @@ Godrick Soldier Ashes,4003D090
 Godrick Soldier Gauntlets,1019F168
 Godrick Soldier Greaves,1019F1CC
 Godrick Soldier Helm,1019F0A0
-Godrick's Great Rune,400000BF
-Godrick's Great Rune,40001FD4
+Godrick's Great Rune Restored,400000BF
+Godrick's Great Rune Unrestored,40001FD4
 Godskin Apostle Bracelets,1007F008
 Godskin Apostle Hood,1007EF40
 Godskin Apostle Robe,1007EFA4
@@ -1413,8 +1413,8 @@ Golden Rune [9],40000B5C
 Golden Seed,4000271A
 Golden Sunflower,400050CB
 Golden Tailoring Tools,40001FFC
-Golden Vow,400019C8
-Golden Vow,401E90E2
+Golden Vow Incantation,400019C8
+Golden Vow Consumable,401E90E2
 Goldmask's Rags,100FDEE4
 Golem Fist,0148ACA0
 Golem Greatbow,02810590
@@ -1974,8 +1974,8 @@ Main-gauche,0016E360
 Malenia's Armor (Altered),100BC41C
 Malenia's Armor,100BC034
 Malenia's Gauntlet,100BC098
-Malenia's Great Rune,400000C4
-Malenia's Great Rune,40001FD9
+Malenia's Great Rune Restored,400000C4
+Malenia's Great Rune Unrestored,40001FD9
 Malenia's Greaves,100BC0FC
 Malenia's Winged Helm,100BBFD0
 Malformed Dragon Armor,1003F804
@@ -2126,8 +2126,8 @@ Miriam's Vanishing,401E954C
 Miriel's Bell Bearing,400022D5
 Misbegotten Shortbow,02628110
 Miséricorde,000FB770
-Mohg's Great Rune,400000C3
-Mohg's Great Rune,40001FD8
+Mohg's Great Rune Restored,400000C3
+Mohg's Great Rune Unrestored,40001FD8
 Mohg's Shackle,40000866
 Mohgwyn's Sacred Spear,01038D50
 Moldmonger's Bell Bearing,401EA74A
@@ -2139,8 +2139,8 @@ Moonrithyll's Knight Sword,00454660
 Moonveil,008A3EA0
 Moore's Bell Bearing,401EA744
 Morgott's Cursed Sword,007B98A0
-Morgott's Great Rune,400000C1
-Morgott's Great Rune,40001FD6
+Morgott's Great Rune Restored,400000C1
+Morgott's Great Rune Unrestored,40001FD6
 Morning Star,00A89C10
 Mottled Necklace +1,200004B1
 Mottled Necklace +2,20001BA8
@@ -2506,8 +2506,8 @@ Radahn Soldier Gauntlets,101A6698
 Radahn Soldier Greaves,101A66FC
 Radahn Soldier Helm,101A65D0
 Radahn's Gauntlets,10072CB8
-Radahn's Great Rune,400000C0
-Radahn's Great Rune,40001FD5
+Radahn's Great Rune Restored,400000C0
+Radahn's Great Rune Unrestored,40001FD5
 Radahn's Greaves,10072D1C
 Radahn's Lion Armor (Altered),1007303C
 Radahn's Lion Armor,10072C54
@@ -2725,8 +2725,8 @@ Rusted Anchor,00E5CC20
 Rusty Key,40001F4A
 Rya's Necklace,40001FC2
 Rya's Necklace,40001FC8
-Rykard's Great Rune,400000C2
-Rykard's Great Rune,40001FD7
+Rykard's Great Rune Restored,400000C2
+Rykard's Great Rune Unrestored,40001FD7
 Rykard's Rancor,400012DE
 Sacramental Bud,40005111
 Sacred Bloody Flesh,401E893A
