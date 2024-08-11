@@ -1815,7 +1815,7 @@ namespace EldenRingTool
         {
             var loc = getEventFlagLocAndBit(2200);
             if (loc.Item1 == IntPtr.Zero) { return false; } //flags not loaded
-            if (getSetEventFlag(2200)) { return false; } //loading flag? sometimes not set even when loaded in, though (stranded graveyard)
+            //if (getSetEventFlag(2200)) { return false; } //loading flag? sometimes not set even when loaded in, though (stranded graveyard)
 
             var ptr = (IntPtr)getCharPtrGameData(); //is there a nice way to validate a pointer?
             var level = ReadInt32(ptr + levelOffset); //check level
