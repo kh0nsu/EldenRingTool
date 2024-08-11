@@ -73,7 +73,7 @@ namespace EldenRingTool
             FREE_CAMERA, FREE_CAMERA_CONTROL, NO_CLIP, ALLOW_MAP_COMBAT, TORRENT_ANYWHERE,
             DISABLE_STEAM_INPUT_ENUM, DISABLE_STEAM_ACHIEVEMENTS, MUTE_MUSIC,
             ADD_SOULS,
-            GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
+            GAME_SPEED_25PC, GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
             FPS_30, FPS_60, FPS_120, FPS_144, FPS_240, FPS_1000,
             FPS, //arbitrary fps
             TOGGLE_STATS_FULL, TOGGLE_RESISTS, TOGGLE_COORDS,
@@ -395,6 +395,15 @@ namespace EldenRingTool
             return sb.ToString();
         }
 
+        void backupHotkeyFile()
+        {
+            try
+            {
+                File.Copy(hotkeyFile(), hotkeyFile() + ".bak", true);
+            }
+            catch { }
+        }
+
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -511,6 +520,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.DISABLE_STEAM_ACHIEVEMENTS: chkSteamAchieve.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.MUTE_MUSIC: chkMuteMusic.IsChecked ^= true; break;
                 case HOTKEY_ACTIONS.ADD_SOULS: addSouls(null, null); break;
+                case HOTKEY_ACTIONS.GAME_SPEED_25PC: _process.getSetGameSpeed(0.25f); break;
                 case HOTKEY_ACTIONS.GAME_SPEED_50PC: _process.getSetGameSpeed(0.5f); break;
                 case HOTKEY_ACTIONS.GAME_SPEED_75PC: _process.getSetGameSpeed(0.75f); break;
                 case HOTKEY_ACTIONS.GAME_SPEED_100PC: _process.getSetGameSpeed(1.0f); break;
@@ -1059,6 +1069,7 @@ namespace EldenRingTool
                 var res = MessageBox.Show("Reset hotkey file?", "Reset hotkeys", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (res == MessageBoxResult.Yes)
                 {
+                    backupHotkeyFile();
                     generateDefaultHotkeyFile();
                     var psi = new ProcessStartInfo(hotkeyFile());
                     psi.UseShellExecute = true;
