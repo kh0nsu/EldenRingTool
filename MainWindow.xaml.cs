@@ -136,6 +136,7 @@ namespace EldenRingTool
         bool _playerNoDeathStateWas = false;
         bool _torNoDeathStateWas = false;
         bool _noClipActive = false;
+        bool panelsCollapsed = false;
 
         static string windowStateFile()
         {
@@ -1721,6 +1722,36 @@ namespace EldenRingTool
                                                             textBox.Text.Substring(0, textBox.Text.Length - 1) + "▼" : 
                                                             textBox.Text.Substring(0, textBox.Text.Length - 1) + "▲";
                 }
+            }
+        }
+
+        private void ToggleCollapse(object sender, RoutedEventArgs e)
+        {
+            var newVisibility = panelsCollapsed ? Visibility.Visible : Visibility.Collapsed;
+
+            foreach (UIElement element in mainPanel.Children)
+            {
+                if (element is StackPanel stackPanel && stackPanel.Name != null)
+                {
+                    // Toggle the visibility of each DockPanel
+                    stackPanel.Visibility = newVisibility;
+                }
+                else if (element is DockPanel dockPanel) {
+                    var textBox = dockPanel.Children.OfType<TextBlock>().FirstOrDefault();
+                    if (textBox != null)
+                    {
+                        textBox.Text = newVisibility == Visibility.Visible ?
+                                                        textBox.Text.Substring(0, textBox.Text.Length - 1) + "▼" :
+                                                        textBox.Text.Substring(0, textBox.Text.Length - 1) + "▲";
+                    }
+                }
+            }
+
+            panelsCollapsed = !panelsCollapsed;
+
+            if (sender is Button button)
+            {
+                button.Content = newVisibility == Visibility.Visible ? "▼" : "▲";
             }
         }
     }
