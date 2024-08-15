@@ -1731,19 +1731,10 @@ namespace EldenRingTool
 
             foreach (UIElement element in mainPanel.Children)
             {
-                if (element is StackPanel stackPanel && stackPanel.Name != null)
+                if (element is StackPanel stackPanel && stackPanel.Name != null && stackPanel.Visibility != newVisibility)
                 {
-                    // Toggle the visibility of each DockPanel
+                    dockPanel_MouseLeftButtonDown(stackPanel, null);
                     stackPanel.Visibility = newVisibility;
-                }
-                else if (element is DockPanel dockPanel) {
-                    var textBox = dockPanel.Children.OfType<TextBlock>().FirstOrDefault();
-                    if (textBox != null)
-                    {
-                        textBox.Text = newVisibility == Visibility.Visible ?
-                                                        textBox.Text.Substring(0, textBox.Text.Length - 1) + "▼" :
-                                                        textBox.Text.Substring(0, textBox.Text.Length - 1) + "▲";
-                    }
                 }
             }
 
