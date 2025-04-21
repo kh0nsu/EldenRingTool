@@ -321,6 +321,8 @@ namespace EldenRingTool
             FROST, FROST_MAX,
             SLEEP, SLEEP_MAX,
             MADNESS, MADNESS_MAX,
+            STANDARD, SLASH, STRIKE, PIERCE,
+            MAGIC, FIRE, LIGHTNING, HOLY,
         }
 
         const long SANE_MINIMUM = 0x700000000000;
