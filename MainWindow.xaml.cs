@@ -676,7 +676,7 @@ namespace EldenRingTool
 
                 magicVal.Text = magicDefense + "%";
                 fireVal.Text = fireDefense + "%";
-                lightningVal.Text = fireDefense + "%";
+                lightningVal.Text = lightningDefense + "%";
                 holyVal.Text = holyDefense + "%";
             }
         }
