@@ -195,7 +195,7 @@
                     <TextBlock x:Name="poiseTimerText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise reset time: 00.0</TextBlock>
                     <ProgressBar x:Name="poiseTimerBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
                 </DockPanel>
-                <StackPanel x:Name="resistsPanel" Visibility="Collapsed">
+                <StackPanel x:Name="resistsPanel">
                     <DockPanel>
                         <TextBlock x:Name="poisonText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Poison: 0000 / 0000</TextBlock>
                         <ProgressBar x:Name="poisonBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FF006D14" />
@@ -223,6 +223,28 @@
                     <DockPanel>
                         <TextBlock x:Name="madText" Margin="5,2" DockPanel.Dock="Left" Width="125" FontSize="10">Madness: 0000 / 0000</TextBlock>
                         <ProgressBar x:Name="madBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FFB08306" />
+                    </DockPanel>
+                </StackPanel>
+                <StackPanel x:Name="defensesPanel">
+                    <DockPanel>
+                        <TextBlock x:Name="slashText" Margin="5,0">Slash:</TextBlock>
+                        <TextBlock x:Name="slashVal"  Margin="5,0">xx%</TextBlock>
+                        <TextBlock x:Name="strikeText" Margin="5,0">Strike:</TextBlock>
+                        <TextBlock x:Name="strikeVal"  Margin="5,0">xx%</TextBlock>
+                        <TextBlock x:Name="pierceText" Margin="5,0">Pierce:</TextBlock>
+                        <TextBlock x:Name="pierceVal"  Margin="5,0">xx%</TextBlock>
+                        <TextBlock x:Name="standardText" Margin="5,0">Standard:</TextBlock>
+                        <TextBlock x:Name="standardVal"  Margin="5,0">xx%</TextBlock>
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="magicText" Margin="5,0">Magic:</TextBlock>
+                        <TextBlock x:Name="magicVal"  Margin="5,0">xx%</TextBlock>
+                        <TextBlock x:Name="fireText" Margin="5,0">Fire:</TextBlock>
+                        <TextBlock x:Name="fireVal"  Margin="5,0">xx%</TextBlock>
+                        <TextBlock x:Name="lightningText" Margin="5,0">Lightning:</TextBlock>
+                        <TextBlock x:Name="lightningVal"  Margin="5,0">xx%</TextBlock>
+                        <TextBlock x:Name="holyText" Margin="5,0">Holy:</TextBlock>
+                        <TextBlock x:Name="holyVal"  Margin="5,0">xx%</TextBlock>
                     </DockPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" x:Name="freezeHPPanel">

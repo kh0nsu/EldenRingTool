@@ -612,6 +612,18 @@ namespace EldenRingTool
                     statText.Text = $"{statName}: {(int)statAmount} / {(int)statMax}";
                 }
             }
+            if (defensesPanel.Visibility == Visibility.Visible)
+            {
+                var slashDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.SLASH)) * 100);
+                var strikeDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.STRIKE)) * 100);
+                var pierceDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.PIERCE)) * 100);
+                var standardDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.STANDARD)) * 100);
+
+                var magicDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.MAGIC)) * 100);
+                var fireDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.FIRE)) * 100);
+                var lightningDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.LIGHTNING)) * 100);
+                var holyDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.HOLY)) * 100);
+            }
         }
 
         void updateMovement()
