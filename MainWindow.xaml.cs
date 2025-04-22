@@ -615,14 +615,32 @@ namespace EldenRingTool
             if (defensesPanel.Visibility == Visibility.Visible)
             {
                 var slashDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.SLASH)) * 100);
+                slashDefense = (int)Math.Round(slashDefense / 5.0) * 5;
                 var strikeDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.STRIKE)) * 100);
+                strikeDefense = (int)Math.Round(strikeDefense / 5.0) * 5;
                 var pierceDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.PIERCE)) * 100);
+                pierceDefense = (int)Math.Round(pierceDefense / 5.0) * 5;
                 var standardDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.STANDARD)) * 100);
+                standardDefense = (int)Math.Round(standardDefense / 5.0) * 5;
 
                 var magicDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.MAGIC)) * 100);
+                magicDefense = (int)Math.Round(magicDefense / 5.0) * 5;
                 var fireDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.FIRE)) * 100);
+                fireDefense = (int)Math.Round(fireDefense / 5.0) * 5;
                 var lightningDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.LIGHTNING)) * 100);
+                lightningDefense = (int)Math.Round(lightningDefense / 5.0) * 5;
                 var holyDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.HOLY)) * 100);
+                holyDefense = (int)Math.Round(holyDefense / 5.0) * 5;
+
+                slashVal.Text = slashDefense + "%";
+                strikeVal.Text = strikeDefense + "%";
+                pierceVal.Text = pierceDefense + "%";
+                standardVal.Text = standardDefense + "%";
+
+                magicVal.Text = magicDefense + "%";
+                fireVal.Text = fireDefense + "%";
+                lightningVal.Text = fireDefense + "%";
+                holyVal.Text = holyDefense + "%";
             }
         }
 
