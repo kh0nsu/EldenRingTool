@@ -228,7 +228,27 @@ namespace EldenRingTool
         {
             try
             {
-                var windowInfo = $"{Left} {Top} {isCompact} {resistsPanel.Visibility} {chkSteamInputEnum.IsChecked} {chkSteamAchieve.IsChecked} {chkMuteMusic.IsChecked}";
+                var windowInfo = 
+                    $"{Left} " +
+                    $"{Top} " +
+                    $"{isCompact} " +
+                    $"{chkSteamInputEnum.IsChecked} " +
+                    $"{chkSteamAchieve.IsChecked} " +
+                    $"{chkMuteMusic.IsChecked} " +
+                    $"{PlayerPanel.Visibility} " +
+                    $"{TorrentPanel.Visibility} " +
+                    $"{EnemyPanel.Visibility} " +
+                    $"{MovementPanel.Visibility} " +
+                    $"{TeleportPanel.Visibility} " +
+                    $"{HitboxPanel.Visibility} " +
+                    $"{MeshPanel.Visibility} " +
+                    $"{ViewsPanel.Visibility} " +
+                    $"{MiscPanel.Visibility} " +
+                    $"{QoLPanel.Visibility} " +
+                    $"{hpPoisePanel.Visibility} " +
+                    $"{resistsPanel.Visibility} " +
+                    $"{defensesPanel.Visibility}";
+
                 File.WriteAllText(windowStateFile(), windowInfo);
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
@@ -244,7 +264,6 @@ namespace EldenRingTool
                 var left = double.Parse(spl[0]);
                 var top = double.Parse(spl[1]);
                 bool compact = bool.Parse(spl[2]);
-                string vis = spl[3];
                 if ((left + Width) > System.Windows.SystemParameters.VirtualScreenWidth || (top + Height) > System.Windows.SystemParameters.VirtualScreenHeight)
                 {
                     Console.WriteLine("Not restoring position, would go off-screen");
@@ -255,13 +274,30 @@ namespace EldenRingTool
                     Top = top;
                 }
                 if (compact) { setCompact(); } //default full
-                if (vis == Visibility.Visible.ToString()) { toggleResists(null, null); } //default hidden
 
-                if (spl.Length >= 7)
+                if (spl.Length >= 6)
                 {
-                    chkSteamInputEnum.IsChecked = bool.Parse(spl[4]);
-                    chkSteamAchieve.IsChecked = bool.Parse(spl[5]);
-                    chkMuteMusic.IsChecked = bool.Parse(spl[6]);
+                    chkSteamInputEnum.IsChecked = bool.Parse(spl[3]);
+                    chkSteamAchieve.IsChecked = bool.Parse(spl[4]);
+                    chkMuteMusic.IsChecked = bool.Parse(spl[5]);
+                }
+                
+                if (spl.Length >= 9)
+                {
+                    RestorePanelVisibility(PlayerPanelControl, PlayerPanel, spl[6]);
+                    RestorePanelVisibility(TorrentPanelControl, TorrentPanel, spl[7]);
+                    RestorePanelVisibility(EnemyPanelControl, EnemyPanel, spl[8]);
+                    RestorePanelVisibility(MovementPanelControl, MovementPanel, spl[9]);
+                    RestorePanelVisibility(TeleportPanelControl, TeleportPanel, spl[10]);
+                    RestorePanelVisibility(HitboxPanelControl, HitboxPanel, spl[11]);
+                    RestorePanelVisibility(MeshPanelControl, MeshPanel, spl[12]);
+                    RestorePanelVisibility(ViewsPanelControl, ViewsPanel, spl[13]);
+                    RestorePanelVisibility(MiscPanelControl, MiscPanel, spl[14]);
+                    RestorePanelVisibility(QoLPanelControl, QoLPanel, spl[15]);
+                    RestorePanelVisibility(hpPoisePanelControl, hpPoisePanel, spl[16]);
+                    RestorePanelVisibility(resistsPanelControl, resistsPanel, spl[17]);
+                    RestorePanelVisibility(defensesPanelControl, defensesPanel, spl[18]);
+
                 }
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
@@ -885,6 +921,7 @@ namespace EldenRingTool
             }
             _hooked = true;
             targetPanel.Opacity = 1;
+            targetPanel.Visibility = Visibility.Visible;
             targetPanel.IsEnabled = true;
         }
 
@@ -1763,8 +1800,11 @@ namespace EldenRingTool
             {
                 if (element is StackPanel stackPanel && stackPanel.Name != null && stackPanel.Visibility != newVisibility)
                 {
-                    dockPanel_MouseLeftButtonDown(stackPanel, null);
                     stackPanel.Visibility = newVisibility;
+                }
+                if (element is DockPanel dockPanel)
+                {
+                    FixPanelArrows(dockPanel, newVisibility.ToString());
                 }
             }
 
@@ -1773,6 +1813,26 @@ namespace EldenRingTool
             if (sender is Button button)
             {
                 button.Content = newVisibility == Visibility.Visible ? "▼" : "▲";
+            }
+        }
+
+        private void FixPanelArrows(DockPanel panel, string visibility)
+        {
+            var textBox = panel.Children.OfType<TextBlock>().FirstOrDefault();
+            if (textBox != null)
+            {
+                textBox.Text = visibility == Visibility.Visible.ToString() ?
+                                                        textBox.Text.Substring(0, textBox.Text.Length - 1) + "▼" :
+                                                        textBox.Text.Substring(0, textBox.Text.Length - 1) + "▲";
+            }
+        }
+
+        private void RestorePanelVisibility(DockPanel dockPanel, StackPanel stackPanel, string panelVisibility)
+        {
+            if (panelVisibility != Visibility.Visible.ToString())
+            {
+                stackPanel.Visibility = Visibility.Collapsed;
+                FixPanelArrows(dockPanel, panelVisibility);
             }
         }
     }

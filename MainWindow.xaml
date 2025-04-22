@@ -10,7 +10,7 @@
     <DockPanel Name="dockPanel">
         <StackPanel DockPanel.Dock="Top">
             <StackPanel x:Name="mainPanel">
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=PlayerPanel}">
+                <DockPanel x:Name="PlayerPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=PlayerPanel}">
                     <TextBlock Text="Player ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Button Width="15" DockPanel.Dock="Right" HorizontalAlignment="Right" Content="▼" Click="ToggleCollapse"></Button>
                 </DockPanel>
@@ -37,7 +37,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TorrentPanel}">
+                <DockPanel x:Name="TorrentPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TorrentPanel}">
                     <TextBlock Text="Torrent ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -51,7 +51,7 @@
                         <CheckBox Checked="torNoMapColOn" Unchecked="torNomapColOff" Margin="5,0" x:Name="chkTorNoMapCol" Content="No Map Collision"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=EnemyPanel}">
+                <DockPanel x:Name="EnemyPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=EnemyPanel}">
                     <TextBlock Text="Enemies ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -62,7 +62,7 @@
                         <CheckBox Checked="repeatActionOn" Unchecked="repeatActionOff" Margin="5,0" x:Name="chkRepeatAction" Content="Repeat Last Action"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MovementPanel}">
+                <DockPanel x:Name="MovementPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MovementPanel}">
                     <TextBlock Text="Movement ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -87,7 +87,7 @@
                     </StackPanel>
                     <TextBlock FontSize="10" Margin="0,2,0,0"><Run Text="Hold ctrl/shift/alt to go further"/></TextBlock>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TeleportPanel}">
+                <DockPanel x:Name="TeleportPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TeleportPanel}">
                     <TextBlock Text="Teleport ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -105,7 +105,7 @@
                         <TextBlock x:Name="globalPos"><Run Text="Global:"/></TextBlock>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=HitboxPanel}">
+                <DockPanel x:Name="HitboxPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=HitboxPanel}">
                     <TextBlock Text="Hitboxes ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -115,7 +115,7 @@
                         <CheckBox Checked="hitboxBOn" Unchecked="hitboxBOff" Margin="10,0" x:Name="chkHitboxB" Content="View B"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MeshPanel}">
+                <DockPanel x:Name="MeshPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MeshPanel}">
                     <TextBlock Text="Mesh Viewers ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -130,7 +130,7 @@
                         <Button Click="changeMeshColours" Content="Change Colours" FontSize="10"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=ViewsPanel}">
+                <DockPanel x:Name="ViewsPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=ViewsPanel}">
                     <TextBlock Text="Views ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -144,7 +144,7 @@
                         <CheckBox Checked="soundViewOn" Unchecked="soundViewOff" x:Name="chkSoundView" Margin="5,0" Content="Sound View"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MiscPanel}">
+                <DockPanel x:Name="MiscPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MiscPanel}">
                     <TextBlock Text="Misc ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -167,7 +167,7 @@
                         <Button Click="setClearCount" Margin="5,0,0,0" Content="NG+"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=QoLPanel}">
+                <DockPanel x:Name="QoLPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=QoLPanel}">
                     <TextBlock Text="QoL ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -182,18 +182,37 @@
                 </StackPanel>
                 <Button Click="installTargetHook" Margin="0,5" x:Name="targetHookButton" Content="Enable target options"/>
             </StackPanel>
-            <StackPanel x:Name="targetPanel" IsEnabled="False" Opacity="0.5">
-                <DockPanel>
-                    <TextBlock x:Name="hpText" Margin="5,2" DockPanel.Dock="Left" Width="125">HP: 00000 / 00000</TextBlock>
-                    <ProgressBar x:Name="hpBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+            <StackPanel x:Name="targetPanel" IsEnabled="False" Opacity="0.5" Visibility="Collapsed">
+                <DockPanel x:Name="hpPoisePanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=hpPoisePanel}">
+                    <TextBlock Text="HP / Poise ▼" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <Separator Margin="0,5,0,0"/>
                 </DockPanel>
-                <DockPanel>
-                    <TextBlock x:Name="poiseText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise: 000 / 000</TextBlock>
-                    <ProgressBar x:Name="poiseBar" Height="20" Minimum="0" Maximum="1" Margin="2,2"/>
-                </DockPanel>
-                <DockPanel>
-                    <TextBlock x:Name="poiseTimerText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise reset time: 00.0</TextBlock>
-                    <ProgressBar x:Name="poiseTimerBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+                <StackPanel x:Name="hpPoisePanel">
+                    <DockPanel>
+                        <TextBlock x:Name="hpText" Margin="5,2" DockPanel.Dock="Left" Width="125">HP: 00000 / 00000</TextBlock>
+                        <ProgressBar x:Name="hpBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="poiseText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise: 000 / 000</TextBlock>
+                        <ProgressBar x:Name="poiseBar" Height="20" Minimum="0" Maximum="1" Margin="2,2"/>
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="poiseTimerText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise reset time: 00.0</TextBlock>
+                        <ProgressBar x:Name="poiseTimerBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal" x:Name="freezeHPPanel">
+                        <CheckBox Checked="targetHpFreezeOn" Unchecked="targetHpFreezeOff" Margin="1,2,0,2" x:Name="chkFreezeHP">Freeze HP</CheckBox>
+                        <Button Click="killTarget" Margin="5,0">Kill</Button>
+                        <Button Click="setHP" Margin="2,0">25%</Button>
+                        <Button Click="setHP" Margin="2,0">50%</Button>
+                        <Button Click="setHP" Margin="2,0">75%</Button>
+                        <Button Click="setHP" Margin="2,0">100%</Button>
+                        <Button Click="setHPCustom" Margin="2,0">Custom</Button>
+                    </StackPanel>
+                </StackPanel>
+                <DockPanel x:Name="resistsPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=resistsPanel}">
+                    <TextBlock Text="Resists ▲" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="resistsPanel" Visibility="Collapsed">
                     <DockPanel>
@@ -225,50 +244,47 @@
                         <ProgressBar x:Name="madBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FFB08306" />
                     </DockPanel>
                 </StackPanel>
-                <Grid x:Name="defensesPanel">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="45px"/>   
-                        <ColumnDefinition Width="35px"/>   
-                        <ColumnDefinition Width="35px" />  
-                        <ColumnDefinition Width="30px"/>   
-                        <ColumnDefinition Width="40px"/>   
-                        <ColumnDefinition Width="35px"/>   
-                        <ColumnDefinition Width="60px" />     
-                        <ColumnDefinition Width="30px"/>   
-                    </Grid.ColumnDefinitions>
+                <DockPanel x:Name="defensesPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=defensesPanel}">
+                    <TextBlock Text="Defenses ▲" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <Separator Margin="0,5,0,0"/>
+                </DockPanel>
+                <StackPanel x:Name="defensesPanel" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="45px"/>   
+                            <ColumnDefinition Width="35px"/>   
+                            <ColumnDefinition Width="35px" />  
+                            <ColumnDefinition Width="40px"/>   
+                            <ColumnDefinition Width="40px"/>   
+                            <ColumnDefinition Width="35px"/>   
+                            <ColumnDefinition Width="60px" />     
+                            <ColumnDefinition Width="30px"/>   
+                        </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
                     
-                    <TextBlock Grid.Row="0" Grid.Column="0" x:Name="strikeText" HorizontalAlignment="Left" Margin="5,0">Strike:</TextBlock>
-                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="strikeVal" Margin="2,0">xx%</TextBlock>
-                    <TextBlock Grid.Row="0" Grid.Column="2" x:Name="slashText" HorizontalAlignment="Left">Slash:</TextBlock>
-                    <TextBlock Grid.Row="0" Grid.Column="3" x:Name="slashVal" Margin="2,0">xx%</TextBlock>
-                    <TextBlock Grid.Row="0" Grid.Column="4" x:Name="pierceText" HorizontalAlignment="Left">Pierce:</TextBlock>
-                    <TextBlock Grid.Row="0" Grid.Column="5" x:Name="pierceVal" Margin="2,0">xx%</TextBlock>
-                    <TextBlock Grid.Row="0" Grid.Column="6" x:Name="standardText" HorizontalAlignment="Left">Standard:</TextBlock>
-                    <TextBlock Grid.Row="0" Grid.Column="7" x:Name="standardVal" Margin="2,0">xx%</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="strikeText" HorizontalAlignment="Left" Margin="5,0">Strike:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="strikeVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="2" x:Name="slashText" HorizontalAlignment="Left">Slash:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="3" x:Name="slashVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="4" x:Name="pierceText" HorizontalAlignment="Left">Pierce:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="5" x:Name="pierceVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="6" x:Name="standardText" HorizontalAlignment="Left">Standard:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="7" x:Name="standardVal" Margin="2,0">--</TextBlock>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" x:Name="magicText" HorizontalAlignment="Left" Margin="5,0">Magic:</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="1" x:Name="magicVal" Margin="2,0">xx%</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="2" x:Name="fireText" HorizontalAlignment="Left">Fire:</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="3" x:Name="fireVal" Margin="2,0">xx%</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="4" x:Name="holyText" HorizontalAlignment="Left">Holy:</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="5" x:Name="holyVal" Margin="2,0">xx%</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="6" x:Name="lightningText" HorizontalAlignment="Left">Lightning:</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="7" x:Name="lightningVal" Margin="2,2">xx%</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="0" x:Name="magicText" HorizontalAlignment="Left" Margin="5,0">Magic:</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="magicVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="2" x:Name="fireText" HorizontalAlignment="Left">Fire:</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="3" x:Name="fireVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="4" x:Name="holyText" HorizontalAlignment="Left">Holy:</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="5" x:Name="holyVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="6" x:Name="lightningText" HorizontalAlignment="Left">Lightning:</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="7" x:Name="lightningVal" Margin="2,2">--</TextBlock>
 
-                </Grid>
-                <StackPanel Orientation="Horizontal" x:Name="freezeHPPanel">
-                    <CheckBox Checked="targetHpFreezeOn" Unchecked="targetHpFreezeOff" Margin="1,2,0,2" x:Name="chkFreezeHP">Freeze HP</CheckBox>
-                    <Button Click="killTarget" Margin="5,0">Kill</Button>
-                    <Button Click="setHP" Margin="2,0">25%</Button>
-                    <Button Click="setHP" Margin="2,0">50%</Button>
-                    <Button Click="setHP" Margin="2,0">75%</Button>
-                    <Button Click="setHP" Margin="2,0">100%</Button>
-                    <Button Click="setHPCustom" Margin="2,0">Custom</Button>
+                    </Grid>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
@@ -281,8 +297,8 @@
             <StackPanel Orientation="Horizontal" Margin="0,0" x:Name="resizePanel">
                 <CheckBox Checked="stayOnTop" Unchecked="dontStayOnTop" FontSize="10" Margin="5,0" x:Name="chkStayOnTop">Stay on top</CheckBox>
                 <Button FontSize="10" Click="toggleStatsFull" x:Name="compactButton">Toggle Stats/Full</Button>
-                <Button FontSize="10" Click="toggleResists" x:Name="resistsToggle" Margin="5,0">Toggle Resists</Button>
-                <Button FontSize="10" Click="toggleCoords" x:Name="coordsToggle" Margin="0,0">Toggle Coords</Button>
+                <!--<Button FontSize="10" Click="toggleResists" x:Name="resistsToggle" Margin="5,0">Toggle Resists</Button>-->
+                <Button FontSize="10" Click="toggleCoords" x:Name="coordsToggle" Margin="5,0">Toggle Coords</Button>
             </StackPanel>
             <Button Click="doQuitout" Height="40" x:Name="quitoutButton">Instant Quitout</Button>
         </StackPanel>
