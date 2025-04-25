@@ -1835,11 +1835,18 @@ namespace EldenRingTool
 
         private void RestorePanelVisibility(DockPanel dockPanel, StackPanel stackPanel, string panelVisibility)
         {
-            if (panelVisibility != Visibility.Visible.ToString())
+            if (stackPanel.Visibility.ToString() != panelVisibility)
             {
-                stackPanel.Visibility = Visibility.Collapsed;
-                FixPanelArrows(dockPanel, panelVisibility);
+                if (panelVisibility == Visibility.Visible.ToString())
+                {
+                    stackPanel.Visibility = Visibility.Visible;
+                }
+                else if (panelVisibility == Visibility.Collapsed.ToString())
+                {
+                    stackPanel.Visibility = Visibility.Collapsed;
+                }
             }
+            FixPanelArrows(dockPanel, panelVisibility);
         }
     }
 }
