@@ -652,23 +652,15 @@ namespace EldenRingTool
             }
             if (defensesPanel.Visibility == Visibility.Visible)
             {
-                var slashDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.SLASH)) * 100);
-                slashDefense = (int)Math.Round(slashDefense / 5.0) * 5;
-                var strikeDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.STRIKE)) * 100);
-                strikeDefense = (int)Math.Round(strikeDefense / 5.0) * 5;
-                var pierceDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.PIERCE)) * 100);
-                pierceDefense = (int)Math.Round(pierceDefense / 5.0) * 5;
-                var standardDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.STANDARD)) * 100);
-                standardDefense = (int)Math.Round(standardDefense / 5.0) * 5;
+                var slashDefense = getRoundedDefense(ERProcess.TargetInfo.SLASH);
+                var strikeDefense = getRoundedDefense(ERProcess.TargetInfo.STRIKE);
+                var pierceDefense = getRoundedDefense(ERProcess.TargetInfo.PIERCE);
+                var standardDefense = getRoundedDefense(ERProcess.TargetInfo.STANDARD);
 
-                var magicDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.MAGIC)) * 100);
-                magicDefense = (int)Math.Round(magicDefense / 5.0) * 5;
-                var fireDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.FIRE)) * 100);
-                fireDefense = (int)Math.Round(fireDefense / 5.0) * 5;
-                var lightningDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.LIGHTNING)) * 100);
-                lightningDefense = (int)Math.Round(lightningDefense / 5.0) * 5;
-                var holyDefense = (int)((1.0 - _process.getTargetDefenses(ERProcess.TargetInfo.HOLY)) * 100);
-                holyDefense = (int)Math.Round(holyDefense / 5.0) * 5;
+                var magicDefense = getRoundedDefense(ERProcess.TargetInfo.MAGIC);
+                var fireDefense = getRoundedDefense(ERProcess.TargetInfo.FIRE);
+                var lightningDefense = getRoundedDefense(ERProcess.TargetInfo.LIGHTNING);
+                var holyDefense = getRoundedDefense(ERProcess.TargetInfo.HOLY);
 
                 slashVal.Text = slashDefense + "%";
                 strikeVal.Text = strikeDefense + "%";
@@ -680,6 +672,15 @@ namespace EldenRingTool
                 lightningVal.Text = lightningDefense + "%";
                 holyVal.Text = holyDefense + "%";
             }
+        }
+
+        private int getRoundedDefense(ERProcess.TargetInfo type)
+        {
+            // 99.9% of defenses are multiples of 5, this is probably fine for all
+            // Can use below if you want a fidelity of 1%
+            //return (int)Math.Round((1.0 - _process.getTargetDefenses(type)) * 100);
+            
+            return (int)(Math.Round((1.0 - _process.getTargetDefenses(type)) * 100 / 5.0) * 5);
         }
 
         void updateMovement()
