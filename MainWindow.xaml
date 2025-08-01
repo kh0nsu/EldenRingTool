@@ -27,6 +27,9 @@
                         <CheckBox Checked="noGoodsOn" Unchecked="noGoodsOff" Margin="0,0,10,0" x:Name="chkInfConsum" Content="Inf Consum."/>
                         <CheckBox Checked="oneShotOn" Unchecked="oneShotOff" Margin="0,0,10,0" x:Name="chkOneShot" Content="One-Shot"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Checked="infPoiseOn" Unchecked="infPoiseOff" x:Name="chkInfPoise" Content="Infinite Poise" Margin="0,0,10,0"/>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                         <Button Click="spawnItem" Content="Spawn Item" Margin="1,0,5,0"/>
                         <Button Click="editStats" Margin="1,0,5,0" Content="Edit Stats"/>
@@ -60,6 +63,9 @@
                         <CheckBox Checked="noDeathAllOn" Unchecked="noDeathAllOff" x:Name="chkAllNoDeath" Margin="0,0,5,0" Content="No Death"/>
                         <CheckBox Checked="noAIOn" Unchecked="noAIOff" x:Name="chkDisableAI" Content="Disable AI"/>
                         <CheckBox Checked="repeatActionOn" Unchecked="repeatActionOff" Margin="5,0" x:Name="chkRepeatAction" Content="Repeat Last Action"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Checked="noRykardOn" Unchecked="noRykardOff" x:Name="chkRykardNoMega" Margin="0,0,5,0" Content="No Rykard Mega Attack"/>
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MovementPanel}">
@@ -137,11 +143,54 @@
                 <StackPanel x:Name="ViewsPanel">
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="poiseViewOn" Unchecked="poiseViewOff" x:Name="chkPoiseView" Content="Poise View"/>
-                        <CheckBox Checked="targetingViewOn" Unchecked="targetingViewOff" x:Name="chkTargetingView" Content="Targeting View (laggy)" Margin="5,0,0,0"/>
+                        <CheckBox Checked="soundViewOn" Unchecked="soundViewOff" x:Name="chkSoundView" Margin="5,0" Content="Sound View"/>
+                        
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="eventDrawOn" Unchecked="eventDrawOff" x:Name="chkEventView" Content="Events View"/>
-                        <CheckBox Checked="soundViewOn" Unchecked="soundViewOff" x:Name="chkSoundView" Margin="5,0" Content="Sound View"/>
+                        <CheckBox Checked="TargetingViewOn" Unchecked="TargetingViewOff" x:Name="chkTargetingView" Content="Targeting View (laggy)" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Checked="ReducedTargetingViewOn" Unchecked="ReducedTargetingViewOff"
+                                  x:Name="chkReducedTargetingView" 
+                                  Content="Reduced Targeting View"
+                                  Margin="0,2,0,2"
+                                  IsEnabled="False"/>
+                        <StackPanel Orientation="Horizontal" 
+                                    x:Name="DistancePanel"
+                                    Margin="10,2,0,2">
+                            <Slider x:Name="DistanceSlider"
+                                    Minimum="50"
+                                    Maximum="150"
+                                    Value="100"
+                                    Width="100"
+                                    TickFrequency="10"
+                                    IsSnapToTickEnabled="True"
+                                    IsEnabled="False"
+                                    ValueChanged="DistanceSliderChanged"
+                                    Margin="5,0,0,0"/>
+            
+                            <TextBlock x:Name="DistanceText"
+                                       Text="100"
+                                       VerticalAlignment="Center"
+                                       Margin="5,0,5,0"/>
+
+                            <Border Background="#3498db"
+                                    CornerRadius="10"
+                                    Width="12"
+                                    Height="12"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center"
+                                    ToolTip="Filters out target views that are not within a certain&#x0A;distance from the player to improve performance"
+                                    ToolTipService.InitialShowDelay="100">
+                                <TextBlock Text="i"
+                                           Foreground="White"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           FontSize="10"/>
+                            </Border>
+                    </StackPanel>
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MiscPanel}">
@@ -248,7 +297,14 @@
                 <Button FontSize="10" Click="toggleResists" x:Name="resistsToggle" Margin="5,0">Toggle Resists</Button>
                 <Button FontSize="10" Click="toggleCoords" x:Name="coordsToggle" Margin="0,0">Toggle Coords</Button>
             </StackPanel>
-            <Button Click="doQuitout" Height="40" x:Name="quitoutButton">Instant Quitout</Button>
+            <Grid Margin="0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Click="doQuitout" Height="40" x:Name="quitoutButton" Grid.Column="0">Instant Quitout</Button>
+                <Button Click="doSave" Height="40" x:Name="saveButton" Grid.Column="1">Force Save</Button>
+            </Grid>
         </StackPanel>
     </DockPanel>
 </Window>

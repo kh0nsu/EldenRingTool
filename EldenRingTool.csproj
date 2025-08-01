@@ -71,6 +71,10 @@
       <DependentUpon>StatsEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
+    <Compile Include="Util\AsmHelper.cs" />
+    <Compile Include="Util\AsmLoader.cs" />
+    <Compile Include="Util\CodeCaveOffsets.cs" />
+    <Compile Include="Util\HookManager.cs" />
     <Page Include="ItemSpawn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
