@@ -5,25 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EldenRingTool"
         mc:Ignorable="d"
-        Title="ERTool VERSION" Width="330" ResizeMode="NoResize" SizeToContent="Height"
+        Title="ERTool VERSION" Width="345" ResizeMode="NoResize" SizeToContent="Height"
         >
     <DockPanel Name="dockPanel">
         <StackPanel DockPanel.Dock="Top">
             <StackPanel x:Name="mainPanel">
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=PlayerPanel}">
+                <DockPanel x:Name="PlayerPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=PlayerPanel}">
                     <TextBlock Text="Player ▼" Margin="2,0,2,0" FontWeight="Bold"/>
-                    <Separator Margin="0,5,0,0"/>
+                    <Button Width="15" DockPanel.Dock="Right" HorizontalAlignment="Right" Content="▼" Click="ToggleCollapse"></Button>
                 </DockPanel>
                 <StackPanel x:Name="PlayerPanel">
                     <StackPanel Orientation="Horizontal" Margin="0,0,8,0">
                         <CheckBox Checked="noDeathOn" Unchecked="noDeathOff" x:Name="chkPlayerNoDeath" Content="No Death" Margin="0,0,10,0"/>
                         <CheckBox Checked="oneHPOn" Unchecked="oneHPOff" x:Name="chkOneHP" Content="1 HP" Margin="0,0,10,0"/>
-                        <CheckBox Checked="maxHPOn" Unchecked="maxHPOff" Margin="0,0,10,0" x:Name="chkMaxHP" Content="Max HP"/>
-                        <CheckBox Checked="runeArcOn" Unchecked="runArcOff" x:Name="chkRuneArc" Content="Rune Arc" RenderTransformOrigin="2.863,-1.6"/>
+                        <CheckBox Checked="maxHPOn" Unchecked="maxHPOff" Margin="5,0,10,0" x:Name="chkMaxHP" Content="Max HP"/>
+                        <CheckBox Checked="runeArcOn" Unchecked="runArcOff" x:Name="chkRuneArc" Content="Rune Arc" Margin="22,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="noStamOn" Unchecked="noStamOff" x:Name="chkInfStam" Content="Inf Stam" Margin="0,0,10,0"/>
-                        <CheckBox Checked="noFPOn" Unchecked="noFPOff" Margin="0,0,10,0" x:Name="chkInfFP" Content="Inf FP"/>
+                        <CheckBox Checked="noFPOn" Unchecked="noFPOff" Margin="8,0,10,0" x:Name="chkInfFP" Content="Inf FP"/>
                         <CheckBox Checked="noGoodsOn" Unchecked="noGoodsOff" Margin="0,0,10,0" x:Name="chkInfConsum" Content="Inf Consum."/>
                         <CheckBox Checked="oneShotOn" Unchecked="oneShotOff" Margin="0,0,10,0" x:Name="chkOneShot" Content="One-Shot"/>
                     </StackPanel>
@@ -37,13 +37,13 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TorrentPanel}">
+                <DockPanel x:Name="TorrentPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TorrentPanel}">
                     <TextBlock Text="Torrent ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="TorrentPanel">
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Checked="torNoDeathOn" Unchecked="torNoDeathOff" Margin="0,0,5,0" x:Name="chkTorNoDeath" Content="No Death"/>
+                        <CheckBox Checked="torNoDeathOn" Unchecked="torNoDeathOff" Margin="0,0,10,0" x:Name="chkTorNoDeath" Content="No Death"/>
                         <CheckBox Checked="torrentAnywhereOn" Unchecked="torrentAnywhereOff" x:Name="chkTorrentAnywhere" Content="Torrent Anywhere"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -51,7 +51,7 @@
                         <CheckBox Checked="torNoMapColOn" Unchecked="torNomapColOff" Margin="5,0" x:Name="chkTorNoMapCol" Content="No Map Collision"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=EnemyPanel}">
+                <DockPanel x:Name="EnemyPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=EnemyPanel}">
                     <TextBlock Text="Enemies ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -62,19 +62,19 @@
                         <CheckBox Checked="repeatActionOn" Unchecked="repeatActionOff" Margin="5,0" x:Name="chkRepeatAction" Content="Repeat Last Action"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MovementPanel}">
+                <DockPanel x:Name="MovementPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MovementPanel}">
                     <TextBlock Text="Movement ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="MovementPanel">
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="noGravOn" Unchecked="noGravOff" x:Name="chkPlayerNoGrav" Content="No Gravity"/>
-                        <CheckBox Checked="noMapColOn" Unchecked="nomapColOff" Margin="5,0" x:Name="chkPlayerNoMapCol" Content="No Map Collision"/>
+                        <CheckBox Checked="noMapColOn" Unchecked="nomapColOff" Margin="15,0" x:Name="chkPlayerNoMapCol" Content="No Map Collision"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="freeCamOn" Unchecked="freeCamOff" x:Name="chkFreeCam" Content="Free Camera"/>
                         <CheckBox Checked="freeCamControlOn" Unchecked="freeCamControlOff" Margin="5,0" x:Name="chkFreeCamControl" Content="Player control"/>
-                        <CheckBox Checked="noClipOn" Unchecked="noClipOff" x:Name="chkNoClip" Content="No Clip"/>
+                        <CheckBox Checked="noClipOn" Unchecked="noClipOff" Margin="25,0" x:Name="chkNoClip" Content="No Clip"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                         <Button Margin="1,0,5,0" Click="doYeet" Content="Forward" Height="20"/>
@@ -87,7 +87,7 @@
                     </StackPanel>
                     <TextBlock FontSize="10" Margin="0,2,0,0"><Run Text="Hold ctrl/shift/alt to go further"/></TextBlock>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TeleportPanel}">
+                <DockPanel x:Name="TeleportPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=TeleportPanel}">
                     <TextBlock Text="Teleport ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -105,7 +105,7 @@
                         <TextBlock x:Name="globalPos"><Run Text="Global:"/></TextBlock>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=HitboxPanel}">
+                <DockPanel x:Name="HitboxPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=HitboxPanel}">
                     <TextBlock Text="Hitboxes ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -115,14 +115,14 @@
                         <CheckBox Checked="hitboxBOn" Unchecked="hitboxBOff" Margin="10,0" x:Name="chkHitboxB" Content="View B"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MeshPanel}">
+                <DockPanel x:Name="MeshPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MeshPanel}">
                     <TextBlock Text="Mesh Viewers ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="MeshPanel">
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="charMeshOn" Unchecked="charMeshOff" x:Name="chkCharMesh" Content="Character Mesh"/>
-                        <CheckBox Checked="charModelHideOn" Unchecked="charModelHideOff" Margin="10,0" x:Name="chkHideModels" Content="Hide Models"/>
+                        <CheckBox Checked="charModelHideOn" Unchecked="charModelHideOff" Margin="15,0" x:Name="chkHideModels" Content="Hide Models"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="colMeshAOn" Unchecked="colMeshAOff" x:Name="chkColMeshA" Content="Collision Mesh A"/>
@@ -130,21 +130,21 @@
                         <Button Click="changeMeshColours" Content="Change Colours" FontSize="10"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=ViewsPanel}">
+                <DockPanel x:Name="ViewsPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=ViewsPanel}">
                     <TextBlock Text="Views ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="ViewsPanel">
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="poiseViewOn" Unchecked="poiseViewOff" x:Name="chkPoiseView" Content="Poise View"/>
-                        <CheckBox Checked="targetingViewOn" Unchecked="targetingViewOff" x:Name="chkTargetingView" Content="Targeting View (laggy)" Margin="5,0,0,0"/>
+                        <CheckBox Checked="targetingViewOn" Unchecked="targetingViewOff" x:Name="chkTargetingView" Content="Targeting View (laggy)" Margin="15,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="eventDrawOn" Unchecked="eventDrawOff" x:Name="chkEventView" Content="Events View"/>
-                        <CheckBox Checked="soundViewOn" Unchecked="soundViewOff" x:Name="chkSoundView" Margin="5,0" Content="Sound View"/>
+                        <CheckBox Checked="soundViewOn" Unchecked="soundViewOff" x:Name="chkSoundView" Margin="8,0" Content="Sound View"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MiscPanel}">
+                <DockPanel x:Name="MiscPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=MiscPanel}">
                     <TextBlock Text="Misc ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
@@ -167,14 +167,14 @@
                         <Button Click="setClearCount" Margin="5,0,0,0" Content="NG+"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=QoLPanel}">
+                <DockPanel x:Name="QoLPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=QoLPanel}">
                     <TextBlock Text="QoL ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="QoLPanel">
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="steamInputEnumDisableOn" Unchecked="steamInputEnumDisableOff" x:Name="chkSteamInputEnum" Content="Stutter Fix"/>
-                        <CheckBox Checked="disableAchieveOn" Unchecked="disableAchieveOff" x:Name="chkSteamAchieve" Margin="5,0" Content="Disable Achievements (Freeze Fix)"/>
+                        <CheckBox Checked="disableAchieveOn" Unchecked="disableAchieveOff" x:Name="chkSteamAchieve" Margin="15,0" Content="Disable Achievements (Freeze Fix)"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="muteMusic" Unchecked="unmuteMusic" x:Name="chkMuteMusic" Content="Mute Music"/>
@@ -182,18 +182,37 @@
                 </StackPanel>
                 <Button Click="installTargetHook" Margin="0,5" x:Name="targetHookButton" Content="Enable target options"/>
             </StackPanel>
-            <StackPanel x:Name="targetPanel" IsEnabled="False" Opacity="0.5">
-                <DockPanel>
-                    <TextBlock x:Name="hpText" Margin="5,2" DockPanel.Dock="Left" Width="125">HP: 00000 / 00000</TextBlock>
-                    <ProgressBar x:Name="hpBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+            <StackPanel x:Name="targetPanel" IsEnabled="False" Opacity="0.5" Visibility="Collapsed">
+                <DockPanel x:Name="hpPoisePanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=hpPoisePanel}">
+                    <TextBlock Text="HP / Poise ▼" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <Separator Margin="0,5,0,0"/>
                 </DockPanel>
-                <DockPanel>
-                    <TextBlock x:Name="poiseText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise: 000 / 000</TextBlock>
-                    <ProgressBar x:Name="poiseBar" Height="20" Minimum="0" Maximum="1" Margin="2,2"/>
-                </DockPanel>
-                <DockPanel>
-                    <TextBlock x:Name="poiseTimerText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise reset time: 00.0</TextBlock>
-                    <ProgressBar x:Name="poiseTimerBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+                <StackPanel x:Name="hpPoisePanel">
+                    <DockPanel>
+                        <TextBlock x:Name="hpText" Margin="5,2" DockPanel.Dock="Left" Width="125">HP: 00000 / 00000</TextBlock>
+                        <ProgressBar x:Name="hpBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="poiseText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise: 000 / 000</TextBlock>
+                        <ProgressBar x:Name="poiseBar" Height="20" Minimum="0" Maximum="1" Margin="2,2"/>
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock x:Name="poiseTimerText" Margin="5,2" DockPanel.Dock="Left" Width="125">Poise reset time: 00.0</TextBlock>
+                        <ProgressBar x:Name="poiseTimerBar" Height="20" Minimum="0" Maximum="1" Margin="2,2" />
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal" x:Name="freezeHPPanel">
+                        <CheckBox Checked="targetHpFreezeOn" Unchecked="targetHpFreezeOff" Margin="1,2,0,2" x:Name="chkFreezeHP">Freeze HP</CheckBox>
+                        <Button Click="killTarget" Margin="5,0">Kill</Button>
+                        <Button Click="setHP" Margin="2,0">25%</Button>
+                        <Button Click="setHP" Margin="2,0">50%</Button>
+                        <Button Click="setHP" Margin="2,0">75%</Button>
+                        <Button Click="setHP" Margin="2,0">100%</Button>
+                        <Button Click="setHPCustom" Margin="2,0">Custom</Button>
+                    </StackPanel>
+                </StackPanel>
+                <DockPanel x:Name="resistsPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=resistsPanel}">
+                    <TextBlock Text="Resists ▲" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <Separator Margin="0,5,0,0"/>
                 </DockPanel>
                 <StackPanel x:Name="resistsPanel" Visibility="Collapsed">
                     <DockPanel>
@@ -225,14 +244,47 @@
                         <ProgressBar x:Name="madBar" Height="15" Minimum="0" Maximum="1" Margin="2,2" Foreground="#FFB08306" />
                     </DockPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" x:Name="freezeHPPanel">
-                    <CheckBox Checked="targetHpFreezeOn" Unchecked="targetHpFreezeOff" Margin="1,2,0,2" x:Name="chkFreezeHP">Freeze HP</CheckBox>
-                    <Button Click="killTarget" Margin="5,0">Kill</Button>
-                    <Button Click="setHP" Margin="2,0">25%</Button>
-                    <Button Click="setHP" Margin="2,0">50%</Button>
-                    <Button Click="setHP" Margin="2,0">75%</Button>
-                    <Button Click="setHP" Margin="2,0">100%</Button>
-                    <Button Click="setHPCustom" Margin="2,0">Custom</Button>
+                <DockPanel x:Name="defensesPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=defensesPanel}">
+                    <TextBlock Text="Defenses ▲" Margin="2,0,2,0" FontWeight="Bold"/>
+                    <Separator Margin="0,5,0,0"/>
+                </DockPanel>
+                <StackPanel x:Name="defensesPanel" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40px"/>   
+                            <ColumnDefinition Width="40px"/>   
+                            <ColumnDefinition Width="35px" />  
+                            <ColumnDefinition Width="40px"/>   
+                            <ColumnDefinition Width="40px"/>   
+                            <ColumnDefinition Width="40px"/>   
+                            <ColumnDefinition Width="55px" />     
+                            <ColumnDefinition Width="40px"/>   
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                    
+                        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="strikeText" HorizontalAlignment="Left" Margin="2,0">Strike:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="strikeVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="2" x:Name="slashText" HorizontalAlignment="Left">Slash:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="3" x:Name="slashVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="4" x:Name="pierceText" HorizontalAlignment="Left">Pierce:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="5" x:Name="pierceVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="6" x:Name="standardText" HorizontalAlignment="Left">Standard:</TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="7" x:Name="standardVal" Margin="2,0">--</TextBlock>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" x:Name="magicText" HorizontalAlignment="Left" Margin="2 ,0">Magic:</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="magicVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="2" x:Name="fireText" HorizontalAlignment="Left">Fire:</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="3" x:Name="fireVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="4" x:Name="holyText" HorizontalAlignment="Left">Holy:</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="5" x:Name="holyVal" Margin="2,0">--</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="6" x:Name="lightningText" HorizontalAlignment="Left">Lightning:</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="7" x:Name="lightningVal" Margin="2,2">--</TextBlock>
+
+                    </Grid>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
@@ -245,8 +297,8 @@
             <StackPanel Orientation="Horizontal" Margin="0,0" x:Name="resizePanel">
                 <CheckBox Checked="stayOnTop" Unchecked="dontStayOnTop" FontSize="10" Margin="5,0" x:Name="chkStayOnTop">Stay on top</CheckBox>
                 <Button FontSize="10" Click="toggleStatsFull" x:Name="compactButton">Toggle Stats/Full</Button>
-                <Button FontSize="10" Click="toggleResists" x:Name="resistsToggle" Margin="5,0">Toggle Resists</Button>
-                <Button FontSize="10" Click="toggleCoords" x:Name="coordsToggle" Margin="0,0">Toggle Coords</Button>
+                <!--<Button FontSize="10" Click="toggleResists" x:Name="resistsToggle" Margin="5,0">Toggle Resists</Button>-->
+                <Button FontSize="10" Click="toggleCoords" x:Name="coordsToggle" Margin="5,0">Toggle Coords</Button>
             </StackPanel>
             <Button Click="doQuitout" Height="40" x:Name="quitoutButton">Instant Quitout</Button>
         </StackPanel>
