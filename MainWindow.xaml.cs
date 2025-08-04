@@ -77,7 +77,7 @@ namespace EldenRingTool
             GAME_SPEED_25PC, GAME_SPEED_50PC, GAME_SPEED_75PC, GAME_SPEED_100PC, GAME_SPEED_150PC, GAME_SPEED_200PC, GAME_SPEED_300PC, GAME_SPEED_500PC, GAME_SPEED_1000PC,
             FPS_30, FPS_60, FPS_120, FPS_144, FPS_240, FPS_1000,
             FPS, //arbitrary fps
-            TOGGLE_STATS_FULL, TOGGLE_RESISTS, TOGGLE_COORDS,
+            TOGGLE_STATS_FULL, TOGGLE_RESISTS, TOGGLE_DEFENSES, TOGGLE_COORDS,
             ENABLE_TARGET_HOOK, STAY_ON_TOP,
             GREAT_RUNE, PHYSICK, ASHES, SPELLS,
         }
@@ -137,6 +137,7 @@ namespace EldenRingTool
         bool _playerNoDeathStateWas = false;
         bool _torNoDeathStateWas = false;
         bool _noClipActive = false;
+        bool panelsCollapsed = false;
 
         static string windowStateFile()
         {
@@ -232,7 +233,27 @@ namespace EldenRingTool
         {
             try
             {
-                var windowInfo = $"{Left} {Top} {isCompact} {resistsPanel.Visibility} {chkSteamInputEnum.IsChecked} {chkSteamAchieve.IsChecked} {chkMuteMusic.IsChecked}";
+                var windowInfo = 
+                    $"{Left} " +
+                    $"{Top} " +
+                    $"{isCompact} " +
+                    $"{chkSteamInputEnum.IsChecked} " +
+                    $"{chkSteamAchieve.IsChecked} " +
+                    $"{chkMuteMusic.IsChecked} " +
+                    $"{PlayerPanel.Visibility} " +
+                    $"{TorrentPanel.Visibility} " +
+                    $"{EnemyPanel.Visibility} " +
+                    $"{MovementPanel.Visibility} " +
+                    $"{TeleportPanel.Visibility} " +
+                    $"{HitboxPanel.Visibility} " +
+                    $"{MeshPanel.Visibility} " +
+                    $"{ViewsPanel.Visibility} " +
+                    $"{MiscPanel.Visibility} " +
+                    $"{QoLPanel.Visibility} " +
+                    $"{hpPoisePanel.Visibility} " +
+                    $"{resistsPanel.Visibility} " +
+                    $"{defensesPanel.Visibility}";
+
                 File.WriteAllText(windowStateFile(), windowInfo);
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
@@ -248,7 +269,6 @@ namespace EldenRingTool
                 var left = double.Parse(spl[0]);
                 var top = double.Parse(spl[1]);
                 bool compact = bool.Parse(spl[2]);
-                string vis = spl[3];
                 if ((left + Width) > System.Windows.SystemParameters.VirtualScreenWidth || (top + Height) > System.Windows.SystemParameters.VirtualScreenHeight)
                 {
                     Console.WriteLine("Not restoring position, would go off-screen");
@@ -259,13 +279,30 @@ namespace EldenRingTool
                     Top = top;
                 }
                 if (compact) { setCompact(); } //default full
-                if (vis == Visibility.Visible.ToString()) { toggleResists(null, null); } //default hidden
 
-                if (spl.Length >= 7)
+                if (spl.Length >= 6)
                 {
-                    chkSteamInputEnum.IsChecked = bool.Parse(spl[4]);
-                    chkSteamAchieve.IsChecked = bool.Parse(spl[5]);
-                    chkMuteMusic.IsChecked = bool.Parse(spl[6]);
+                    chkSteamInputEnum.IsChecked = bool.Parse(spl[3]);
+                    chkSteamAchieve.IsChecked = bool.Parse(spl[4]);
+                    chkMuteMusic.IsChecked = bool.Parse(spl[5]);
+                }
+                
+                if (spl.Length >= 9)
+                {
+                    RestorePanelVisibility(PlayerPanelControl, PlayerPanel, spl[6]);
+                    RestorePanelVisibility(TorrentPanelControl, TorrentPanel, spl[7]);
+                    RestorePanelVisibility(EnemyPanelControl, EnemyPanel, spl[8]);
+                    RestorePanelVisibility(MovementPanelControl, MovementPanel, spl[9]);
+                    RestorePanelVisibility(TeleportPanelControl, TeleportPanel, spl[10]);
+                    RestorePanelVisibility(HitboxPanelControl, HitboxPanel, spl[11]);
+                    RestorePanelVisibility(MeshPanelControl, MeshPanel, spl[12]);
+                    RestorePanelVisibility(ViewsPanelControl, ViewsPanel, spl[13]);
+                    RestorePanelVisibility(MiscPanelControl, MiscPanel, spl[14]);
+                    RestorePanelVisibility(QoLPanelControl, QoLPanel, spl[15]);
+                    RestorePanelVisibility(hpPoisePanelControl, hpPoisePanel, spl[16]);
+                    RestorePanelVisibility(resistsPanelControl, resistsPanel, spl[17]);
+                    RestorePanelVisibility(defensesPanelControl, defensesPanel, spl[18]);
+
                 }
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
@@ -557,6 +594,7 @@ namespace EldenRingTool
                     break;
                 case HOTKEY_ACTIONS.TOGGLE_STATS_FULL: toggleStatsFull(null, null); break;
                 case HOTKEY_ACTIONS.TOGGLE_RESISTS: toggleResists(null, null); break;
+                case HOTKEY_ACTIONS.TOGGLE_DEFENSES: toggleDefenses(null, null); break;
                 case HOTKEY_ACTIONS.TOGGLE_COORDS: toggleCoords(null, null); break;
                 case HOTKEY_ACTIONS.ENABLE_TARGET_HOOK: installTargetHook(targetHookButton, null); break;
                 case HOTKEY_ACTIONS.STAY_ON_TOP: chkStayOnTop.IsChecked ^= true; break;
@@ -617,6 +655,37 @@ namespace EldenRingTool
                     statText.Text = $"{statName}: {(int)statAmount} / {(int)statMax}";
                 }
             }
+            if (defensesPanel.Visibility == Visibility.Visible)
+            {
+                var slashDefense = getRoundedDefense(ERProcess.TargetInfo.SLASH);
+                var strikeDefense = getRoundedDefense(ERProcess.TargetInfo.STRIKE);
+                var pierceDefense = getRoundedDefense(ERProcess.TargetInfo.PIERCE);
+                var standardDefense = getRoundedDefense(ERProcess.TargetInfo.STANDARD);
+
+                var magicDefense = getRoundedDefense(ERProcess.TargetInfo.MAGIC);
+                var fireDefense = getRoundedDefense(ERProcess.TargetInfo.FIRE);
+                var lightningDefense = getRoundedDefense(ERProcess.TargetInfo.LIGHTNING);
+                var holyDefense = getRoundedDefense(ERProcess.TargetInfo.HOLY);
+
+                slashVal.Text = slashDefense + "%";
+                strikeVal.Text = strikeDefense + "%";
+                pierceVal.Text = pierceDefense + "%";
+                standardVal.Text = standardDefense + "%";
+
+                magicVal.Text = magicDefense + "%";
+                fireVal.Text = fireDefense + "%";
+                lightningVal.Text = lightningDefense + "%";
+                holyVal.Text = holyDefense + "%";
+            }
+        }
+
+        private int getRoundedDefense(ERProcess.TargetInfo type)
+        {
+            // 99.9% of defenses are multiples of 5, this is probably fine for all
+            // Can use below if you want a fidelity of 1%
+            //return (int)Math.Round((1.0 - _process.getTargetDefenses(type)) * 100);
+            
+            return (int)(Math.Round((1.0 - _process.getTargetDefenses(type)) * 100 / 5.0) * 5);
         }
 
         void updateMovement()
@@ -859,6 +928,7 @@ namespace EldenRingTool
             }
             _hooked = true;
             targetPanel.Opacity = 1;
+            targetPanel.Visibility = Visibility.Visible;
             targetPanel.IsEnabled = true;
         }
 
@@ -1322,6 +1392,11 @@ namespace EldenRingTool
             resistsPanel.Visibility = resistsPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
 
+        private void toggleDefenses(object sender, RoutedEventArgs e)
+        {
+            defensesPanel.Visibility = defensesPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
         private void savePosDB(object sender, RoutedEventArgs e)
         {
             var pos = _process.getMapCoords();
@@ -1765,5 +1840,56 @@ namespace EldenRingTool
         private void infPoiseOff(object sender, RoutedEventArgs e) => _process.ToggleInfinitePoise(false);
 
         private void doSave(object sender, RoutedEventArgs e) => _process.ForceSave();
+
+        private void ToggleCollapse(object sender, RoutedEventArgs e)
+        {
+            var newVisibility = panelsCollapsed ? Visibility.Visible : Visibility.Collapsed;
+
+            foreach (UIElement element in mainPanel.Children)
+            {
+                if (element is StackPanel stackPanel && stackPanel.Name != null && stackPanel.Visibility != newVisibility)
+                {
+                    stackPanel.Visibility = newVisibility;
+                }
+                if (element is DockPanel dockPanel)
+                {
+                    FixPanelArrows(dockPanel, newVisibility.ToString());
+                }
+            }
+
+            panelsCollapsed = !panelsCollapsed;
+
+            if (sender is Button button)
+            {
+                button.Content = newVisibility == Visibility.Visible ? "▼" : "▲";
+            }
+        }
+
+        private void FixPanelArrows(DockPanel panel, string visibility)
+        {
+            var textBox = panel.Children.OfType<TextBlock>().FirstOrDefault();
+            if (textBox != null)
+            {
+                textBox.Text = visibility == Visibility.Visible.ToString() ?
+                                                        textBox.Text.Substring(0, textBox.Text.Length - 1) + "▼" :
+                                                        textBox.Text.Substring(0, textBox.Text.Length - 1) + "▲";
+            }
+        }
+
+        private void RestorePanelVisibility(DockPanel dockPanel, StackPanel stackPanel, string panelVisibility)
+        {
+            if (stackPanel.Visibility.ToString() != panelVisibility)
+            {
+                if (panelVisibility == Visibility.Visible.ToString())
+                {
+                    stackPanel.Visibility = Visibility.Visible;
+                }
+                else if (panelVisibility == Visibility.Collapsed.ToString())
+                {
+                    stackPanel.Visibility = Visibility.Collapsed;
+                }
+            }
+            FixPanelArrows(dockPanel, panelVisibility);
+        }
     }
 }

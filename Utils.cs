@@ -8,6 +8,7 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -142,59 +143,28 @@ namespace MiscUtils
             return d.FileName;
         }
 
+
         public static bool launchGame()
-        {//TODO: get game dir from steam files. see https://github.com/soulsmods/ModEngine2/blob/main/launcher/steam_app_path.cpp
+        {
             try
             {
                 string exename = @"eldenring.exe";
                 string path = exename;
-                string dir = "";
-
-                string dirGuess1 = @"C:\Program Files (x86)\Steam\steamapps\common\ELDEN RING\Game";
-                string dirGuess2 = @"D:\Steam\steamapps\common\ELDEN RING\Game";
-                string dirGuess3 = @"D:\SteamLibrary\steamapps\common\ELDEN RING\Game";
-
-                string pathGuess1 = System.IO.Path.Combine(dirGuess1, exename);
-                string pathGuess2 = System.IO.Path.Combine(dirGuess2, exename);
-                string pathGuess3 = System.IO.Path.Combine(dirGuess3, exename);
-
-                if (File.Exists(path))
+                
+                if (File.Exists(path)) // prioritize running Elden Ring from the folder this exe is in.
                 {
-                    Utils.debugWrite("Game is in working dir");
+                    Utils.debugWrite("Found Elden Ring exe at: " + path);
                 }
-                else if (File.Exists(pathGuess1))
+                else // otherwise dynamically search for the game in steam config files
                 {
-                    Utils.debugWrite("Game is at default steam location");
-                    path = pathGuess1;
-                    dir = dirGuess1;
-                }
-                else if (File.Exists(pathGuess2))
-                {
-                    Utils.debugWrite(@"Game is in D:\Steam");
-                    path = pathGuess2;
-                    dir = dirGuess2;
-                }
-                else if (File.Exists(pathGuess3))
-                {
-                    Utils.debugWrite(@"Game is on D:\SteamLibrary");
-                    path = pathGuess3;
-                    dir = dirGuess3;
+                    path = GetEldenRingExePath();
+                    Utils.debugWrite("Found Elden Ring exe at: " + path);
                 }
 
-                if (!File.Exists(path))
-                {
-                    MessageBox.Show(@"Please find eldenring.exe. This is normally found in C:\Program Files (x86)\Steam\steamapps\common\ELDEN RING\Game but could be somewhere else if you moved the steam library. (If you run the tool from that folder, you won't need to browse.)", "", MessageBoxButton.OK, MessageBoxImage.Information);
-                    string filter = exename + "|" + exename;
-                    path = promptForFile(null, filter);
-                    if (string.IsNullOrEmpty(path)) { return false; }
-                    dir = System.IO.Path.GetDirectoryName(path);
-                    exename = System.IO.Path.GetFileName(path);
-                    Utils.debugWrite("Will use selected path " + path);
-                }
                 var psi = new ProcessStartInfo(path);
                 psi.EnvironmentVariables["SteamAppId"] = "1245620";
                 psi.UseShellExecute = false;
-                psi.WorkingDirectory = dir;
+                psi.WorkingDirectory = System.IO.Path.GetDirectoryName(path);
                 Process.Start(psi);
                 return true;
             }
@@ -202,6 +172,45 @@ namespace MiscUtils
             {
                 return false;
             }
+        }
+
+        public static string GetEldenRingExePath()
+        {
+            string steamPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam", "InstallPath", null) as string;
+            if (string.IsNullOrEmpty(steamPath))
+                return null;
+
+            List<string> libraries = new List<string>();
+
+            string steamInstallConfigPath = Path.Combine(steamPath, "steamapps", "libraryfolders.vdf"); // contains info about steam games install locations
+            if (File.Exists(steamInstallConfigPath))
+            {
+
+                string[] lines = File.ReadAllLines(steamInstallConfigPath);
+                var regex = new Regex(@"""path""\s+""(.+?)"""); // search the config for lines with the text: "path" 
+
+                foreach (string line in lines)
+                {
+                    var match = regex.Match(line);
+                    if (match.Success)
+                    {
+                        string path = match.Groups[1].Value.Replace(@"\\", @"\");
+                        libraries.Add(path);
+                    }
+                }
+
+            }
+
+            foreach (string installDir in libraries)
+            {
+                string gamePath = Path.Combine(installDir, "steamapps", "common", "ELDEN RING", "Game", "eldenring.exe");
+                if (File.Exists(gamePath))
+                {
+                    return gamePath;
+                }
+            }
+
+            return null;
         }
     }
 

@@ -334,6 +334,8 @@ namespace EldenRingTool
             FROST, FROST_MAX,
             SLEEP, SLEEP_MAX,
             MADNESS, MADNESS_MAX,
+            STANDARD, SLASH, STRIKE, PIERCE,
+            MAGIC, FIRE, LIGHTNING, HOLY,
         }
 
         const long SANE_MINIMUM = 0x700000000000;
@@ -1389,6 +1391,38 @@ namespace EldenRingTool
                 }
                 Thread.Sleep(100); //arbitrary. will except here when closing program, but nothing needs to be done.
             }
+        }
+
+        public float getTargetDefenses(TargetInfo stat)
+        {
+            var targetPtr = (IntPtr)ReadUInt64(erBase + codeCavePtrLoc);
+            var ptr1 = (IntPtr)ReadUInt64(targetPtr + 0x58);
+            var ptr2 = (IntPtr)ReadUInt64(ptr1 + 0x18);
+            var ptr3 = (IntPtr)ReadUInt64(ptr2 + 0xC0);
+            var npcParamPtr = (IntPtr)ReadUInt64(ptr3 + 0x18); // 
+
+            switch (stat)
+            {
+                case TargetInfo.STANDARD:
+                    return ReadFloat(npcParamPtr + 0x1A4);
+                case TargetInfo.SLASH:
+                    return ReadFloat(npcParamPtr + 0x1A8);
+                case TargetInfo.STRIKE:
+                    return ReadFloat(npcParamPtr + 0x1AC);
+                case TargetInfo.PIERCE:
+                    return ReadFloat(npcParamPtr + 0x1B0);
+                case TargetInfo.MAGIC:
+                    return ReadFloat(npcParamPtr + 0x1B4);
+                case TargetInfo.FIRE:
+                    return ReadFloat(npcParamPtr + 0x1B8);
+                case TargetInfo.LIGHTNING:
+                    return ReadFloat(npcParamPtr + 0x1BC);
+                case TargetInfo.HOLY:
+                    return ReadFloat(npcParamPtr + 0x1C0);
+                default:
+                    return 0.0f;
+            }
+
         }
 
         public double getSetTargetInfo(TargetInfo info, int? setVal = null)
