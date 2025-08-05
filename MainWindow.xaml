@@ -24,7 +24,7 @@
                         <CheckBox Checked="noStamOn" Unchecked="noStamOff" x:Name="chkInfStam" Content="Inf Stam" Margin="0,0,10,0"/>
                         <CheckBox Checked="noFPOn" Unchecked="noFPOff" Margin="8,0,10,0" x:Name="chkInfFP" Content="Inf FP"/>
                         <CheckBox Checked="noGoodsOn" Unchecked="noGoodsOff" Margin="0,0,10,0" x:Name="chkInfConsum" Content="Inf Consum."/>
-                        <CheckBox Checked="infPoiseOn" Unchecked="infPoiseOff" x:Name="chkInfPoise" Content="Inf. Poise" Margin="0,0,10,0"/>
+                        <CheckBox Checked="infPoiseOn" Unchecked="infPoiseOff" x:Name="chkInfPoise" Content="Inf Poise" Margin="0,0,10,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Checked="runeArcOn" Unchecked="runArcOff" x:Name="chkRuneArc" Content="Rune Arc" Margin="0,0,0,0"/>
@@ -153,7 +153,7 @@
                         <CheckBox Checked="ReducedTargetingViewOn" Unchecked="ReducedTargetingViewOff" x:Name="chkReducedTargetingView" 
                                   Content="Reduced Targeting View" Margin="0,2,0,2" IsEnabled="False"/>
                         <StackPanel Orientation="Horizontal" x:Name="DistancePanel" Margin="10,2,0,2">
-                            <Slider x:Name="DistanceSlider" Minimum="50" Maximum="150" Value="100" Width="130" TickFrequency="10"
+                            <Slider x:Name="DistanceSlider" Minimum="50" Maximum="150" Value="100" Width="120" TickFrequency="10"
                                     IsSnapToTickEnabled="True" IsEnabled="False" ValueChanged="DistanceSliderChanged" Margin="0,0,0,0"/>
                             <TextBlock x:Name="DistanceText" Text="100" VerticalAlignment="Center" Margin="5,0,5,0"/>
                             <Border Background="#3498db" CornerRadius="10" Width="12" Height="12" Margin="5,0,0,0" VerticalAlignment="Center"
