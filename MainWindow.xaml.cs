@@ -80,6 +80,7 @@ namespace EldenRingTool
             TOGGLE_STATS_FULL, TOGGLE_RESISTS, TOGGLE_DEFENSES, TOGGLE_COORDS,
             ENABLE_TARGET_HOOK, STAY_ON_TOP,
             GREAT_RUNE, PHYSICK, ASHES, SPELLS,
+            QUICK_SAVE,
         }
 
         public class HotkeyAction
@@ -602,6 +603,7 @@ namespace EldenRingTool
                 case HOTKEY_ACTIONS.PHYSICK: _process.openMenuByName(_process.MENUS[2]); break;
                 case HOTKEY_ACTIONS.ASHES: _process.openMenuByName(_process.MENUS[3]); break;
                 case HOTKEY_ACTIONS.SPELLS: _process.openMenuByName(_process.MENUS[5]); break;
+                case HOTKEY_ACTIONS.QUICK_SAVE: _process.ForceSave(); break;
                 default: Utils.debugWrite("Action not handled: " + act.ToString()); break;
             }
         }
