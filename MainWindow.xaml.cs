@@ -19,6 +19,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Threading;
 using System.Reflection;
+using EldenRingTool.Util;
 using MiscUtils;
 
 namespace EldenRingTool
@@ -178,6 +179,8 @@ namespace EldenRingTool
             Closing += MainWindow_Closing;
             Closed += MainWindow_Closed;
             Loaded += MainWindow_Loaded;
+            
+            
 
             retry:
             try
@@ -217,9 +220,11 @@ namespace EldenRingTool
             else
             {//we good
                 _process.patchLogos();
+                _process.AllocateMem();
                 _timer.Tick += _timer_Tick;
                 _timer.Interval = TimeSpan.FromSeconds(0.1); //~10hz UI update rate
                 _timer.Start();
+                
             }
 
         }
@@ -1588,14 +1593,40 @@ namespace EldenRingTool
             _process.setSoundView(false);
         }
 
-        private void targetingViewOn(object sender, RoutedEventArgs e)
+        private void TargetingViewOn(object sender, RoutedEventArgs e)
         {
             _process.freezeOn(ERProcess.DebugOpts.TARGETING_VIEW);
+            chkReducedTargetingView.IsEnabled = true;
         }
 
-        private void targetingViewOff(object sender, RoutedEventArgs e)
+        private void TargetingViewOff(object sender, RoutedEventArgs e)
         {
+            chkReducedTargetingView.IsEnabled = false;
+            chkReducedTargetingView.IsChecked = false;
+            DistanceSlider.IsEnabled = false;
             _process.offAndUnFreeze(ERProcess.DebugOpts.TARGETING_VIEW);
+        }
+        
+        private void ReducedTargetingViewOn(object sender, RoutedEventArgs e)
+        {
+            DistanceSlider.IsEnabled = true;
+            _process.ToggleReducedTargetView(true);
+        }
+
+        private void ReducedTargetingViewOff(object sender, RoutedEventArgs e)
+        {
+            DistanceSlider.IsEnabled = false;
+            _process.ToggleReducedTargetView(false);
+        }
+        
+        private void DistanceSliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (DistanceText != null)
+            {
+                DistanceText.Text = e.NewValue.ToString("0");
+            }
+
+            _process?.SetTargetViewMaxDist((float)e.NewValue);
         }
 
         private void editStats(object sender, RoutedEventArgs e)
@@ -1798,6 +1829,17 @@ namespace EldenRingTool
                 }
             }
         }
+
+        private void noRykardOn(object sender, RoutedEventArgs e) => _process.ToggleRykardHook(true);
+
+
+        private void noRykardOff(object sender, RoutedEventArgs e) => _process.ToggleRykardHook(false);
+
+        private void infPoiseOn(object sender, RoutedEventArgs e) => _process.ToggleInfinitePoise(true);
+
+        private void infPoiseOff(object sender, RoutedEventArgs e) => _process.ToggleInfinitePoise(false);
+
+        private void doSave(object sender, RoutedEventArgs e) => _process.ForceSave();
 
         private void ToggleCollapse(object sender, RoutedEventArgs e)
         {

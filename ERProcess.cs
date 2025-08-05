@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Reflection;
 using System.IO;
+using EldenRingTool.Util;
 using MiscUtils;
 
 namespace EldenRingTool
@@ -45,6 +46,15 @@ namespace EldenRingTool
 
         [DllImport("kernel32.dll")]
         private static extern bool CloseHandle(IntPtr hObject);
+        
+        public const uint MemCommit = 0x1000;
+        public const uint MemReserve = 0x2000;
+        public const uint PageExecuteReadwrite = 0x40;
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, 
+            uint flAllocationType = MemCommit | MemReserve, 
+            uint flProtect = PageExecuteReadwrite
+        );
 
         public uint RunThread(IntPtr address, uint timeout = 0xFFFFFFFF, IntPtr? param = null)
         {
@@ -56,8 +66,11 @@ namespace EldenRingTool
 
         Thread freezeThread = null;
         bool _running = true;
+        HookManager _hookManager;
         public ERProcess()
         {
+         
+            _hookManager = new HookManager(this);
             findAttach();
             findBaseAddress();
             aobScan();
@@ -438,6 +451,12 @@ namespace EldenRingTool
 
         int triggerNGPlusOffset = 0; //in GameMan
 
+        private int _hasSpEffectHook;
+        private int _infinitePoiseHook;
+        private int _blueTargetViewHook;
+      
+        
+
         //scanning for above addresses
         void aobScan()
         {//see https://github.com/kh0nsu/FromAobScan
@@ -541,6 +560,11 @@ namespace EldenRingTool
 
             triggerNGPlusOffset = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "48 8b 05 ?? ?? ?? ?? 0f b6 80 ?? ?? 00 00 c3 ?? 48 8b 05 ?? ?? ?? ?? 8b 90", "Trigger NG+ offset in GameMan", readoffset32: 3 + 4 + 3, startIndex: 6000000);
 
+
+            _hasSpEffectHook = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "39 51 08 74 0C 48 8B", "HasSpEffect", justOffset: -0x10);
+            _blueTargetViewHook = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "0F 84 41 01 00 00 48 8D 54", "BlueTargetViewHook", justOffset: 0x6);
+            _infinitePoiseHook = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, "80 BF 5F 02", "InfinitePoise", justOffset: 0);
+            
             var cave = "";
             for (int i = 0; i < 0xA0; i++) { cave += "90"; }
             codeCavePtrLoc = scanner.findAddr(scanner.sectionOne, scanner.textOneAddr, cave, "codeCave_0x60_nops", startIndex: 100000);
@@ -1874,6 +1898,105 @@ namespace EldenRingTool
             Console.WriteLine($"kiloflag time {sw.ElapsedMilliseconds} ms"); //~50ms on my machine
         }
 #endif
+        public void AllocateMem()
+        {
+            IntPtr searchRangeStart = erBase - 0x40000000;
+            IntPtr searchRangeEnd = erBase - 0x30000;
+            uint codeCaveSize = 0x2000;
+            IntPtr allocatedMemory;
+        
+            for (IntPtr addr = searchRangeEnd; addr.ToInt64() > searchRangeStart.ToInt64(); addr -= 0x10000)
+            {
+                allocatedMemory = VirtualAllocEx(_targetProcessHandle, addr, codeCaveSize);
+        
+                if (allocatedMemory != IntPtr.Zero)
+                {
+                    CodeCaveOffsets.Base = allocatedMemory;
+                    break;
+                }
+            }
+        }
+
+        public void ToggleReducedTargetView(bool isEnabled)
+        {
+            var code = CodeCaveOffsets.Base + (int)CodeCaveOffsets.ReducedTargetView.Code;
+            if (isEnabled)
+            {
+                var maxDist = CodeCaveOffsets.Base + (int)CodeCaveOffsets.ReducedTargetView.MaxDist;
+                WriteFloat(maxDist, 100.0f * 100.0f);
+                var codeBytes = AsmLoader.GetAsmBytes("ReducedTargetView");
+                var bytes = BitConverter.GetBytes(erBase.ToInt64() + worldChrManOff);
+                var hook = erBase.ToInt64() + _blueTargetViewHook;
+                Array.Copy(bytes, 0, codeBytes, 0x36 + 2, 8);
+                AsmHelper.WriteRelativeOffsets(codeBytes, new []
+                {
+                    (code.ToInt64() + 0x86, maxDist.ToInt64(), 8, 0x86 + 4 ),
+                    (code.ToInt64() + 0xC4, hook + 0x5, 5, 0xC4 + 1),
+                    (code.ToInt64() + 0xCA, hook + 0x141, 5, 0xCA + 1),
+                });
+                WriteBytes(code, codeBytes);
+                _hookManager.InstallHook(code.ToInt64(), hook, new byte[]
+                    { 0x48, 0x8D, 0x54, 0x24, 0x40 });
+            }
+            else
+            {
+                _hookManager.UninstallHook(code.ToInt64());
+            }
+            
+        }
+        
+        public void SetTargetViewMaxDist(float reducedTargetViewDistance)
+        {
+            var maxDist = CodeCaveOffsets.Base + (int)CodeCaveOffsets.ReducedTargetView.MaxDist;
+            WriteFloat(maxDist, reducedTargetViewDistance * reducedTargetViewDistance);
+        }
+
+        public void ToggleRykardHook(bool isEnabled)
+        {
+            var code = CodeCaveOffsets.Base + CodeCaveOffsets.Rykard;
+            if (isEnabled)
+            {
+                var hook = erBase.ToInt64() + _hasSpEffectHook;
+                var codeBytes = AsmLoader.GetAsmBytes("RykardNoMega");
+                var bytes = AsmHelper.GetJmpOriginOffsetBytes(hook, 7, code + 0x17);
+                Array.Copy(bytes, 0, codeBytes, 0x12 + 1, 4);
+                WriteBytes(code, codeBytes);
+                _hookManager.InstallHook(code.ToInt64(), hook, new byte[]
+                    { 0x48, 0x8B, 0x49, 0x08, 0x48, 0x85, 0xC9 });
+            }
+            else
+            {
+                _hookManager.UninstallHook(code.ToInt64());
+            }
+        }
+
+        public void ToggleInfinitePoise(bool isInfinitePoiseEnabled)
+        {
+            var code = CodeCaveOffsets.Base + CodeCaveOffsets.InfinitePoise;
+
+            if (isInfinitePoiseEnabled)
+            {
+                var hook = erBase.ToInt64() + _infinitePoiseHook;
+                var codeBytes = AsmLoader.GetAsmBytes("InfinitePoise");
+                var bytes = BitConverter.GetBytes(erBase.ToInt64() + worldChrManOff);
+                Array.Copy(bytes, 0, codeBytes, 0x1 + 2, 8);
+                AsmHelper.WriteJumpOffsets(codeBytes, new[]
+                {
+                    (hook, 7, code + 0x1D, 0x1D + 1),
+                    (hook, 7, code + 0x2A, 0x2A + 1),
+                });
+               WriteBytes(code, codeBytes);
+                _hookManager.InstallHook(code.ToInt64(), hook, new byte[]
+                    { 0x80, 0xBF, 0x5F, 0x02, 0x00, 0x00, 0x00 });
+            }
+            else
+            {
+                _hookManager.UninstallHook(code.ToInt64());
+            }
+        }
+
+        public void ForceSave() => 
+            WriteUInt8((IntPtr)ReadInt64(erBase + quitoutBase) + 0xb72, 1);
     }
 
     public class TeleportHelper

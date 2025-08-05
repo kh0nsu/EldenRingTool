@@ -114,4 +114,84 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ReducedTargetView" xml:space="preserve">
+    <value>50                      push   rax
+52                      push   rdx
+41 50                   push   r8
+41 51                   push   r9
+48 83 ec 70             sub    rsp,0x70
+0f 11 04 24             movups XMMWORD PTR [rsp],xmm0
+0f 11 4c 24 10          movups XMMWORD PTR [rsp+0x10],xmm1
+0f 11 54 24 20          movups XMMWORD PTR [rsp+0x20],xmm2
+0f 11 5c 24 30          movups XMMWORD PTR [rsp+0x30],xmm3
+0f 11 64 24 40          movups XMMWORD PTR [rsp+0x40],xmm4
+0f 11 6c 24 50          movups XMMWORD PTR [rsp+0x50],xmm5
+48 8b 4f 08             mov    rcx,QWORD PTR [rdi+0x8]
+48 8b 01                mov    rax,QWORD PTR [rcx]
+48 8d 54 24 60          lea    rdx,[rsp+0x60]
+ff 50 28                call   QWORD PTR [rax+0x28]
+48 ba 00 00 00 00 00    movabs rdx,0x0
+00 00 00
+48 8b 12                mov    rdx,QWORD PTR [rdx]
+48 8b 92 08 e5 01 00    mov    rdx,QWORD PTR [rdx+0x1e508]
+48 8b 92 90 01 00 00    mov    rdx,QWORD PTR [rdx+0x190]
+48 8b 52 68             mov    rdx,QWORD PTR [rdx+0x68]
+f3 0f 10 52 74          movss  xmm2,DWORD PTR [rdx+0x74]
+f3 0f 10 42 70          movss  xmm0,DWORD PTR [rdx+0x70]
+f3 0f 5c 00             subss  xmm0,DWORD PTR [rax]
+f3 0f 5c 50 04          subss  xmm2,DWORD PTR [rax+0x4]
+f3 0f 10 4a 78          movss  xmm1,DWORD PTR [rdx+0x78]
+f3 0f 5c 48 08          subss  xmm1,DWORD PTR [rax+0x8]
+f3 0f 59 d2             mulss  xmm2,xmm2
+f3 0f 59 c0             mulss  xmm0,xmm0
+f3 0f 59 c9             mulss  xmm1,xmm1
+f3 0f 58 c2             addss  xmm0,xmm2
+f3 0f 58 c1             addss  xmm0,xmm1
+f3 0f 10 0d 00 00 00    movss  xmm1,DWORD PTR [rip+0x0]        # 8e &lt;_main+0x8e&gt;
+00
+0f 2f c1                comiss xmm0,xmm1
+0f 92 c0                setb   al
+0f 10 6c 24 50          movups xmm5,XMMWORD PTR [rsp+0x50]
+0f 10 64 24 40          movups xmm4,XMMWORD PTR [rsp+0x40]
+0f 10 5c 24 30          movups xmm3,XMMWORD PTR [rsp+0x30]
+0f 10 54 24 20          movups xmm2,XMMWORD PTR [rsp+0x20]
+0f 10 4c 24 10          movups xmm1,XMMWORD PTR [rsp+0x10]
+0f 10 04 24             movups xmm0,XMMWORD PTR [rsp]
+48 83 c4 70             add    rsp,0x70
+41 59                   pop    r9
+41 58                   pop    r8
+5a                      pop    rdx
+84 c0                   test   al,al
+74 0b                   je     c9 &lt;skip_render&gt;
+58                      pop    rax
+48 8d 54 24 40          lea    rdx,[rsp+0x40]
+e9 00 00 00 00          jmp    c9 &lt;skip_render&gt;
+0000000000c9 &lt;skip_render&gt;:
+58                      pop    rax
+e9 00 00 00 00          jmp    cf &lt;skip_render+0x6&gt;</value>
+  </data>
+  <data name="RykardNoMega" xml:space="preserve">
+    <value>48 8b 49 08             mov    rcx,QWORD PTR [rcx+0x8]
+81 fa a5 2e 00 00       cmp    edx,0x2ea5
+75 03                   jne    f &lt;normal&gt;
+48 31 c9                xor    rcx,rcx
+00000000000f &lt;normal&gt;:
+48 85 c9                test   rcx,rcx
+e9 00 00 00 00          jmp    17 &lt;normal+0x8&gt;</value>
+  </data>
+  <data name="InfinitePoise" xml:space="preserve">
+    <value>50                      push   rax
+48 a1 00 00 00 00 00    movabs rax,ds:0x0
+00 00 00
+48 8b 80 08 e5 01 00    mov    rax,QWORD PTR [rax+0x1e508]
+48 3b 46 08             cmp    rax,QWORD PTR [rsi+0x8]
+75 0a                   jne    22 &lt;normal&gt;
+58                      pop    rax
+48 83 fe 00             cmp    rsi,0x0
+e9 00 00 00 00          jmp    22 &lt;normal&gt;
+000000000022 &lt;normal&gt;:
+58                      pop    rax
+80 bf 5f 02 00 00 00    cmp    BYTE PTR [rdi+0x25f],0x0
+e9 00 00 00 00          jmp    2f &lt;normal+0xd&gt;</value>
+  </data>
 </root>
