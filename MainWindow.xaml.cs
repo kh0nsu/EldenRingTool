@@ -21,6 +21,8 @@ using System.Threading;
 using System.Reflection;
 using EldenRingTool.Util;
 using MiscUtils;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace EldenRingTool
 {
@@ -1170,34 +1172,63 @@ namespace EldenRingTool
 
         void notifyOfUpdate()
         {
-            websiteButton.Content = "Update Available";
-            websiteButton.Foreground = Brushes.Red;
-            websiteButton.FontWeight = FontWeights.Bold;
+            AppUpdateTxt.Visibility = Visibility.Visible;
         }
 
-        public void doUpdateCheck(bool force = false)
+        public async void doUpdateCheck(bool force = false)
         {
+            HttpClient httpClient = new HttpClient();
             var checkFile = Utils.getFnameInAppdata("LastUpdateCheck", "ERTool");
             var lastCheckDate = Utils.getFileDate(checkFile);
             var sinceLastCheck = DateTime.Now - lastCheckDate;
             Utils.debugWrite($"Last check was {sinceLastCheck.TotalDays} days ago");
+
+            string apiUrl = $"https://api.github.com/repos/kh0nsu/EldenRingTool/releases/latest";
+
             if (force || sinceLastCheck.TotalDays >= 1)
             {
-                Utils.debugWrite("Checking for update...");
-                var runningAssembly = Assembly.GetEntryAssembly().GetName();
-                var userAgent = runningAssembly.Name + " v" + runningAssembly.Version;
-                //this will block until finished which could be a long time
-                int versionCheck = Utils.checkVerAgainstURL(updateCheckUrl, userAgent, runningAssembly.Version.ToString());
-
-                Utils.debugWrite("Version check result: " + versionCheck);
-
-                Utils.setFileDate(checkFile);
-
-                if (versionCheck == 1)
+                try
                 {
-                    Dispatcher.Invoke(notifyOfUpdate);
+                    string currentVersionStr = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                    string webVersionStr = "";
+                    Version currentVersion = new Version(currentVersionStr);
+
+                    httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("ERTool", currentVersionStr));
+                    Stream responseStream = await httpClient.GetStreamAsync(apiUrl);
+                    StreamReader reader = new StreamReader(responseStream);
+
+                    string line;
+
+                    while ((line = await reader.ReadLineAsync()) != null)
+                    {
+                        int tagIndex = line.IndexOf("\"tag_name\":", StringComparison.OrdinalIgnoreCase);
+
+                        if (tagIndex == -1) return;
+
+                        int quoteStart = line.IndexOf('"', tagIndex + "\"tag_name\":".Length) + 1;
+                        int quoteEnd = line.IndexOf('"', quoteStart);
+
+                        if (quoteStart == -1 || quoteEnd == -1) return;
+
+                        webVersionStr = line.Substring(quoteStart, quoteEnd - quoteStart).TrimStart('v');
+                    }
+
+                    if (currentVersion.CompareTo(new Version(webVersionStr)) != 0)
+                    {
+                        Dispatcher.Invoke(notifyOfUpdate);
+                    }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error checking for updates. {e.Message}");
+                }
+
             }
+        }
+
+        public void OpenNewVersionInBrowser(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/kh0nsu/EldenRingTool/releases");
         }
 
         private void enableUpdateCheck(object sender, RoutedEventArgs e)

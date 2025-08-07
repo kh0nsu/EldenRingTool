@@ -10,6 +10,9 @@
     <DockPanel Name="dockPanel">
         <StackPanel DockPanel.Dock="Top">
             <StackPanel x:Name="mainPanel">
+                <TextBlock x:Name="AppUpdateTxt" Margin="0,2,0,0" HorizontalAlignment="Center" Visibility="Collapsed">
+                    <Hyperlink Click="OpenNewVersionInBrowser" FontSize="12" Foreground="Red" FontWeight="Bold">Update Available</Hyperlink>
+                </TextBlock>
                 <DockPanel x:Name="PlayerPanelControl" Height="16" MouseLeftButtonDown="dockPanel_MouseLeftButtonDown" Tag="{Binding ElementName=PlayerPanel}">
                     <TextBlock Text="Player ▼" Margin="2,0,2,0" FontWeight="Bold"/>
                     <Button Width="15" DockPanel.Dock="Right" HorizontalAlignment="Right" Content="▼" Click="ToggleCollapse"></Button>
