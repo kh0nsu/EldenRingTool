@@ -35,6 +35,7 @@ namespace EldenRingTool
         public class Item
         {
             public string Name { get; set; }
+            public string SearchName { get; set; }
             public uint Id { get; set; }
             public int Level { get; set; }
             public string InfusionName { get; set; }
@@ -64,6 +65,7 @@ namespace EldenRingTool
                 ItemDB.Items.Select(item => new Item
                 {
                     Name = item.Item1,
+                    SearchName = NormalizeForSearch(item.Item1),
                     Id = item.Item2,
                     Category = item.Item3
                 })
@@ -104,28 +106,28 @@ namespace EldenRingTool
                 if (SelectedItems.Contains(item))
                     return false;
 
-                string filter = FilterBox?.Text?.ToLower() ?? "";
-                return string.IsNullOrEmpty(filter) || item.Name.ToLower().Contains(filter);
+                string filter = NormalizeForSearch(FilterBox?.Text);
+                return string.IsNullOrEmpty(filter) || item.SearchName.Contains(filter);
             }
             return false;
         }
 
         private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string filter = RemoveDiacritics(FilterBox.Text).ToLowerInvariant();
+            string filter = NormalizeForSearch(FilterBox.Text);
 
             AvailableItemsView.Filter = item =>
             {
                 if (item is Item i)
                 {
-                    string name = RemoveDiacritics(i.Name).ToLowerInvariant();
-                    return name.Contains(filter);
+                    return i.SearchName.Contains(filter);
                 }
                 return false;
             };
         }
 
-        private static string RemoveDiacritics(string text)
+        //drops accents, punctuation and spacing so "reverse bladed" finds "Reverse-Bladed Sword"
+        private static string NormalizeForSearch(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return string.Empty;
@@ -135,13 +137,11 @@ namespace EldenRingTool
 
             foreach (char c in normalized)
             {
-                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                {
-                    sb.Append(c);
-                }
+                if (CharUnicodeInfo.GetUnicodeCategory(c) == UnicodeCategory.NonSpacingMark) { continue; }
+                if (char.IsLetterOrDigit(c)) { sb.Append(char.ToLowerInvariant(c)); }
             }
 
-            return sb.ToString().Normalize(NormalizationForm.FormC);
+            return sb.ToString();
         }
 
         private void ClearFilter_Click(object sender, RoutedEventArgs e)

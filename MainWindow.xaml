@@ -207,6 +207,10 @@
                         <CheckBox Checked="stayOnTop" Unchecked="dontStayOnTop" Margin="5,0" x:Name="chkStayOnTop">Stay on top</CheckBox>
                         <CheckBox Checked="enableUpdateCheck" Unchecked="disableUpdateCheck" Margin="5,0" x:Name="chkAutoUpdate">Auto update check</CheckBox>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                        <CheckBox x:Name="chkHotkeysEnabled" Content="Enable Hotkeys" IsChecked="True" VerticalAlignment="Center" ToolTip="Uncheck to temporarily disable all hotkeys"/>
+                        <Button Click="newHotkeySetup" x:Name="btnNewHotkeys" Margin="10,0,0,0" Padding="6,0" Content="Hotkey Setup"/>
+                    </StackPanel>
                 </StackPanel>
                 <Button Click="installTargetHook" Margin="0,5" x:Name="targetHookButton" Content="Enable target options"/>
             </StackPanel>
@@ -318,7 +322,6 @@
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" x:Name="bottomPanel">
             <StackPanel Orientation="Horizontal" Margin="0,5" x:Name="updatePanel">
-                <Button Click="newHotkeySetup" HorizontalAlignment="Right" Margin="2,0" x:Name="btnNewHotkeys">Hotkey Setup</Button>
                 <Button Click="toggleStatsFull" x:Name="compactButton" Margin="2,0">Toggle Stats/Full</Button>
                 <Button Click="toggleCoords" x:Name="coordsToggle" Margin="2,0">Toggle Coords</Button>
                 <Button Click="goToWebsite" x:Name="websiteButton" Margin="2,0"> Homepage</Button>

@@ -164,6 +164,11 @@ namespace EldenRingTool
             return Utils.getFnameInAppdata("builds.txt", "ERTool");
         }
 
+        static string getSeededBuildsFileAppData()
+        {
+            return Utils.getFnameInAppdata("seeded_builds.txt", "ERTool");
+        }
+
         public static string getGraceProfilesFileAppData()
         {
             return Utils.getFnameInAppdata("grace_profiles.txt", "ERTool");
@@ -487,16 +492,13 @@ namespace EldenRingTool
             try
             {
                 string buildsFileName = getBuildsFileAppData();
-
-                if (File.Exists(buildsFileName))
-                {
-                    return;
-                }
+                string seededFileName = getSeededBuildsFileAppData();
 
                 var assembly = Assembly.GetExecutingAssembly();
                 string resourceName = assembly.GetManifestResourceNames()
-                  .Single(str => str.EndsWith("default_builds.txt")); 
+                  .Single(str => str.EndsWith("default_builds.txt"));
 
+                string sourceData;
                 using (var stream = assembly.GetManifestResourceStream(resourceName))
                 {
                     if (stream == null)
@@ -507,16 +509,50 @@ namespace EldenRingTool
 
                     using (var reader = new StreamReader(stream))
                     {
-                        var sourceData = reader.ReadToEnd();
-                        File.WriteAllText(buildsFileName, sourceData);
+                        sourceData = reader.ReadToEnd();
                     }
                 }
 
+                var defaults = sourceData.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                if (defaults.Length == 0) { return; }
+
+                if (!File.Exists(buildsFileName))
+                {
+                    File.WriteAllText(buildsFileName, sourceData);
+                    File.WriteAllLines(seededFileName, defaults.Select(buildNameOf));
+                    return;
+                }
+
+                //a preset is only ever seeded once, so ones the user has since deleted don't come back
+                var seeded = File.Exists(seededFileName)
+                    ? new HashSet<string>(File.ReadAllLines(seededFileName))
+                    : new HashSet<string>();
+                var present = new HashSet<string>(File.ReadAllLines(buildsFileName).Select(buildNameOf));
+
+                var toAdd = defaults
+                    .Where(line => !seeded.Contains(buildNameOf(line)) && !present.Contains(buildNameOf(line)))
+                    .ToList();
+
+                if (toAdd.Count > 0)
+                {
+                    var existing = File.ReadAllText(buildsFileName);
+                    var sb = new StringBuilder(existing);
+                    if (existing.Length > 0 && !existing.EndsWith("\n")) { sb.Append(Environment.NewLine); }
+                    foreach (var line in toAdd) { sb.Append(line).Append(Environment.NewLine); }
+                    File.WriteAllText(buildsFileName, sb.ToString());
+                }
+
+                File.WriteAllLines(seededFileName, defaults.Select(buildNameOf));
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error creating default builds file: " + ex.Message);
             }
+        }
+
+        static string buildNameOf(string buildLine)
+        {//name is everything before the first separator, matching LoadAllBuildsFromFile
+            return buildLine.Split('|')[0].Replace("||", "|");
         }
 
         private void generateDefaultGraceProfiles()
@@ -576,7 +612,7 @@ namespace EldenRingTool
 
                 var tuple = Tuple.Create(key, mods);
 
-                if (registeredHotkeys.ContainsKey(tuple) && IsTargetAppFocused())
+                if (chkHotkeysEnabled?.IsChecked == true && registeredHotkeys.ContainsKey(tuple) && IsTargetAppFocused())
                 {
                     foreach (var act in registeredHotkeys[tuple])
                         doAct(act); 
@@ -1344,7 +1380,7 @@ namespace EldenRingTool
                         webVersionStr = line.Substring(quoteStart, quoteEnd - quoteStart).TrimStart('v');
                     }
 
-                    if (currentVersion.CompareTo(new Version(webVersionStr)) != 0)
+                    if (currentVersion.CompareTo(new Version(webVersionStr)) < 0)
                     {
                         Dispatcher.Invoke(notifyOfUpdate);
                     }
